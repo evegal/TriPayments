@@ -10,7 +10,7 @@
 
 
 ##step 1 : Clone repo
-	git clone https://github.com/jirishus/gateway.git
+	$ git remote add origin https://github.com/dkontizas/TriPayments.git
 ##step 2 : Place folder in HTDOCS
 	XAMPP/htdocs 
 ##step 3 : Install Node Dependencies (package.json)
