@@ -1,0 +1,143 @@
+include ../modals/midsEditModal2.html
+include ../modals/midCreateModal.jade
+include ../modals/deleteMidModal.jade
+include ../modals/enableMidModal.jade
+include ../modals/removeMidModal.jade
+
+.row
+    h1 Merchant Accounts - Manage MIDs
+.panel.panel-default
+    .panel-heading
+        .row
+            .col-md-6
+              h2.panel-title
+                i.fa.fa-icon
+                | MIDS Available: {{dataLen}}
+            .col-md-6
+                a.def_btn.wet_asphalt_btn.float-right(href="" ng-csv='midsCSV' filename="midsExport.csv" ng-if="dataLen != 0")
+                    i.fa.fa-file-excel-o 
+                    span Excel Export
+                a.def_btn.emerald_btn.float-right.margin-right(href="" ng-click="open()" ng-controller="midCreateModal") 
+                    i.fa.fa-plus
+                    span Add MID
+    .panel-body
+        h3.noResults(ng-if="dataLen == 0") {{'There are currently no MIDs setup for this account.'}}
+        table.table.table-striped.ng-table-responsive.midsTable(st-table="shownMids" st-safe-src="mids" ng-if="dataLen != 0")
+            thead
+                tr
+                    th(colspan="10")
+                        input.form-control(st-search="" type="search" placeholder="Search all mids")
+                tr
+                    th.st-header(st-sort="Id" style="width:5%") MID#
+                    th.st-header(st-sort="DisplayName") Display Name
+                    th.st-header(st-sort="Gateway") Gateway
+                    th.st-header(st-sort="MonthlyCap" style="width:8%") Monthly Cap
+                    th.st-header(st-sort="CapUtilizationPercentage" style="width:7%") Monthly Cap Status
+                    th.st-header(st-sort="Active" style="width:7%") Status
+                    th.st-header(st-sort="PaymentTypes" style="width:7%") Payment Types
+                    th.st-header MID Group Profile
+                    th.st-header Rollover Profile
+                    th.st-header Actions
+            tbody
+                tr
+                    td
+                        span(tooltip="Filter By MID #")
+                            input.form-control(st-search="'Id'" type="search" placeholder="MID #")
+                    td
+                        span(tooltip="Filter By Display Name")
+                            input.form-control(st-search="'DisplayName'" type="search" placeholder="Display Name")
+                    td
+                        span(tooltip="Filter By Gateway")
+                            input.form-control(st-search="'Gateway'" type="search" placeholder="Gateway")
+                    td
+                        span(tooltip="Filter By Monthly Cap")
+                            input.form-control(st-search="'MonthlyCap'" type="search" placeholder="MonthlyCap")
+                    td
+                        span(tooltip="Filter By Cap Utilization %")
+                            input.form-control(st-search="'CapUtilizationPercentage'" type="search" placeholder="Cap Utilization %")
+                    td
+                        span(tooltip="Filter By Status")
+                            input.form-control(st-search="'Active'" type="search" placeholder="Status")
+                    td
+                        span(tooltip="Filter By Payment Types")
+                            input.form-control(st-search="'PaymentTypes'" type="search" placeholder="Payment Types")
+                    td
+                        span(tooltip="Filter By Group Profile")
+                            input.form-control(st-search="'GroupMembership'" type="search" placeholder="Group Membership")
+                    td
+                        span(tooltip="Filter By Group Rollover Profile")
+                            input.form-control(st-search="'RolloverParents'" type="search" placeholder="Rollover Profile")
+
+
+
+                tr(ng-repeat="mid in shownMids")
+                    td {{mid.Id}}
+                    td {{mid.DisplayName}}
+                    td {{mid.Gateway}}
+                    td {{mid.MonthlyCap | currency}}
+                    td
+                        progressbar(value="mid.CapUtilizationPercentage") 
+                            span {{mid.CapUtilizationPercentage}} %
+                    td 
+                        //span.success {{getStatus(mid)}}
+                        //span(ng-class="(mid.Active) ? 'success' : 'failed' ") {{getStatus(mid)}}
+                        tri-status(status="{{mid.Active}}" ng-class="(mid.Active) ? 'success' : 'failed' ")
+                    //td {{mid.PaymentTypeIds}}
+
+                    td.paymentTypes {{doShit(mid)}} 
+                        span(ng-bind-html="payments") {{payments}}
+
+                    //td.paymentTypes
+                        i.fa.fa-cc-visa.fa-2x
+                        i.fa.fa-cc-discover.fa-2x
+                        i.fa.fa-cc-amex.fa-2x
+                    //td {{mid.GroupMembership}}
+                    td
+                        //a(href="") 
+                            span(popover="{{dynamicPop}}" popover-title="Groups") Belongs to {{setGroups(mid)}} Groups
+                        //a(href="" tooltip-html-unsafe="{{groupTip}}") Belongs To {{setGroups(mid)}} Groups
+                        //a.groupAnchor(href="" my-dir) Belongs To {{setGroups(mid)}} Groups
+                        //a.groupAnchor(clients-array="clients" pop-lister)
+                        //a.groupAnchor(href="") 
+                            span Belongs to {{setGroups(mid)}} Groups
+                            ul.floater
+                                li hey there
+                        //a.groupAnchor(href="")
+                            span Belongs to {{setGroups(mid)}} Groups
+                            div.floater
+                                ul(ng-repeat="group in groupTip track by $index")
+                                    li {{group}}
+                        //a.groupAnchor
+                            span Belongs to {{setGroups(mid)}} Groups
+                            div.floater
+                                ol(ng-repeat="group in groupNames[$index] track by $index")
+                                    li {{group.Name}}
+                        tri-group
+
+                               
+
+
+                    //td {{mid.RolloverParents || 'not set'}}
+                    td
+                        a.groupAnchor(href="") 
+                            span {{showRolloverParents(mid)}} Rollover MID(s)
+                            div.floater
+                                ul(ng-repeat="roll in rollGroups track by $index")
+                                    li {{roll}}
+                    td 
+                        a.row_btn.edit_mid_btn(ng-click="openIt(mid)" ng-controller="editMidModalCtrl")
+                            i.fa.fa-edit
+                            span Edit
+                        a.row_btn.disable_mid_btn(ng-click="openMID($index,mid)" ng-controller="DeleteMidCtrl" ng-show="{{mid.Active}}") 
+                            i.fa.fa-toggle-off
+                            span Disable
+                        a.row_btn.emerald_btn(ng-click="open($index,mid)" ng-controller="EnableMidCtrl" ng-show="{{!mid.Active}}")
+                            i.fa.fa-toggle-on
+                            span Enable
+                        a.row_btn.delete_mid_btn(ng-click="open($index,mid)" ng-controller="removeMidModal")
+                            i.fa.fa-trash
+                            span Delete
+            tfoot
+                tr
+                    td.text-center(colspan="10")
+                        div(st-pagination="" st-items-by-page="20")

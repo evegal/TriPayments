@@ -1,0 +1,42 @@
+script(type="text/ng-template" id="merchantEditContent.html")
+	.merchantEditModal
+	.modal-header
+		h3.modal-title
+			span.subtle Edit Group Account
+			span {{merchant.Name}}
+		button.close(type="button" ng-click="cancel()") x
+	.modal-body
+		//.row
+			.col-md-6
+				p MID Group Name
+				input.form-control(ng-model="merchant.Name")
+			.col-md-5
+				p Email for Notification
+				input.form-control(ng-model="merchant.CapLimitNotificationEmails")
+		form.form(name="merchantEditForm")
+			table.table
+				thead
+					tr
+						th MID Group Name
+						th Email For Notification
+						th Balancing Type
+						th Currency
+				tbody
+					tr
+						td
+							input.form-control(ng-model="merchant.Name")
+						td
+							input.form-control(ng-model="merchant.CapLimitNotificationEmails")
+						td
+							select.form-control(ng-model="merchant.BalancingType" ng-options="item.BalancingTypeId as item.BalancingType for item in BalancingTypes")
+						td
+							select.form-control(ng-options="item.Id as item.Name for item in currencies" ng-model="merchant.Currency")
+	.userCreateSuccess
+		p Merchant Account Updated
+	.modal-footer
+		a.modal_edit(ng-show="merchantEditForm.$dirty" type="submit" ng-click="updateMerchant(merchant)") Save
+		a.cancel_btn(ng-click="cancel()") Exit
+
+
+
+

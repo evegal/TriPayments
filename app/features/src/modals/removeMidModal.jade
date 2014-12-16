@@ -1,0 +1,21 @@
+script(type="text/ng-template" id="RemoveMidContent.html")
+    .modal-header
+        h3.modal-title
+            span.subtle Remove MID
+            span {{mid.DisplayName}}
+        button.close(type="button" ng-click="cancel()") x
+
+    .modal-body
+        p.text-center Are you sure you want to Delete
+        h2.text-center {{mid.DisplayName}}
+
+        .userCreateSuccess
+            p MID Removed
+
+    .modal-footer
+        a.row_btn.cancel_btn(href="" ng-click="removeMID()") 
+                i.fa.fa-check
+                span Confirm
+        a.row_btn.cancel_btn(href="" ng-click="cancel()")
+                i.fa.fa-sign-out
+                span Exit

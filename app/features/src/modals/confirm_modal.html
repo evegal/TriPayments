@@ -1,0 +1,56 @@
+    <!--MODAL WINDOW--> 
+    <script type="text/ng-template" id="voidModalContent.html">
+        <div class="modal-header">
+            <h3 class="modal-title"><span class="subtle">Void Transaction:</span> {{trans.TransactionId}} <span class="subtle">Name:</span> {{trans.FirstName}} {{trans.LastName}}</h3>
+            <button type="button" class="close" ng-click="cancelVoid()">x</button>
+         </div>
+        <div class="modal-body">               
+         <table class="table table-responsive">
+            <thead>
+                <tr>
+                    <th>Transaction Id</th>
+                    <th>CRM MID</th>
+                    <th>Amount</th>
+                    <th>Currency</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                </tr>
+            <thead>
+            <tbody>
+                <tr>
+                    <td>{{trans.TransactionId}}</td>
+                    <td>{{trans.MidDisplayName}}</td>
+                    <td>{{trans.Amount | currency}}</td>
+                    <td>{{trans.Currency}}</td>
+                    <td>{{trans.FirstName}}</td>
+                    <td>{{trans.LastName}}</td>
+                </tr>
+            </tbody>
+         </table>
+
+        </div>
+
+        <div class="MID_feedback">
+            <p class="p-title">Are You Sure You Want To Void This Transaction?</p>
+            <h3>{{activeUser}}</h3>
+            <a href="" class="confirm_btn" ng-click="confirmVoid()">Confirm</a>
+        </div>
+
+        <div class="userCreateSuccess">
+            <p>Void Successful</p>
+        </div>
+
+        <div class="userError">
+            <p>Void Failed</p>
+        </div>
+
+         <div class="modal-footer">
+            <section class="voidBtns">
+            <!-- Response -->
+              <h3 class="text-center jumbotron voidFeedback">Action Status: <span>{{voidStatus}}</span></h3>              
+            <!--Buttons -->
+              <a href=""  class="action_btn" ng-click="processVoid(trans.TransactionId)">Void</a>
+              <a href="" class="cancel_btn" ng-click="cancelVoid()">Cancel</a>
+            </section>
+        </div>
+     </script>

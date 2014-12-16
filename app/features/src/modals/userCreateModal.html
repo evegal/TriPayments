@@ -1,0 +1,72 @@
+<script type="text/ng-template" id="userModalContent.html">
+<div class="userCreateModal">
+	<div class="modal-header">
+            <h3 class="modal-title">User Creation</h3>
+            <button type="button" class="close" ng-click="cancel()">x</button>
+    </div>
+    <div class="modal-body">
+
+    <form role="form" class="form" name="userCreateForm" ng-submit="submit()">
+	    <div class="row">
+	    	<div class="col-md-8 col-md-offset-2">
+	    		<span>User Info</span>
+		    	<div class="input-group">
+		                <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+		                <input type="text" class="form-control" placeholder="Username" ng-model="userCreateForm.username" id="username" required>  
+		        </div>
+		        
+		        <div class="input-group">
+		        	<span class="input-group-addon"><span class="glyphicon glyphicon-envelope"></span></span>
+		               <input type="email" class="form-control" placeholder="Email" ng-model="userCreateFrom.email" id="email" required> 
+		        </div>
+		        <span class="error" ng-show="userCreateForm.email.$error.required">
+		            Not A Valid Email
+		        </span>
+		   
+	        </div>
+	       	
+	    </div><!-- row -->
+	    <div class="row">
+	    	<div class="col-md-8 col-md-offset-2">
+	    	<span>Password</span>
+	    	<div class="input-group">
+	                <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+	                <input type="password" class="form-control" placeholder="Password minimum 6 characters" ng-model="passwordModel" id="password">  
+	        </div>
+	       
+	        <div class="input-group">
+	        	<span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+	               <input type="password" class="form-control" placeholder="Repeat Password" id="repeatpassword"> 
+	        </div>
+	   
+	        </div>
+	        
+	    </div><!-- row -->
+
+		<div class="user_feedback">
+	    	<p class="p-title">Confirm New User Details</p>
+		    	<button href="" class="save_btn" type="submit()">Create User</button>
+	    </div>
+
+	    <div class="userCreateSuccess">
+	    	{{userCreateSuccess || 'not set'}}
+	    </div>
+
+	    <div class="userError">
+	    	<p>Incorrect Credentials</p>
+	    </div>
+
+	    <div class="nameError">
+	    	<p>{{createErrorMsg}}</p>
+	    </div>
+
+	    <div class="modal-footer">
+	    	<a href="" class="create_btn" ng-click="ok()">Create</a>
+	    	<a href="" class="cancel_btn" ng-click="cancel()">Exit</a>
+	    </div>
+    </form>
+
+
+    </div>
+</div>   
+</script>

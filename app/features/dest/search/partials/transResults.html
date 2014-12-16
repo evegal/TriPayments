@@ -1,0 +1,36 @@
+<div class="transForm_feedback"><div class="panel panel-default transForm_results"><div class="panel-heading"><div class="row"><div class="col-md-6"><h2 class="panel-title"><span>{{dataLen}} results</span></h2></div><div class="col-md-6"><a ng-csv="transactionCSV" filename="transactions.csv" ng-show="transactionCSV.length" class="def_btn wet_asphalt_btn float-right margin-right"><i class="fa fa-file"></i><span>Export Excel</span></a><a ng-click="new_search()" class="def_btn belize_hole_btn float-right margin-right"><i class="fa fa-search"></i><span>New Search</span></a><a ng-click="modify_search()" class="def_btn peter_river_btn float-right margin-right"><i class="fa fa-search-plus"></i><span>Modify Search</span></a></div></div></div><div class="panel-body"><accordion close-others="oneAtATime"><table st-table="shownData" st-safe-src="transData" class="table"><thead><tr><th colspan="13"><input st-search="" type="text" placeholder="Filter through all search results..." class="form-control"/></th></tr><tr><th>Trans ID</th><th>Type</th><th>Gateway</th><th>MID Name</th><th>Date</th><th>Amount</th><th>CC Type</th><th>#CC</th><th>Status</th><th>First Name</th><th>Last Name</th><th style="width:10%">Email</th><th style="width:20%">Actions</th></tr></thead><tbody ng-repeat="tran in shownData"><tr><td class="search-results-trans-id"><a ng-click="open(tran)" ng-controller="transModalCtrl" class="row_btn peter_river_btn full_width"><i class="fa fa-eye"></i><span>{{tran.TransactionId}}</span></a></td><td>{{tran.Type}}</td><td>{{tran.Gateway}}</td><td>{{tran.MidDisplayName}}</td><td>{{tran.RequestDate | date:'shortDate'}}</td><td>{{tran.Amount}}</td><td>{{tran.PaymentTypeName}}</td><td>{{tran.CcLastFour}}</td><!--td {{returnStatus(tran)}}--><td><a href="" class="groupAnchor"><span ng-class="(tran.ResultCode === 0) ? 'success' : 'failed' ">{{returnStatus(tran)}}</span><i class="fa fa-info-circle"></i><div class="floater"><ul><li>{{tran.ResponseDescription}}</li></ul></div></a></td><td>{{tran.FirstName}}</td><td>{{tran.LastName}}</td><td>{{tran.Email}}</td><td><a ng-click="open(tran)" ng-controller="refundModalCtrl" class="table_action_btn peter_river_btn margin-right"><i class="fa fa-money"></i><span class="btn_text">Refund</span></a><a ng-click="open(tran)" ng-controller="voidModalCtrl" class="table_action_btn alazarin_btn margin-right"><i class="fa fa-ban"></i><span class="btn_text">Void</span></a><a ng-click="doToggle(tran)" ng-if="tran.RelatedTransactions &amp;&amp; tran.RelatedTransactions.length &gt; 0" class="table_action_btn peter_river_btn"><i class="fa fa-eye"></i><span class="btn_text">Trans</span><span>{{tran.RelatedTransactions.length}}</span></a></td><!--td.paymentTypesdiv(ng-if="trans.Type == 'Authorize' && trans.ResultCode == 0")
+    a.table_action_btn.alazarin_btn.margin-right(tooltip="Void transaction: {{trans.TransactionId}}" tooltip-placement="top" ng-click="open(trans)" href="" ng-controller="voidModalCtrl") 
+      i.fa.fa-ban
+      span void
+    a.table_action_btn.orange_btn.disabled.margin-right(tooltip="Unable to refund with type as authorize" tooltip-placement="top")
+      i.fa.fa-money
+      span Refund
+    a.table_action_btn.peter_river_btn
+      i.fa.fa-eye
+      span Trans  
+
+div(ng-if="trans.Type == 'Capture' || trans.Type == 'Charge' && trans.ResultCode == 0")
+  a.table_action_btn.alazarin_btn.margin-right(tooltip="Void transaction: {{trans.TransactionId}}" ng-click="open(trans)" href="" ng-controller="voidModalCtrl")
+    i.fa.fa-ban
+    span void
+  a.table_action_btn.orange_btn.margin-right(tooltip="Refund transaction: {{trans.TransactionId}}" ng-click="open(trans)" href="" ng-controller="refundModalCtrl")
+    i.fa.fa-money
+    span Refund
+  a.table_action_btn.peter_river_btn
+    i.fa.fa-eye
+    span Trans
+
+
+div(ng-if="trans.Type == 'Void' || trans.Type == 'Refund' || trans.Type == 'Credit' || trans.ResultCode !== 0")
+  a.table_action_btn.alazarin_btn.margin-right.disabled(tooltip="Unable to void with this processed type" tooltip-placement="top")
+    i.fa.fa-ban
+    span void
+  a.table_action_btn.orange_btn.disabled.margin-right(tooltip="Unable to refund with this processed type" tooltip-placement="top")
+    i.fa.fa-money
+    span Refund
+  a.table_action_btn.peter_river_btn
+    i.fa.fa-eye
+    span Trans
+
+  
+--><td><tr><td colspan="13" ng-if="tran.RelatedTransactions &amp;&amp; tran.RelatedTransactions.length &gt; 0" class="pushToggle"><accordion-group heading="" is-open="true"><h2> <i class="fa fa-exchange"></i><span>Related Transactions</span></h2><table class="table table-striped"><thead><tr><th>Transaction ID</th><th>API User</th><th>Amount</th><th>Type</th><th>Status</th><th>Gateway</th><th>Name</th><th>MID</th><th>Payment Type</th><th>Date</th></tr></thead><tbody>{{getNestedApiUser(tran)}}<tr ng-repeat="thing in nestedTrans"><td>{{thing.TransactionId}}</td><td>{{thing.ApiUser}}</td><td>{{thing.Amount}}</td><td>{{thing.Type}}</td><!--td {{getNestedStatus(thing)}}--><td><a href="" class="groupAnchor"><span ng-class="(thing.ResultCode === 0) ? 'success' : 'failed'">{{getNestedStatus(thing)}}</span><i class="fa fa-info-circle"></i><div class="floater"><ul><li>{{thing.ResponseDescription}}</li></ul></div></a></td><td>{{thing.Gateway}}</td><td>{{thing.MidDisplayName}}</td><td>{{thing.Mid}}</td><td>{{thing.PaymentTypeName}}</td><td>{{thing.RequestDate  | date:'shortDate'}}</td></tr></tbody></table></accordion-group></td></tr></td></tr><tfoot><tr><td colspan="13" class="text-center"><div st-items-by-page="20" st-pagination="">                                      </div></td></tr></tfoot></tbody></table></accordion></div></div></div>

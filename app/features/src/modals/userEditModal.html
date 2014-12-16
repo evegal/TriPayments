@@ -1,0 +1,107 @@
+<script type="text/ng-template" id="userEditContent.html">
+	<div class="modal-header">
+		<h3 class="modal-title"><span class="subtle">Edit User:</span> {{user.UserName}}</h3>
+	</div>
+
+	<div class="modal-body">
+
+		<form name="editUserForm">
+
+			<table class="table">
+				<thead>
+					<tr>
+						<th>User Name</th>
+						<th>User Email</th>
+						<th>User Password</th>
+					</tr>
+				</thead>
+
+				<tbody>
+					<tr>
+						<td>
+							<input class="form-control" type="text" ng-model="user.UserName" />
+						</td>
+						<td>
+							<input class="form-control" type="text" ng-model="user.Email" />
+						</td>
+						<td>
+							<input class="form-control" type="password" ng-model="user.Password" placeholder="Enter New Password To Update" />
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
+		</form>
+
+	</div>
+
+	<div class="modal-footer action_group">
+	 
+        <a href="" class="modal_edit" ng-click="updateUser(user)" ng-show="editUserForm.$dirty">Save</a>
+        <a href="" class="cancel_btn" ng-click="cancel()">Exit</a>                      
+   
+	</div>
+
+</script>
+
+
+<!--
+<script type="text/ng-template" id="userEditContent.html">
+<div class="modal-header">
+	<h3 class="modal-title"><span class="subtle">Edit User:</span> {{user.UserName}}</h3>
+    <button type="button" class="close" ng-click="cancel()">x</button>
+ </div>
+
+ <div class="modal-body">
+ 
+  	<table class="table table-striped">
+ 		<thead>
+ 			<tr>
+ 				<th>Comp ID</th>
+ 				<th>User Name</th>
+ 				<th>Email</th>
+ 				<th>Password</th>
+ 			</tr>
+ 		</thead>
+ 		<tbody>
+ 			<tr>
+ 				<td>
+ 					<span>{{user.TriPaymentsApiCompanyId}}</span>
+ 				</td>
+ 				<td>
+ 					<span>{{user.UserName}}</span>
+ 				</td>
+ 				<td>
+	 				<span>
+	 					{{user.Email}}
+	 				</span>
+ 				</td>
+ 				<td>
+ 					<span editable-text="user.Password" e-name="Password" e-form="rowform">{{user.Password}}</span>
+ 				</td>
+ 				<td style="white-space:nowrap">
+ 					
+ 					
+ 				</td>
+ 			</tr>
+ 		</tbody>
+
+ 	</table>
+	
+
+ 	
+ </div>
+
+ <div class="modal-footer action_group">
+	<button ng-show='!rowform.$visible' class="cancel_btn" ng-click="rowform.$show()">Edit</button>
+ 	<button ng-show='!rowform.$visible' class="cancel_btn" ng-click="cancel()">Exit</button>
+
+ 	<form class="action_group" editable-form name="rowform" onbeforesave="updateUser($data,user.UserId)" ng-show='rowform.$visible' shown='inserted == user;'>
+		<button ng-show='rowform.$visible' class="save_btn" type="submit" ng-disabled="rowform.$waiting">Save</button>
+		<button ng-show='rowform.$visible' class="cancel_btn" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()">Cancel</button>					
+	</form>
+
+ 	
+ </div>
+</script>
+-->

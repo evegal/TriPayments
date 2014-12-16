@@ -1,0 +1,20 @@
+<span select="merchant.CapNotificationThreshold" e-name="CapNotificationThreshold" e-form="rowform" e-ng-options="obj.value as obj.value for obj in CapValues">{{merchant.CapNotificationThreshold}}</span>
+
+    <form editable-form name="rowform" onbeforesave="saveUpdate($data,mid.Id)" ng-show='rowform.$visible', shown='inserted == merchant'>
+                        <button class="merchant_save" type="submit" ng-disabled="rowform.$waiting">Save</button>
+                        <button class="cancel_btn" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()">Cancel</button>
+    </form>
+
+
+
+
+
+    <div class="col-md-7">
+					<div class="progress">
+						<div class="progress-bar" style="width:{{mid.RemainingCapPercentage}}%"></div>
+					</div>
+					</div>
+
+					<div class="col-md-5">
+						<span>{{mid.RemainingCapPercentage}} %</span>
+					</div>

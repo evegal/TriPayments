@@ -1,0 +1,21 @@
+script(type="text/ng-template" id="EnableMidContent.html")
+    .modal-header
+        h3.modal-title
+            span.subtle Enable MID:
+            span {{mid.DisplayName}}
+        button.close(type="button" ng-click="cancel()") x
+
+    .modal-body
+        p.text-center Are you sure you want to Enable
+        h2.text-center {{mid.DisplayName}}
+
+        .userCreateSuccess
+            p MID Enabled
+
+    .modal-footer
+        a.row_btn.cancel_btn(href="" ng-click="enableMID()") 
+                i.fa.fa-check
+                span Confirm
+        a.row_btn.cancel_btn(href="" ng-click="cancel()")
+                i.fa.fa-sign-out
+                span Exit

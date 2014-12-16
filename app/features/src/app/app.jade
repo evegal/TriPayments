@@ -1,0 +1,48 @@
+div(id="wrapper")
+            div#sidebar-wrapper
+                ul.sidebar-nav
+                    li.sidebar-brand
+                        p.brand
+                            img(src="../../../images/logo.png")             
+                    li 
+                        a(ng-class="{{'app.search' | isState }}" ui-sref=".search" ng-click="checkState()") 
+                            i.fa.fa-icon.fa-search
+                            span Search
+                    li 
+                        a(href="" ng-click="setDefault();checkState()" ng-class="noteState1()")
+                            i.fa.fa-bank
+                            span Merchant Accounts
+                        ul.mids_subNav(collapse="isCollapsed")
+                            li
+                                a(ng-class="noteState2()" ui-sref="app.merchants.mids")
+                                    i.fa.fa-cog
+                                    span Manage MIDs
+                            li
+                                a(ng-class="noteState3()" ui-sref="app.merchants.groups")
+                                    i.fa.fa-cogs
+                                    span Manage MID Groups
+                    li 
+                        a(ng-class="{{'app.virtual_terminal' | isState }}" ui-sref=".virtual_terminal" ng-click="checkState()") 
+                            i.fa.fa-icon.fa-terminal
+                            span Virtual Terminal
+                   
+                    li(data-ng-hide="!authentication.isAuth")
+                        a(ng-class="{{'app.usermanager' | isState }}" ui-sref=".usermanager" ng-click="checkState()")
+                            i.fa.fa-icon.fa-users
+                            span User Management
+
+            div#page-content-wrapper
+               .container-fluid
+                    header.dash_header
+                        .row
+                            .col-sm-4
+                                a(href="",id="menu-toggle",class="")
+                                    i.fa.fa-icon.fa-align-left
+                                    span Collapse
+                            .col-sm-8.top-control(ng-controller="loginCtrl")
+                                span(ng-cloack="") Welcome to TriPayments, {{authentication.userName}}  
+                               
+                                a(href="" ng-click="logOut()" tooltip="log out {{currentUser.name}}" tooltip-placement="left") 
+                                    i.fa.fa-icon.fa-sign-out
+                    .dash
+                        div(ui-view="")

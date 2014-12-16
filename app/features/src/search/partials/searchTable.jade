@@ -1,0 +1,136 @@
+table.table.table-striped.ng-table-responsive.primary_search_table(st-table="shownData" st-safe-src="data" ng-if="resultAmount != 0")
+                thead
+                    tr.search-header-blank
+                        th(colspan="13")
+                          input.form-control(st-search="" type="search" placeholder="Filter through all search results...")
+                    tr
+                        th.st-header(st-sort="TransactionId" width="6%") Trans ID
+                        th.st-header(st-sort="RequestDate" width="5%") Date
+                        th.st-header(st-sort="Type" width="5%") Type
+                        th.st-header(st-sort="Amount" width="5%") Amount
+                        th.st-header(st-sort="ResponseDescription" width="5%") Status
+                        th.st-header(st-sort="Gateway" width="5%") Gateway
+                        th.st-header(st-sort="MidDisplayName" width="10%") MID Name
+                        th.st-header(st-sort="PaymentTypeName" width="6%") CC Type
+                        th.st-header(st-sort="CcLastFour" width="5%") #CC
+                        th.st-header(st-sort="FirstName" width="7%") First Name
+                        th.st-header(st-sort="LastName" width="7%") Last Name
+                        th.st-header(ng-show="Udf1Show" st-sort="Udf1" width="10%") UDF1
+                        th.st-header(ng-show="EmailShow" st-sort="Email" width="10%") Email
+                        th.st-header-nosort(width="14%") Actions
+
+                tbody
+                    tr
+                      td
+                        span(tooltip="Filter by entering an ID" tooltip-placement="top") 
+                          input.form-control(st-search="'TransactionId'" type="search" placeholder="Filter ID" )
+                      td
+                        span(tooltip="Filter by entering a date" tooltip-placement="top")
+                          input.form-control(st-search="'RequestDate'" type="search" placeholder="Filter Date")
+                      td
+                        span(tooltip="Filter by entering a transaction type" tooltip-placement="top") 
+                          input.form-control(st-search="'Type'" type="search" placeholder="Filter Type")
+                      td
+                        span(tooltip="Filter by entering an amount" tooltip-placement="top") 
+                          input.form-control(st-search="'Amount'" type="search" placeholder="Filter Amount")
+                      td
+                        span(tooltip="Filter by entering a status" tooltip-placement="top") 
+                          input.form-control(st-search="'ResponseDescription'" type="search" placeholder="Filter by status")
+                      td 
+                        span(tooltip="Filter by entering a gateway" tooltip-placement="top") 
+                          input.form-control(st-search="'Gateway'" type="search" placeholder="Filter Gateway")
+                      td
+                        span(tooltip="Filter by entering a MID name" tooltip-placement="top") 
+                          input.form-control(st-search="'MidDisplayName'" type="search" placeholder="Filter MID")
+                      td
+                        span(tooltip="Filter by entering a credit card type e.g. AMEX, Visa, Mastercard, Discover " tooltip-placement="top")
+                          input.form-control(st-search="'PaymentTypeName'" type="search" placeholder="Filter Gateway")
+                      td
+                        span(tooltip="Filter by entering credit card number" tooltip-placement="top") 
+                          input.form-control(st-search="'CcLastFour'" type="search" placeholder="Filter CC")
+                      td
+                        span(tooltip="Filter by entering a first name" tooltip-placement="top") 
+                          input.form-control(st-search="'FirstName'" type="search" placeholder="Filter First Name")
+                      td
+                        span(tooltip="Filter by entering a last name" tooltip-placement="top") 
+                          input.form-control(st-search="'LastName'" type="search" placeholder="Filter Last Name")
+                      td(ng-show="Udf1Show")
+                        span(tooltip="Filter by entering an UDF1" tooltip-placement="top") 
+                          input.form-control(st-search="'Udf1'" type="search" placeholder="Filter Udf1")
+                      td(ng-show="EmailShow")
+                        span(tooltip="Filter by entering an Email" tooltip-placement="top") 
+                          input.form-control(st-search="'Email'" type="search" placeholder="Filter Email")                          
+                      td
+                        span
+
+                    tr(ng-repeat="trans in shownData")
+                        td.search-results-trans-id
+                            a.row_btn.peter_river_btn.full_width(tooltip="See transaction details for {{trans.TransactionId}}" tooltip-placement="top" href="" ng-click="open(trans)" ng-controller="transModalCtrl")
+                              i.fa.fa-eye
+                              span {{trans.TransactionId}}
+                        td {{trans.RequestDate | date:'shortDate' }}
+                        td {{trans.Type}}
+                        td(ng-class="(trans.Amount > 0) ? 'cash_pos' : 'cash_neg' ") {{trans.Amount | currency }}
+                        td
+                          a.groupAnchor(href="")
+                            i.fa.fa-info-circle
+                            span(ng-class="(trans.ResultCode === 0) ? 'success' : 'failed' ")  {{returnStatus(trans)}}
+                            div.floater
+                              ul
+                                li {{trans.ResponseDescription}}
+                        td {{trans.Gateway}}
+                        td {{trans.MidDisplayName}}
+
+                        
+                        td.paymentTypes
+                          div(ng-if="trans.PaymentTypeName == 'Discover'")
+                            i.fa.fa-cc-discover.fa-2x 
+                            span
+                          div(ng-if="trans.PaymentTypeName == 'Mastercard'")
+                            i.fa.fa-cc-mastercard.fa-2x 
+                            span
+                          div(ng-if="trans.PaymentTypeName == 'Visa'")
+                            i.fa.fa-cc-visa.fa-2x 
+                            span
+                          div(ng-if="trans.PaymentTypeName == 'AMEX'")
+                            i.fa.fa-cc-amex.fa-2x 
+                            span
+
+                        td {{trans.CcFirstSix}}-{{trans.CcLastFour}}
+                        //td {{trans.ResponseDescription}}
+
+
+
+                        td {{trans.FirstName}}
+                        td {{trans.LastName}}
+                        td(ng-show="Udf1Show") {{trans.Udf1}}
+                        td(ng-show="EmailShow") {{trans.Email}}
+                        td.paymentTypes
+
+                          div(ng-if="trans.Type == 'Authorize' && trans.ResultCode == 0")
+                            a.row_btn.alazarin_btn.search_width.margin-right(tooltip="Void transaction: {{trans.TransactionId}}" tooltip-placement="top" ng-click="open(trans)" href="" ng-controller="voidModalCtrl") 
+                              i.fa.fa-ban
+                              span void
+                            a.row_btn.orange_btn.search_width.disabled(tooltip="Unable to refund with type as authorize" tooltip-placement="top")
+                              i.fa.fa-money
+                              span Refund
+
+                          div(ng-if="trans.Type == 'Capture' && trans.ResultCode == 0 || trans.Type == 'Charge' && trans.ResultCode == 0")
+                            a.row_btn.alazarin_btn.search_width.margin-right(tooltip="Void transaction: {{trans.TransactionId}}" ng-click="open(trans)" href="" ng-controller="voidModalCtrl")
+                              i.fa.fa-ban
+                              span void
+                            a.row_btn.orange_btn.search_width(tooltip="Refund transaction: {{trans.TransactionId}}" ng-click="open(trans)" href="" ng-controller="refundModalCtrl")
+                              i.fa.fa-money
+                              span Refund
+
+                          div(ng-if="trans.Type == 'Void' || trans.Type == 'Refund' || trans.Type == 'Credit' || trans.ResultCode !== 0")
+                            a.row_btn.alazarin_btn.search_width.margin-right.disabled(tooltip="Unable to void with this processed type" tooltip-placement="top")
+                              i.fa.fa-ban
+                              span void
+                            a.row_btn.orange_btn.search_width.disabled(tooltip="Unable to refund with this processed type" tooltip-placement="top")
+                              i.fa.fa-money
+                              span Refund
+                  tfoot
+                      tr
+                          td.text-center(colspan="13")
+                              div(st-items-by-page='20', st-pagination='')

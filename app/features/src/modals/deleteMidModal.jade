@@ -1,0 +1,21 @@
+script(type="text/ng-template" id="DeleteMidContent.html")
+    .modal-header
+        h3.modal-title
+            span.subtle Disable MID:
+            span {{mid.DisplayName}}
+        button.close(type="button" ng-click="cancel()") x
+
+    .modal-body
+        p.text-center Are you sure you want to Disable
+        h2.text-center {{mid.DisplayName}}
+
+        .userCreateSuccess
+            p MID Disabled
+
+    .modal-footer
+        a.row_btn.cancel_btn(href="" ng-click="disableMID()") 
+                i.fa.fa-check
+                span Confirm
+        a.row_btn.cancel_btn(href="" ng-click="cancel()")
+                i.fa.fa-sign-out
+                span Exit

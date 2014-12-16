@@ -1,0 +1,61 @@
+<script type="text/ng-template" id="dummyContent.html">
+    <div class="modal-header">
+        <h3>Dummy Edit</h3>
+        <button type="button" class="close" ng-click="cancel()">x</button>
+    </div>
+    <div class="modal-body">
+
+        <form name="dummy_form">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Merchant Name</th>
+                        <th>Gateway</th>
+                        <th>Customers</th>
+                        <th>Email</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td>
+                            <input type="text" ng-model="mid.display_name" />
+                        </td>
+                        <td>
+                            <input type="text" ng-model="mid.gateway" />
+                        </td>
+                        <td>
+                            <input type="text" ng-model="mid.active_customers" />
+                        </td>
+                        <td>
+                            <input type="text" ng-model="mid.emailNotification" />
+                        </td>
+                    </tr>
+                </tbody>
+               
+            </table>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>DropDown Test</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Data</td>
+                    </tr>
+                </tbody>
+            </table>
+         </form>
+
+    </div>
+
+    <div class="modal-footer action_group">
+     
+        <a class="modal_edit" ng-show="dummy_form.$dirty" ng-click="updateData()">Save</a>
+        <a class="cancel_btn" ng-click="cancel()">Exit</a>                      
+   
+    </div>
+
+</script>

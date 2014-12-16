@@ -1,0 +1,18 @@
+.row.login_panel.login_dash
+    .text-center.fa-2x.login_box
+        form.form(ng-submit="submit()" name="resetForm" novalidate)
+            p.login-logo 
+                 img(src="../../images/logo.png")
+            p.reset_info Reset Password
+            p.reset_info Enter the email you used when creating the account and click <span class="highlight">send password reset email.</span> An email will be sent to that address containing a link to reset your password.
+            
+            input.form-control(type="email" placeholder="Email Used At Signup" required="" ng-model="resetForm.Email")
+            button.btn.btn-primary.form-control(type="submit" id="submit") Send Password Reset Email
+            .user_help
+                .login_error_msg
+                    p {{message}}
+                p.error Please Enter A Valid Email
+            
+    section.copyright
+        p copyright &copy; 2014 Trangle Holdings Limited d/b/a
+        p Triangle Payments. All Rights Reserved.

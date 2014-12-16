@@ -1,0 +1,451 @@
+.row
+    h1 Virtual Terminal
+.panel.panel-default.userSearch(ng-if="authType == 'Authorize'")
+    .panel-heading
+        .row
+            .col-md-10
+                h2 Authorize Query
+            .col-md-2
+                a.addMIDGroup(href="" ng-click="reloadVirtual()") New Operation
+    .panel-body
+         table.table
+          thead
+            tr
+                th First name
+                th Last name
+                th Email
+                th Address
+                th Zip
+          tbody
+            tr
+                td {{user.fname}}
+                td {{user.lname}}
+                td {{user.email}}
+                td {{user.address}}
+                td {{user.zip}}
+// CAPTURE FEEDBACK
+.panel.panel-default.userSearch(ng-if="authType == 'Capture'")
+    .panel-heading
+        .row
+            .col-md-10
+                h2 Capture Query
+            .col-md-2
+                a.addMIDGroup(href="" ng-click="reloadVirtual()") New Operation
+    .panel-body
+         table.table
+          thead
+            tr
+                th Transaction #
+                th Authorization Code
+                th Ref #
+               
+          tbody
+            tr
+                td {{capture_form.TransNumber}}
+                td {{capture_form.AuthCode}}
+                td {{capture_form.RefNumber}}
+// CHARGE FEEDBACK
+.panel.panel-default.userSearch(ng-if="authType == 'Charge'")
+    .panel-heading
+        .row
+            .col-md-10
+                h2 Charge Query
+            .col-md-2
+                a.addMIDGroup(href="" ng-click="reloadVirtual()") New Operation
+    .panel-body
+         table.table
+          thead
+            tr
+                th First name
+                th Last name
+                th Email
+                th Address
+                th Zip
+          tbody
+            tr
+                td {{charge_form.fname}}
+                td {{charge_form.lname}}
+                td {{charge_form.email}}
+                td {{charge_form.address}}
+                td {{charge_form.zip}}
+// REFUND FEEDBACK
+.panel.panel-default.userSearch(ng-if="authType == 'Refund'")
+    .panel-heading
+        .row
+            .col-md-10
+                h2 Refund Query
+            .col-md-2
+                a.addMIDGroup(href="" ng-click="reloadVirtual()") New Operation
+    .panel-body
+         table.table
+          thead
+            tr
+                th Transaction #
+                th Authorization Code
+                th Amount
+                th Ref #
+               
+          tbody
+            tr
+                td {{refund_form.transNumber}}
+                td {{refund_form.AuthCode}}
+                td {{refund_form.Amount}}
+                td {{refund_form.refnumber}}
+
+// VOID FEEDBACK
+.panel.panel-default.userSearch(ng-if="authType == 'Void'")
+    .panel-heading
+        .row
+            .col-md-10
+                h2 Void Query
+            .col-md-2
+                a.btn.btn-primary(href="" ng-click="reloadVirtual()") New Operation
+    .panel-body
+         table.table
+          thead
+            tr
+                th Transaction #
+                th Authorization Code
+                th Amount
+                th Ref #
+               
+          tbody
+            tr
+                td {{refund_form.transNumber}}
+                td {{refund_form.AuthCode}}
+                td {{refund_form.Amount}}
+                td {{refund_form.refnumber}}
+
+
+
+.panel.panel-default.virtual_panel
+    .panel-heading
+        h2.panel-title
+            i.fa.fa-icon
+            | Virtual Terminal Options
+    .panel-body
+        .form-inline
+                .stand
+                    label Select the operation type
+                    select.opType.form-control(ng-model="authType")
+                        option Authorize
+                        option Capture
+                        option Charge
+                        //option Refund
+                        //option Void
+                        option(value="") Select An Operation Type
+                    //a(href="#") What will Authorize do?
+                // AUTHORIZE FORM
+                form.form-inline.virtual_form(name="auth_form" ng-show="authType == 'Authorize'" ng-submit="submit()" novalidate)
+                    h2.stand Authorization form:
+                    .row.virtual_content
+                        .col-md-6
+                            h3 Customer Details:
+                            .form-group
+                                label First name:
+                                    span.required-icon(ng-show="auth_form.fname.$invalid && !auth_form.fname.$pristine") x
+                                input.form-control(type="text" name="fname" placeholder="Joe" ng-model="user.fname" required="")
+                                //p.input-helper(ng-show="auth_form.fname.$error.required && auth_form.fname.$dirty") Name Required
+                            .form-group
+                                label Last name:
+                                    span.required-icon(ng-show="auth_form.lname.$invalid && !auth_form.lname.$pristine") x
+                                input.form-control(type="text" name="lname" placeholder="Smith" ng-model="user.lname" required="")
+                            .form-group
+                                label Email:
+                                    span.required-icon(ng-show="auth_form.email.$invalid && !auth_form.email.$pristine") x
+                                input.form-control(type="email" name="email" placeholder="enter a valid email" ng-model="user.email" required="")
+                            //.form-group
+                                label IP address:
+                                input.form-control(type="text" placeholder="ex 127.0.0.1")
+                            .form-group
+                                label Billing address:
+                                    span.required-icon(ng-show="auth_form.address.$invalid && !auth_form.address.$pristine") x
+                                input.form-control(type="text" name="address" placeholder="123 Main St" ng-model="user.address" required="")
+                            .form-group
+                                label Billing city:
+                                    span.required-icon(ng-show="auth_form.city.$invalid && !auth_form.city.$pristine") x
+                                input.form-control(type="text" name="city" placeholder="ex San Diego" ng-model="user.city" required="")
+                            .form-group
+                                label Billing state:
+                                    span.required-icon(ng-show="auth_form.state.$invalid && !auth_form.state.$pristine") x
+                                input.form-control(type="text" name="state" placeholder="ex CA" ng-model="user.state" required="")
+                            .form-group
+                                label Billing country:
+                                    span.required-icon(ng-show="auth_form.country.$invalid && !auth_form.country.$pristine") x
+                                input.form-control(type="text" name="country" placeholder="ex USA" ng-model="user.country" required="")
+                            .form-group
+                                label Billing postal:
+                                    span.required-icon(ng-show="auth_form.zip.$invalid && !auth_form.zip.$pristine") x
+                                input.form-control(type="text" name="zip" placeholder="ex 92111" ng-model="user.zip" required="")
+                            .form-group
+                                label Billing phone:
+                                    span.required-icon(ng-show="auth_form.phone.$invalid && !auth_form.phone.$pristine") x
+                                input.form-control(type="text" name="phone" placeholder="ex 619-540-9909" ng-model="user.phone" required="")
+
+                        .col-md-6
+                            h3 Payment Details:
+                            .form-group
+                                label Amount:
+                                    span.required-icon(ng-show="auth_form.amount.$invalid && !auth_form.amount.$pristine") x
+                                input.form-control(type="text" name="amount" placeholder="50" ng-model="user.amount" required="")
+                            .form-group
+                                label Currency:
+                                    span.required-icon(ng-show="auth_form.currency.$invalid && !auth_form.currency.$pristine") x
+                                select.form-control(name="user.currency" ng-model="user.currency" required="" ng-options="obj.Id as obj.Name for obj in currencies")
+                                   
+                            .form-group
+                                label Credit Card Number:
+                                    span.required-icon(ng-show="auth_form.ccNumber.$invalid && !auth_form.ccNumber.$pristine") x
+                                input.form-control(type="text" placeholder="ex. 4264-6542-4984-4116" name="ccNumber" ng-model="user.ccNumber" required="")
+                            .form-group
+                                label CVV:
+                                    span.required-icon(ng-show="auth_form.Cvv.$invalid && !auth_form.Cvv.$pristine") x
+                                input.form-control(type="password" maxlength="4" name="Cvv" ng-model="user.Cvv" required="")
+                            .form-group
+                                label Expiration Date
+                                    //span.required-icon(ng-show="auth_form.ExpireMonth.$invalid && !auth_form.ExpireYear.$pristine") x
+                                select.form-control(name="ExpireMonth" ng-model="user.ExpireMonth" required="")
+                                    option(value="") MM
+                                    option(value=01) 01-Jan
+                                    option(value=02) 02-Feb
+                                    option(value=03) 03-Mar
+                                    option(value=04) 04-Apr
+                                    option(value=05) 05-May
+                                    option(value=06) 06-Jun
+                                    option(value=07) 07-Jul
+                                    option(value=08) 08-Aug
+                                    option(value=09) 09-Sep
+                                    option(value=10) 10-Oct
+                                    option(value=11) 11-Nov
+                                    option(value=12) 12-Dec
+                                select.form-control(name="ExpireYear" ng-model="user.ExpireYear" required="")
+                                    option(value="") YYYY
+                                    option 2014
+                                    option 2015
+                                    option 2016
+                                    option 2017
+                                    option 2018
+                                    option 2019
+                                    option 2020
+                                    option 2021
+                                    option 2022
+
+                            h3 Reference Details:
+                            .form-group
+                                label MID Group:
+                                    span.required-icon(ng-show="auth_form.midGroup.$invalid && !auth_form.midGroup.$pristine") x
+                                select.form-control(name="midGroup" ng-model="user.midGroup" ng-options="obj.Id as obj.Name for obj in groupsBulk" required="")
+
+                                    
+                            .form-group
+                                label Ref Details:
+                                    span.required-icon(ng-show="auth_form.refnumber.$invalid && !auth_form.refnumber.$pristine") x
+                                input(name="refnumber" type="text" placeholder="ex 564-984716" ng-model="user.refnumber" required="")
+                    .row
+                        div.userError
+                            p Please Fill In Required Fields
+                        a(href="" ng-click="submit()" type="submit").generate_results Authorize
+                // CAPTURE FORM
+                form.form-inline.virtual_form(name="capture_form" ng-show="authType == 'Capture'" novalidate)
+                    h2.stand Capture form:
+                    .row.virtual_content
+                        .col-md-6
+                            h3 Previous Transaction Details:
+                            .form-group
+                                label Transaction number:
+                                    span.required-icon *
+                                input(type="text" name="TransNumber" ng-model="user.TransNumber" placeholder="ex. 5489629" required="")
+                            .form-group
+                                label Authorization code:
+                                    span.required-icon *
+                                input(type="text" name="AuthCode" ng-model="user.AuthCode" placeholder="Enter Authorization Code" required="")
+                        .col-md-6
+                            h3 Reference Details:
+                            .form-group
+                                label Ref number:
+                                    span.required-icon *
+                                input(type="text" name="RefNumber" ng-model="user.RefNumber" placeholder="Enter Your Unique Identifier" required="")
+                     .row
+                        div.userError
+                            p Please Fill In Required Fields
+                        a(href="" ng-click="captureSubmit()").generate_results Capture
+
+                // CHARGE FORM
+                form.form-inline.virtual_form(name="charge_form" ng-show="authType == 'Charge'" novalidate)
+                    h2.stand Charge form:
+                    .row.virtual_content
+                        .col-md-6
+                            h3 Customer Details:
+                            .form-group
+                                label First name:
+                                    span.required-icon(ng-show="charge_form.fname.$invalid && !charge_form.fname.$pristine") x
+                                input.form-control(type="text" name="fname" placeholder="Lee" ng-model="user.fname" required="")
+                            .form-group
+                                label Last name:
+                                    span.required-icon(ng-show="charge_form.lname.$invalid && !charge_form.lname.$pristine") x
+                                input.form-control(type="text" name="lname" placeholder="Nelson" ng-model="user.lname" required="")
+                            .form-group
+                                label Email:
+                                    span.required-icon(ng-show="charge_form.email.$invalid && !charge_form.email.$pristine") x
+                                input.form-control(type="email" name="email" placeholder="youremail@gmail.com" ng-model="user.email" required="")
+                            //.form-group
+                                label IP address:
+                                input.form-control(type="text" name="" placeholder="ex 127.0.0.1")
+                            .form-group
+                                label Billing address:
+                                    span.required-icon(ng-show="charge_form.address.$invalid && !charge_form.address.$pristine") x
+                                input.form-control(type="text" name="address" placeholder="123 Main St" ng-model="user.address" required="")
+                            .form-group
+                                label Billing city:
+                                    span.required-icon(ng-show="charge_form.city.$invalid && !charge_form.city.$pristine") x
+                                input.form-control(type="text" name="city" placeholder="ex San Diego" ng-model="user.city" required="")
+                            .form-group
+                                label Billing state:
+                                    span.required-icon(ng-show="charge_form.state.$invalid && !charge_form.state.$pristine") x
+                                input.form-control(type="text" name="state" placeholder="ex CA" ng-model="user.state" required="")
+                            .form-group
+                                label Billing country:
+                                    span.required-icon(ng-show="charge_form.country.$invalid && !charge_form.country.$pristine") x
+                                input.form-control(type="text" name="country" placeholder="ex USA" ng-model="user.country" required="")
+                            .form-group
+                                label Billing postal:
+                                    span.required-icon(ng-show="charge_form.zip.$invalid && !charge_form.zip.$pristine") x
+                                input.form-control(type="text" name="zip" placeholder="ex 92111" ng-model="user.zip" required="")
+                            .form-group
+                                label Billing phone:
+                                    span.required-icon(ng-show="charge_form.phone.$invalid && !charge_form.phone.$pristine") x
+                                input.form-control(type="text" name="phone" placeholder="ex 619-540-9909" ng-model="user.phone" required="")
+
+                        .col-md-6
+                            h3 Payment Details:
+                            .form-group
+                                label Amount:
+                                    span.required-icon(ng-show="charge_form.amount.$invalid && !charge_form.amount.$pristine") x
+                                input.form-control(type="text" name="amount" placeholder="50" ng-model="user.amount" required="")
+                            .form-group
+                                label Currency:
+                                    span.required-icon(ng-show="charge_form.currency.$invalid && !charge_form.currency.$pristine") x
+                                select.form-control(name="currency" ng-model="charge_form.currency" required="" ng-options="obj.Id as obj.Name for obj in currencies")
+                                    
+                            .form-group
+                                label Credit Card Number:
+                                    span.required-icon(ng-show="charge_form.ccNumber.$invalid && !charge_form.ccNumber.$pristine") x
+                                input.form-control(type="text" name="ccNumber" placeholder="ex. 4264-6542-4984-4116" ng-model="user.ccNumber" required="")
+                            .form-group
+                                label CVV:
+                                    span.required-icon(ng-show="charge_form.Cvv.$invalid && !charge_form.Cvv.$pristine") x
+                                input.form-control(type="password" name="Cvv" maxlength="4" ng-model="user.Cvv" required="")
+                            .form-group
+                                label Expiration Date
+                                select.form-control(name="ExpireMonth" ng-model="user.ExpireMonth" required="")
+                                    option(value="") MM
+                                    option(value=01) 01-Jan
+                                    option(value=02) 02-Feb
+                                    option(value=03) 03-Mar
+                                    option(value=04) 04-Apr
+                                    option(value=05) 05-May
+                                    option(value=06) 06-Jun
+                                    option(value=07) 07-Jul
+                                    option(value=08) 08-Aug
+                                    option(value=09) 09-Sep
+                                    option(value=10) 10-Oct
+                                    option(value=11) 11-Nov
+                                    option(value=12) 12-Dec
+                                select.form-control(name="ExpireYear" ng-model="user.ExpireYear" required="")
+                                    option(value="") YYYY
+                                    option 2014
+                                    option 2015
+                                    option 2016
+                                    option 2017
+                                    option 2018
+                                    option 2019
+                                    option 2020
+                                    option 2021
+                                    option 2022
+
+                            h3 Reference Details:
+                            .form-group
+                                label MID Group:
+                                    span.required-icon(ng-show="charge_form.midGroup.$invalid && !charge_form.midGroup.$pristine") x
+                                select.form-control(name="midGroup" ng-model="user.midGroup" ng-options="obj.Id as obj.Name for obj in groupsBulk" required="")
+
+                            .form-group
+                                label Ref Details:
+                                    span.required-icon(ng-show="charge_form.refnumber.$invalid && !charge_form.refnumber.$pristine") x
+                                input(type="text" name="refnumber" placeholder="ex 564-984716" ng-model="user.refnumber" required="")
+                    .row
+                        div.userError
+                            p Please Fill In Required Fields
+                        a(href="" ng-click="chargeSubmit()").generate_results Charge
+
+                // REFUND FORM
+                form.form-inline.virtual_form(name="refund_form" ng-show="authType == 'Refund'" novalidate)
+                    h2.stand Refund form
+                    .row.virtual_content
+                        .col-md-6
+                            h3 Previous Transaction Details
+                            .form-group
+                                label Transaction number:
+                                input(type="text" ng-model="refund_form.transNumber")
+                            .form-group
+                                label Authorization code:
+                                input(type="text" ng-model="refund_form.AuthCode")
+                        .col-md-6
+                            h3 Payment Details
+                            .form-group
+                                label Amount
+                                input(type="text" ng-model="refund_form.Amount")
+                            h3 Reference Details
+                            .form-group
+                                label Ref number
+                                input(type="text" ng-model="refund_form.refnumber")
+                    .row
+                        a(href="" ng-click="refundSubmit()").generate_results Authorize
+                // VOID FORM
+                form.form-inline.virtual_form(name="void_form" ng-show="authType == 'Void'" novalidate)
+                    h2.stand Void Form
+                    .row.virtual_content
+                        .col-md-6
+                            h3 Transaction number
+                            .form-group
+                                label Transaction number:
+                                input(type="text" ng-model="refund_form.transNumber")
+                            .form-group
+                                label Authorization code:
+                                input(type="text" ng-model="refund_form.AuthCode")
+                        .col-md-6
+                            h3 Reference Details
+                            .form-group
+                                label Ref number:
+                                input(type="text" ng-model="refund_form.refnumber")
+                    .row
+                        a(href="" ng-click="voidSubmit()").generate_results Authorize
+// COMMUNICATION DETAIL
+.panel.panel-default.comm-panel(ng-controller="CommCtrl")
+    .panel-heading
+        .row
+            .col-md-2
+                h2 Request:
+                    //span.success {{reqStatus}}
+                    span(ng-class="(reqStatus == 0) ? 'success' : 'failed'") {{RequestTxt}}
+            .col-md-2
+                h2 Response: 
+                   span(ng-class="(repStatus == 0) ? 'success' : 'failed'") {{ResponseTxt}}
+
+            .col-md-3
+                a.toggleComm(href="" ng-click="isCollapsed = !isCollapsed; toggleText()") Hide Communication Details
+            .col-md-3
+                a(href="" clip-copy="getTextToCopy()" clip-click="doSomething()") Copy Details
+    .panel-body.comm-details(collapse="isCollapsed")
+        .row.request_row(ng-class="(reqStatus == 0) ? 'success-bg' : 'failed-bg'")
+            .col-md-1
+                h2 Request
+                p {{RequestTxt}}
+            .col-md-11
+                p {{Request}}
+        .row.response_row(ng-class="(repStatus == 0) ? 'success-bg' : 'failed-bg'")
+            .col-md-1
+                h2 Response
+                p {{ResponseTxt}}
+            .col-md-11
+                p {{Response}}

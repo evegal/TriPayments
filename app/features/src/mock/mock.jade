@@ -1,0 +1,43 @@
+// VIEW FOR TESTING PURPOSES
+
+include ../modals/mockModal.jade
+
+.row
+	.col-md-12
+		table.table
+			thead
+				tr
+					th ID
+					th Company
+					th Actions
+					
+			tbody
+				tr(ng-repeat="worker in workers")
+					td {{worker.id}}
+					td {{worker.company}}
+					td
+						a.btn.btn-default(href="" ng-click="doEdit(worker)") Edit
+						a.btn.btn-default(href="") Delete
+					
+//.row
+	h2 Users
+		ul(ng-repeat="User in Users")
+			li {{User.UserName}}
+
+//.row
+	.col-md-12.jumbotron
+		select.form-control(ng-options="User.company for User in workers" ng-model="selectedItem")
+
+.row
+	.col-md-12
+		p PopIn
+		tri-popover
+
+.row
+	.col-md-12
+		div(ui-view="")
+
+.row
+	.col-md-12
+		select(ng-model="blah" ng-options="item.BalancingTypeId as item.BalancingType for item in BalancingTypes")
+		

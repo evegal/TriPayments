@@ -1,0 +1,53 @@
+<script type="text/ng-template" id="midsModalContent2.html">
+<div class="modal-header">
+	<h3 class="modal-title"><span class="subtle">Edit MID: </span>{{mid.DisplayName}}</h3>
+	<button type="button" class="close" ng-click="cancel()">x</button>
+</div>
+
+<div class="modal-body">
+	
+	<form name="mid_form">
+
+		<div class="row">
+			<div class="col-md-6">
+				<label>MID Name</label>
+				<input type="text" ng-model="mid.DisplayName" class="form-control" />
+			</div>
+			<div class="col-md-6">
+				<!--
+				<label>Rollover MID</label>
+				<select ng-model="mid.RolloverMidId" class="form-control" ng-options="obj.RolloverMidId as obj.RolloverMidId for obj in rollOvers">
+				</select>
+				-->
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-6">
+				<label>Gateway</label>
+				<input type="text" ng-model="mid.Gateway" class="form-control" />
+			</div>
+			<div class="col-md-6">
+				<label>Monthly Cap</label>
+				<input type="text" ng-model="mid.MonthlyCap" class="form-control" />
+			</div>
+		</div>
+
+		<div class="row">
+
+		</div>
+		
+	</form>
+</div>
+
+
+
+<div class="modal-footer action_group">
+	 
+        <a class="modal_edit" ng-show="mid_form.$dirty" ng-click="updateMID(mid)">Save</a>
+        <a class="cancel_btn" ng-click="cancel()">Exit</a>                      
+   
+</div>
+
+
+</script>

@@ -1,0 +1,64 @@
+<!--MODAL WINDOW--> 
+    <script type="text/ng-template" id="refundModalContent.html">
+        <div class="modal-header">
+            <h3 class="modal-title"><span class="subtle">Refund Transaction:</span> {{trans.TransactionId}} <span class="subtle">Name:</span> {{trans.FirstName}} {{trans.LastName}}</h3>
+            <button type="button" class="close" ng-click="cancelRefund()">x</button>
+         </div>
+        <div class="modal-body">
+          <table class="table-refund-input">
+            <tbody>
+                <tr>
+                    <td><h3 class="refund-panel">Refund Amount: </h3></td>
+                    <td><input class="form-control amount_input" id="refundAmount" type="text" placeholder="Enter Refund Amout" required></td>
+                    <td>{{trans.Currency}}</td>
+                </tr>
+            </tbody>
+         </table>
+
+
+          <table class="table table-responsive">
+            <h3>Transaction Details</h3>
+            <thead>
+                <tr>
+                    <th>Transaction Id</th>
+                    <th>CRM MID</th>
+                    <th>Amount</th>
+                    <th>Currency</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                </tr>
+            <thead>
+            <tbody>
+                <tr>
+                    <td>{{trans.TransactionId}}</td>
+                    <td>{{trans.MidDisplayName}}</td>
+                    <td>{{trans.Amount | currency}}</td>
+                    <td>{{trans.Currency}}</td>
+                    <td>{{trans.FirstName}}</td>
+                    <td>{{trans.LastName}}</td>
+                </tr>
+            </tbody>
+         </table>
+            
+        <div class="MID_feedback">
+            <p class="p-title">Are You Sure You Want To Refund?</p>
+            <h3>{{trans.Currency}} {{refundAmount | currency}}</h3>
+            <a href="" class="confirm_btn" ng-click="confirmRefund()">Confirm</a>
+        </div>
+
+        <div class="userCreateSuccess">
+          <p>Refund Successful</p>
+        </div>
+
+        <div class="userError">
+            <p>Refund Failed</p>
+        </div>
+                
+        </div>
+         <div class="modal-footer">
+            <section class="voidBtns">
+              <a href=""  class="action_btn" ng-click="processRefund(trans.Amount,trans.TransactionId)">Refund</a>
+              <a href="" class="cancel_btn" ng-click="cancelRefund()">Cancel</a>
+            </section>
+        </div>
+     </script>

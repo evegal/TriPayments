@@ -1,0 +1,311 @@
+//Table overides
+.table{
+    font-size:14px;
+    tr td {
+        vertical-align: middle !important;
+    }
+}
+.table-bordered{
+    td, th{
+        border: none !important;
+        border-bottom: solid 1px #ccc !important;
+    }
+}
+.tr-ng-title{
+    .tr-ng-sort{
+        width:14px !important;
+        height:14px !important;
+        float:right !important;
+        cursor: pointer;
+    }
+}
+.primary_search_table {
+    font-size:.9em; 
+    thead {
+        display:none;
+    }
+    .action_btn {
+        background:$river;
+        color:#fff;
+        display:inline-block;
+        width:100%;
+        padding:10px;
+        text-align:center;
+        &:hover {
+            background:$belizehole;
+            text-decoration:none;
+        }
+    }
+    .disabled{
+        cursor: default;
+        background:$silver !important;
+    }
+    .void_btn {
+        background:$alizarin;
+        margin-right:5px;
+        width:40%;
+        &:hover {
+            background:$pomegranate;
+            text-decoration:none;
+        }
+    }
+    .refund_btn {
+        background:$carrot;
+        width:50%;
+        &:hover {
+            background:$pumpkin;
+            text-decoration:none;
+        }
+    }
+    .floater {
+        left: -130%;
+    }
+}
+.st-header {
+    cursor:pointer;
+    position:relative;
+    &:after {
+        content:'';
+        position:absolute;
+        height:0px;
+        width:0px;
+        border-left:6px solid transparent;
+        border-right:6px solid transparent;
+        border-top:6px solid #29ace2;
+        border-bottom:6px solid transparent;
+        top:45%;
+        //margin-left:5px;
+        right:20px;
+    }
+}
+.st-sort-ascent {
+    &:after {
+        content:'';
+        position:absolute;
+        height:0px;
+        width:0px;
+        border-left:6px solid transparent;
+        border-right:6px solid transparent;
+        border-top:6px solid transparent;
+        border-bottom:6px solid #29ace2;
+        top:30%;
+        //margin-left:5px;
+        right:20px;
+    }   
+}
+.st-header-no-soft{
+    background: #fff !important;
+}
+// Merchants Table
+.merchant_save {
+    background:$green;
+}
+.cancelEdit {
+    background:$red !important;
+}
+.fatrow {
+    height:65px;
+    td {
+        vertical-align: middle !important;
+    }
+    @media(max-width:810px) {
+         height:auto;
+     } 
+}
+table.nested {
+    td {
+        padding:8px;
+    }
+    tbody {
+        
+    }
+}
+.nestedRow {
+    
+}
+.childRow {
+    position:relative;
+    > td {
+        padding:0 !important;
+    }
+    a.accordion-toggle {
+        /*
+        background:$peterriver;
+        color:#fff;
+        position:absolute;
+        padding: 4px;
+        right:0;
+        top:-53px;
+        font-size:14px;
+        width:5%;
+        text-align:center;
+        &:hover {
+            text-decoration:none;
+            background:$belizehole;
+        }
+        */
+    }
+    .panel {
+        border:0px;
+    }
+    .panel-heading {
+        padding:0px !important;
+    }
+}
+.parent_row {
+    background:$skyblue;
+    .CapEmail + .editable-wrap {
+        width:100%;
+    }
+    .CurrencyName + .editable-wrap {
+        width:50%;
+    }
+}
+.hidden-panel {
+    display:none;
+}
+.parentTableHead {
+    background:$skyblue;
+}
+table {
+    thead {
+        background:$softbase;
+        color:#333;
+    }
+}
+
+
+//----------- EDITABLE TABLE
+.editable-input {
+    background:#999;
+    border-radius:5px;
+    border:0px;
+    color:#fff;
+    padding-left:5px;
+    font-weight:500;
+    width:90%;
+    height:30px;
+}
+select.editable-input {
+    height:30px;
+}
+
+.transId_btn {
+    display: block;
+    width: 100%;
+    background: $peterriver;
+    padding: 10px 0;
+    text-align: center;
+    color: #fff;
+    &:hover {
+        background:$belizehole;
+        color:#fff;
+        text-decoration:none;
+    }
+}
+.ng-table {
+    border:0px;
+    th {
+        text-align:left;
+    }
+    thead > tr {height:40px;}
+    tr {
+        height:60px;
+        font-size:14px;
+        position:relative;
+        td {
+            vertical-align: middle !important;
+        }
+    }
+}
+.ng-table-counts {
+    display:none;
+}
+
+.search_area .ng-isolate-scope {
+    text-align:right;
+}
+
+// NG-GRID
+.gridStyle {
+    //border: 1px solid rgba(212,212,212);
+    width: 100%;
+    height:400px;
+}
+.selectedItems {
+    
+}
+
+// PAYMENT TYPES
+.paymentTypes {
+    i {
+        display:inline-block;
+        margin-right:5px;
+    }
+}
+
+// CURRENCY
+.cash_pos {
+    color:$green;
+}
+.cash_neg {
+    color:$red;
+}
+
+///////////////
+// SNAP FORM 
+///////////////
+.snapForm_results {
+    display:none;
+}
+.snapSpan {
+    border-right:1px solid #ccc;
+    padding-right:5px;
+    margin-right:5px;
+}
+
+///////////////
+// TRANS FORM 
+///////////////
+
+.transForm_feedback {
+    display:none;
+    a.accordion-toggle {
+        display:block;
+        padding:25px 0;
+    }
+    .pushToggle .panel-heading {
+        margin-top:-55px;
+        padding:0;
+    }
+    td.pushToggle {
+        border-bottom:0px;
+        padding:0;
+        .panel {
+            border:0px;
+        }
+    }
+    table th,table td {
+        border-bottom:0px !important;
+    }
+    .table_action_btn {
+        color:#fff;
+        display:inline-block;
+        font-size:12px;
+        padding:10px 5px;
+        width:31%;
+        text-align:center;
+        &:hover {
+            text-decoration:none;
+        }
+        i {
+            margin-right:5px;
+        }
+        span.btn_text {
+            @media(max-width:1700px) {
+                display:none;
+            }
+        }
+    }
+    
+}

@@ -1,0 +1,63 @@
+<script type="text/ng-template" id="addMIDSContent.html">
+<div class="modal-header">
+    <h3 class="modal-title"><span class="subtle">Add MIDS To:</span> {{groupName}}</h3>
+    <button type="button" class="close" ng-click="cancel()">x</button>
+</div>
+<div class="modal-body">
+    
+    <form name="addMIDform" ng-submit="ok()" novalidate>
+
+        <div class="row">
+            
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th style="width:50%">Available MIDS</th>
+                        <th style="width:50%">Actions</th>
+                    </tr>
+                 </thead>
+                 <tbody>
+                    <tr ng-repeat="mid in availableMIDS">
+                        <td>{{mid.DisplayName}}</td>
+                        <td class="action_group">
+                            <a class="row_btn emerald_btn" href="" ng-click="addMID($index,mid)"><i class="fa fa-plus"></i><span>Add MID</span></a>
+                        <td>
+                    </tr>
+
+                 </tbody>
+            </table>
+            
+            <!--
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th style="width:50%">Available MIDS</th>
+                        <th style="width:50%">Actions</th>
+                    </tr>
+                 </thead>
+                 <tbody>
+                    <tr ng-repeat="flagged in flaggedMIDS">
+                        <td>{{flagged.DisplayName}}</td>
+                        <td class="action_group">
+                            <a class="modal_edit" href="" ng-click="unFlagMID($index,mid)">Remove MID</a>
+                        <td>
+                    </tr>
+                 </tbody>
+            </table>
+            -->
+           
+        </div>
+
+    </form>
+
+</div>
+
+<div class="userCreateSuccess">
+        <p>Success</p>
+</div>
+
+<div class="modal-footer action_group">
+    <a href="" class="row_btn peter_river_btn" ng-click="cancel()"><i class="fa fa-sign-out"></i><span>Exit</span></a>
+</div>
+
+</script>

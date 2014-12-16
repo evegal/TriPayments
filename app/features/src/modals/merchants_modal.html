@@ -1,0 +1,145 @@
+<div>
+    <script type="text/ng-template" id="merchantModalContent.html">
+        <div class="modal-header">
+            <h3 class="modal-title">Merchant Account Setup</h3>
+        </div>
+        <div class="modal-body">
+           
+
+         <div ng-controller="merchantTabsCtrl">
+
+      <tabset justified="true">
+        <tab heading="Setup">
+
+            <form class="form-inline" name="setup_form" role="form">
+                <div class="row">
+                    <div class="col-md-6">
+
+                    <div class="row">
+                        <div class="col-md-6">
+                        <p><span>Status</span></p>
+                       <div class="form-group">
+                            <input type="radio">
+                            <label for="status">Active</label>
+                       </div>
+                       </div>
+
+                       <div clas="col-md-6">
+                       <p><span>Processor</span></p>
+                       <div class="form-group">
+                            <select>
+                                <option>payments</option>
+                                <option>payments</option>
+                                <option>payments</option>
+                            </select>
+                       </div>
+                       </div>
+                    </div>
+
+                    <p><span>Daily Processing Limit</span></p>
+                    <div class="form-group row">
+                          <div class="col-md-6">
+                          <select>
+                                <option>payments</option>
+                                <option>payments</option>
+                                <option>payments</option>
+                            </select>
+                          </div>
+
+                          <div class="col-md-6">
+                            <input type="text" class="form-control">
+                            </div>
+                    </div>
+
+                    <p><span>Processor ID Number</span></p>
+                    <div class="form-group">
+                    <input type="text" class="form-control long_input" placeholder="Enter Your Processing ID">
+                    </div>
+
+
+                    <div class="row">
+                    <div class="col-md-6">
+                    <p><span>Reserve Account Rate</span></p>
+                    <div class="form-group">
+                    <input type="text" class="form-control long_input">
+                    </div>
+                    </div>
+
+                    <div class="col-md-6">
+                     <h2>Gateway Fee</h3>
+                    <div class="form-group">
+                    <input type="text" class="form-control long_input">
+                    </div>
+                    </div>
+                    </div>
+
+
+                    </div>
+
+                    <div class="col-md-6">
+                       
+                    <h2>Rollover MD</h2>
+                    <div class="form-group">
+                         <select>
+                                <option>payments</option>
+                                <option>payments</option>
+                                <option>payments</option>
+                        </select>
+                    </div>
+
+                    <h2>Display Name</h2>
+                    <div class="form-group">
+                        <input type="text" class="form-control long_input">
+                    </div>
+
+                    <div class="row">
+                    <div class="col-md-6">
+                        <h2>Monthly Cap</h2>
+                        <input type="text" class="form-control">
+                    </div>
+                    <div class="col-md-6">
+                        <h2>Transaction Fee</h2>
+                        <input type="text" class="form-control">
+                    </div>
+                    </div>
+
+                     <div class="row">
+                    <div class="col-md-6">
+                        <h2>Chargeback Fee</h2>
+                        <input type="text" class="form-control">
+                    </div>
+                    <div class="col-md-6">
+                        <h2>Discount Rate</h2>
+                        <input type="text" class="form-control">
+                    </div>
+                    </div>
+
+
+
+                    </div>
+                </div>
+
+                <h2>Cards Accepted</h2>
+                    <input type="radio" class="visa_card">
+            </form>
+        </tab>
+        <tab heading="chargebacks">
+
+        <ul ng-repeat="merchant in merchants">
+        <p>{{merchant.display_name}}</p>
+        </ul>
+        </tab>
+        <tab heading="Test Transaction">Long Labeled Justified content</tab>
+        <tab heading="Email Configuration">Long Labeled Justified content</tab>
+      </tabset>
+        </div> 
+        
+       
+        </div>
+        <div class="modal-footer">
+             <a href="" ng-click="ok()">Cancel</a>
+             <a href="" ng-click="ok()">Save</a>
+        </div>
+
+    </script>
+</div>

@@ -1,0 +1,14 @@
+.row.jumbotron
+    .col-md-6
+        p Company
+        input.form-control(type="text" ng-model="chosenWorker.company")
+       
+    .col-md-6
+        p Id
+        input.form-control(type="text" ng-model="chosenWorker.id")
+.row.jumbotron
+    .col-md-6
+        p Balancing Types
+        select(ng-model="blah" ng-options="item.BalancingTypeId as item.BalancingType for item in BalancingTypes")
+//.row
+    {{BalancingTypes}}

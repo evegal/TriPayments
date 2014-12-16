@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+  <head>
+    <meta charset="UTF-8">
+    <title>Tri-Portal Go</title>
+    <link href="bower_components/angular-loading-bar/src/loading-bar.css" rel="stylesheet">
+    <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css">
+    <link href="bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="bower_components/angular-wizard/dist/angular-wizard.css">
+    <link href="styles/stylesheets/screen.css" rel="stylesheet" type="text/css">
+  </head>
+  <body ng-controller="indexCtrl" class="{{$state.current.name}}">
+    <div ui-view=""></div>
+  </body>
+  <script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+  <script src="bower_components/jquery/dist/jquery.min.js"></script>
+  <script src="bower_components/angular-loading-bar/build/loading-bar.min.js"></script>
+  <script src="bower_components/angular-local-storage/dist/angular-local-storage.min.js"></script>
+  <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+  <script src="bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+  <script src="bower_components/angular-smart-table/dist/smart-table.min.js"></script>
+  <script src="bower_components/angular-smart-table/dist/smart-table.debug.js"></script>
+  <script src="bower_components/angular-wizard/dist/angular-wizard.js"></script>
+  <script src="bower_components/lodash/dist/lodash.min.js"></script>
+  <script src="bower_components/angular-momentjs/angular-momentjs.js"></script>
+  <script src="bower_components/moment/min/moment.min.js"></script>
+  <script src="bower_components/zeroclipboard/dist/ZeroClipboard.min.js"></script>
+  <script src="bower_components/ng-clip/dest/ng-clip.min.js"></script>
+  <script src="bower_components/ng-csv/build/ng-csv.min.js"></script>
+  <script src="js/app.js"></script>
+  <script src="features/src/login/loginCtrl.js"></script>
+  <script src="features/src/app/appCtrl.js"></script>
+  <script src="features/src/search/searchCtrl.js"></script>
+  <script src="features/src/merchants/midsCtrl.js"></script>
+  <script src="features/src/merchants/groupsCtrl.js"></script>
+  <script src="features/src/vterminal/vterminalCtrl.js"></script>
+  <script src="features/src/usermanager/usermanagerCtrl.js"></script>
+  <script src="features/src/resetpass/resetCtrl.js"></script>
+  <script src="features/src/mock/mockCtrl.js"></script>
+  <script src="js/services/services.js"></script>
+  <script src="js/directives/directives.js">   </script>
+</html>

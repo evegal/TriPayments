@@ -1,0 +1,24 @@
+
+.row.login_panel.login_dash
+    .text-center.fa-2x.login_box
+        form.form(ng-submit="loginSub()" name="loginForm" novalidate ng-class="")
+            p.login-logo 
+                 img(src="../../images/logo.png")
+            p Sign In To Your Account
+            
+            input.form-control(type="text" placeholder="Username" id="username" ng-model="loginData.userName" required="" autofocus="")
+            
+            input.form-control(type="password" placeholder="Password" id="password" ng-model="loginData.password" required="")
+            
+            button.btn.btn-primary.form-control(type="submit" id="submit" ng-click="login()") Enter Portal
+            .user_help
+                .login_error_msg
+                    p {{message}}
+                a.forgot(ui-sref="reset") Forgot password or username?
+                
+            .logout
+                //p {{logoutMsg}}
+                p.logoutMsg(ng-show="{{loggedOut}}") logged out
+    section.copyright
+        p copyright &copy; 2014 Trangle Holdings Limited d/b/a
+        p Triangle Payments. All Rights Reserved.

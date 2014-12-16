@@ -1,0 +1,53 @@
+script(type="text/ng-template" id="merchantCreateContent.html")
+    .modal-header
+        h3.modal-title.subtle
+            span.subtle Create Merchant Group
+        button.close(type="button" ng-click="cancel()") x
+    .modal-body
+        form.merchantCreateForm(name="merchantCreateForm" ng-submit="ok()" novalidate)
+            .row
+                .col-md-6
+                    p Merchant Name
+                    input.form-control(type="text" placeholder="Enter Custom Group Name" id="merchantGroupName")
+                .col-md-6
+                    p Currency
+                    //select.form-control(ng-options="item.Id as item.Name for item in currencies" ng-model="Currency")
+                    select.form-control(id="Currency")
+                        option Select A Currency
+                        option(value=0) USD
+                        option(value=3) AUD
+                        option(value=4) CAD
+                        option(value=5) DKK
+                        option(value=2) EUR
+                        option(value=1) GBP
+                        option(value=7) JPY
+                        option(value=8) NOK
+                        option(value=6) NZD
+                        option(value=9) SEK
+                        option(value=6) NZD
+                        option(value=11) SGD
+            .row
+                .col-md-6
+                    p Balancing Type
+                    select.form-control(id="BalancingType")
+                        option(value=0) None
+                        option(value=1) Cap
+                        option(value=2) Priority
+                .col-md-6
+                    p Email For Notification
+                    input.form-control(type="text" placeholder="Enter Emails" id="MerchantEmail")
+            .merchant_feedback
+                p.p-title Confirm New Merchant Details
+                a.save_btn(type="submit" ng-click="ok()") Save
+
+            .userCreateSuccess
+                p Merchant Account Created
+        .nameError
+            p {{createErrorMsg}}
+    .modal-footer
+        a(ng-click="submitUserCreate()")
+            i.fa.fa-plus
+            span Create
+        a(ng-click="cancel()")
+            i.fa.fa-sign-out
+            span Exit

@@ -1,0 +1,30 @@
+.modal-merchants-container
+    script(type="text/ng-template" id="merchantModalContent.html")
+        .modal-header
+            h3.modal-title Merchant Account Setup | {{merchant.display_name}}
+        .modal-body
+            .modal-body-tabs(ng-controller="merchantTabsCtrl")
+                tabset(justified="true")
+                    tab(heading="Setup")
+                        form.form-inline(name="setup_form" role="form")
+                            .row
+                                .col-md-6
+                                    label(for="display_name") Display Name
+                                    input(name="display_name" type="text" value="{{merchant.display_name}}")
+                                    label(for="monthly_cap") Monthly Cap
+                                    input(name="monthly_cap" type="number" value="{{merchant.monthly_cap}}")
+                                    label(for="monthly_cap_status") Monthly Cap Status
+                                    input(name="monthly_cap_status" type="number" value="{{merchant.monthly_cap_status}}")
+                                .col-md-6
+                                    label(for="gateway") Gateway
+                                    input(name="gateway" type="text" value="{{merchant.gateway}}")
+                                    label(for="payment_types") Payment Types
+                                    input(name="payment_types" type="text" value="{{merchant.payment_types}}")
+                                    label(for="status") Status
+                                    input(name="status" type="text" value="{{merchant.status}}")
+                    tab(heading="Chargebacks")
+                    tab(heading="Test Transaction")
+                    tab(heading="Email Configuration")
+        .modal-footer
+            a(href="" ng-click="ok()") Cancel
+            a(href="" ng-click="ok()") Save

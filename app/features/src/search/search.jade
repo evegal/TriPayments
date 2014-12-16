@@ -1,0 +1,294 @@
+include ../modals/transaction_modal.html
+include ../modals/confirm_modal.html
+include ../modals/refund_modal.html
+
+
+.dash
+    h1 Reports
+    .panel.panel-default.snap-panel-options
+        .panel-heading
+            .row
+                .col-md-8
+                    h2.panel-title Transaction Snapshot:
+        .panel-body
+            .row
+                form.form.searcher.snap-shot(name="snapForm" ng-submit="snapFormSubmit()")
+                        h2.search_header SnapShot
+                        .row
+                            .col-md-4
+                                label Start Date:
+                                .row
+                                    .col-md-8
+                                        include partials/calendar1-1.jade
+                                    .col-md-2
+                                        select.form-control(ng-options="item as item for item in Hours" ng-model="fromHours")
+                                        
+                                    .col-md-2
+                                        select.form-control(ng-options="item as item for item in Mins" ng-model="fromMins")
+                                           
+                                        
+                            .col-md-4
+                                label End Date:
+                                .row
+                                    .col-md-8
+                                        include partials/calendar1-2.jade
+                                    .col-md-2
+                                        select.form-control(ng-options="item as item for item in Hours" ng-model="toHours")
+                                            
+                                        
+                                    .col-md-2
+                                        select.form-control(ng-options="item as item for item in Mins" ng-model="toMins")
+                                           
+                                        
+                            .col-md-4
+                                label Preset Date Range:
+                                select.form-control(ng-model="snapForm.fromDate")
+                                    option Select An Item
+                                    option(value="{{Yesterday}}") Yesterday
+                                    //option Last Week
+                                    //option Last Month
+                                    //option Last Quarter
+                                    //option Last Year
+                                    option(value="{{past3Days}}") Past 3 Days
+                                    option(value="{{past7Days}}") Past 7 Days
+                                    option(value="{{past90Days}}") Past 90 Days
+                                    option(value="{{past180Days}}") Past 180 Days
+                                    option(value="{{past360Days}}") Past 365 Days
+                           
+                        .row
+                            .col-md-4
+                                label Gateway
+                                select.form-control(ng-model="snapForm.gateway" ng-options="obj.Id as obj.DisplayName for obj in gateways")
+                                    
+                        .row
+                            .col-md-12
+                                button.generate_results(type="submit")
+                                    i.fa.fa-search
+                                    span Snapshot Search
+
+
+    .panel.panel-default.panel-options
+        .panel-heading
+            .row
+                .col-md-8
+                    h2.panel-title Transaction Search:
+                .col-md-4
+                    //.row
+                        .col-md-6
+                            a.search_format.single_format(href="" ng-model="searchType" ng-click="singleFormat()") 
+                                i.fa.fa-file-o
+                                span Single Format:
+                                
+                        .col-md-6
+                            a.search_format.group_format(href="" ng-model="searchType" ng-click="groupFormat()") 
+                                i.fa.fa-files-o
+                                span Group Format:
+                                
+        .panel-body
+            .row(ng-show="searchType == 'single'")
+                form.form.searcher(ng-submit="submit()" name="search_form" novalidate)
+                    h2.date_title.search_header Date Selection:
+                    .row
+                        .col-sm-8
+                            include partials/filler.html
+                        .col-sm-4
+                    h2.search_header User Details:
+                    .row
+                        .col-md-4
+                            .form-group
+                                label Last Name
+                                input(type="text" placeholder="ex Nelson" ng-model="search_form.lname" id="lname" value="name")
+                        .col-md-4
+                                label First Name
+                                input(type="text" placeholder="ex John" ng-model="search_form.fname")
+                        .col-md-4
+                                label Email
+                                input(type="text" placeholder="ex johndoe@email.com" ng-model="search_form.email")
+                    .row
+                        .col-md-4
+                            .form-group
+                                label Transaction ID
+                                input(type="text" placeholder="ex 5489629" ng-model="search_form.transID")
+                        .col-md-4
+                            .form-group
+                                label Credit Card's Last 4 Digits
+                                input(type="text" placeholder="ex 1680" ng-model="search_form.cc_digits")
+                        .col-md-4
+                                label Phone Number
+                                input(type="text" placeholder="ex 619-445-9654" ng-model="search_form.phoneNum")
+                    .advanced_fields
+                        h2.tagged Advanced Search
+                        .row
+                            .col-md-3
+                                .form-group
+                                    label Status
+                                    select.form-control(ng-model="search_form.statusmenu" ng-options="obj.value as obj.text for obj in statusItems")
+                                       option(value="") Select An Item
+
+                            .col-md-3
+                                    label Mid Group
+                                    select.form-control(ng-model="search_form.midmenu" ng-options="obj.Id as obj.Name for obj in groupsBulk")
+                                       option(value="") Select An Item
+                            .col-md-3
+                                    label Transaction Type
+                                    select.form-control(ng-model="search_form.transmenu" ng-options="obj.value as obj.text for obj in transItems")
+                                        option(value="") Select An Item
+                                       
+                            .col-md-3
+                                    label Reference Number
+                                    input(type="text" placeholder="ex 898989898" ng-model="search_form.refNum")
+                    .row.text-center
+                        button.generate_results(type="submit" id="submit")
+                            i.fa.fa-search  
+                            span  Search
+                        a.advanced_search(href="" ng-click="toggleSearch()") Advanced Search
+
+            .row(ng-show="searchType == 'group'")
+                
+                form.form.searcher.trans-form(name="transForm" ng-submit="transFormSubmit()")
+                    h2.date_title.search_header Date Selection:
+                    .row
+                        .col-md-12.col-lg-4
+                            label Start Date:
+                            .row
+                                .col-md-8
+                                    include partials/calendar2-1.jade
+                                .col-md-2
+                                    select.form-control(ng-options="item as item for item in Hours" ng-model="fromHours")
+                                    
+                                .col-md-2
+                                    select.form-control(ng-options="item as item for item in Mins" ng-model="fromMins")
+                                    
+                        .col-md-12.col-lg-4
+                            label End Date:
+                            .row
+                                .col-md-8
+                                    include partials/calendar2-2.jade
+                                .col-md-2
+                                    select.form-control(ng-options="item as item for item in Hours" ng-model="toHours")
+                                    
+                                .col-md-2
+                                    select.form-control(ng-options="item as item for item in Mins" ng-model="toMins")
+                                    
+                        .col-md-6.col-lg-4
+                            label Preset Date Range:
+                            select.form-control(ng-model="transForm.fromDate")
+                                option Select An Item
+                                option(value="{{Yesterday}}") Yesterday
+                                //option Last Week
+                                //option Last Month
+                                //option Last Quarter
+                                //option Last Year
+                                option.pastSet(value="{{past3Days}}") Past 3 Days
+                                option.pastSet(value="{{past7Days}}") Past 7 Days
+                                option.pastSet(value="{{past90Days}}") Past 90 Days
+                                option.pastSet(value="{{past180Days}}") Past 180 Days
+                                option.pastSet(value="{{past360Days}}") Past 365 Days
+
+
+                            //select.form-control(ng-options="obj.value as obj.name for obj in dateRanges" ng-model="transForm.dateOptions" ng-change="updateOptions(transForm)")
+                    h2.search_header Merchant Details:    
+                    .row
+                        .col-md-4
+                            label Gateway
+                            select.form-control(ng-model="transForm.gateway" ng-options="obj.Id as obj.DisplayName for obj in gateways")
+                        .col-md-4
+                            label Merchant:
+                            select.form-control(ng-model="transForm.MID" ng-options="obj.Id as obj.DisplayName for obj in mids")
+                                
+                        .col-md-4
+                            label Status:
+                            select.form-control(ng-model="transForm.Status")
+                                option Any Status
+                                option(value=0) Success
+                                option(value=1) Declined
+                                option(value=2) Error
+                        //.col-md-4
+                            label Transaction Type:
+                            select.form-control(ng-model="transForm.transType")
+                                option Any Transaction Type
+                                option(value=1) Charge
+                                option(value=2) Void
+                                option(value=3) Refund
+                                option(value=4) Authorize
+                                option(value=6) Capture
+                        //.col-md-3
+                            label Action Type:
+                            select.form-control
+                                option Any Action Type
+                                option option1
+                    h2.search_header User Details:
+                    .row
+                        .col-md-4
+                            label Transaction ID:
+                            input.form-control(type="text" placeholder="Transaction ID" ng-model="transForm.transId")
+                        .col-md-4
+                            label Transaction Type:
+                            select.form-control(ng-model="transForm.transType")
+                                option Any Transaction Type
+                                option(value=1) Charge
+                                option(value=2) Void
+                                option(value=3) Refund
+                                option(value=4) Authorize
+                                option(value=6) Capture
+                        .col-md-4
+                            label Reference Number:
+                            input.form-control(type="text" placeholder="Reference Number" ng-model="transForm.refNumber")
+                        //.col-md-3
+                            label Order ID:
+                            input.form-control(type="text" placeholder="Order ID")
+                        //.col-md-3
+                            label Last Name:
+                            input.form-control(type="text" placeholder="Last Name" ng-model="transForm.lname")
+                        //.col-md-3
+                            label First Name:
+                            input.form-control(type="text" placeholder="First Name" ng-model="transForm.fname")
+                    .row
+                        .col-md-4
+                            label Last Name:
+                            input.form-control(type="text" placeholder="Last Name" ng-model="transForm.lname")
+                        .col-md-4
+                            label First Name:
+                            input.form-control(type="text" placeholder="First Name" ng-model="transForm.fname")
+                        .col-md-4
+                            label Email:
+                            input.form-control(type="text" placeholder="Email" ng-model="transForm.email")
+                    .row
+                        .col-md-4
+                            label Phone Number:
+                            input.form-control(type="text" placeholder="Phone Number" ng-model="transForm.phone")
+                        .col-md-4
+                            label Credit Card Last Four:
+                            input.form-control(type="text" placeholder="Credit Card Last Four" ng-model="transForm.CcLast4")
+
+                    .row
+                        .col-md-12
+                            button.generate_results(type="submit")
+                                i.fa.fa-search
+                                span Transaction Search:
+
+
+.search_feedback
+      .panel.panel-default.table_search_results
+        .panel-heading.search_table_heading
+            .row
+                .col-md-6
+                    h2.panel-title Search Results 
+                        span {{resultAmount}}
+                .col-md-6
+                    a.def_btn.wet_asphalt_btn.float-right(href="" ng-csv="transactionCSV" filename="transactions.csv" ng-show="transactionCSV.length") 
+                        i.fa.fa-file-excel-o
+                        span Export Excel
+                    a.def_btn.belize_hole_btn.float-right.margin-right(tooltip="Begin a new search" tooltip-placement="top" href="" ng-click="new_search()") 
+                        i.fa.fa-search  
+                        span New Search
+                    a.def_btn.peter_river_btn.float-right.margin-right(tooltip="Modify existing search" tooltip-placement="top" href="" ng-click="modform()")
+                        i.fa.fa-search-plus
+                        span Modify Search
+        .panel-body
+            h3.noResults(ng-if="resultAmount == 0") {{'We apologize but there are no results found for your search'}}
+            include partials/searchTable.jade
+
+
+include partials/transResults.jade
+include partials/snapResults.jade

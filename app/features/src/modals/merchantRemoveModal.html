@@ -1,0 +1,22 @@
+<script type="text/ng-template" id="merchantRemoveContent.html">
+	
+	<div class="modal-header">
+		<h3 class="modal-title"><span class="subtle">Remove MID Group: </span> {{merchant.Name}}</h3>
+	    <button type="button" class="close" ng-click="cancel()">x</button>
+	 </div>
+
+		<div class="modal-body">
+		    <p class="text-center">Are you sure you want to remove?</p>
+		    <h2 class="text-center">{{merchant.Name}}</h2>
+		</div>
+
+		<div class="userCreateSuccess">
+		    <p>Merchant Successfully Remove</p>
+		</div>
+
+	<div class="modal-footer action_group">
+	    <a href="" class="row_btn alazarin_btn margin-right" ng-click="removeGroup()"><i class="fa fa-trash"></i><span>Confirm</span></a>
+	    <a href="" class="row_btn peter_river_btn" ng-click="cancel()"><i class="fa fa-sign-out"></i><span>Exit</span></a>
+	</div>
+
+</script>

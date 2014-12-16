@@ -1,0 +1,320 @@
+script(type="text/ng-template" id="midCreateContent.html")
+    .midCreateModal
+        .modal-header
+            h3 Create New MID
+            button.close(type="button" ng-click="cancel()") X
+        .modal-body
+            wizard(on-finish="finishedWizard()")
+              wz-step(title="1. Gateway Config")
+                .gateway-option
+                        label Do you want to setup from your pre-existing gateways?
+                        input(type="checkbox" ng-model="preExist")
+                form.STEPONE(name="form.midCreateForm1" ng-submit="midStep1()" ng-if="preExist == false")
+                    
+                    .row
+                        .col-md-4
+                            label Choose Gateway Service:
+                        .col-md-8
+                            select.form-control(ng-model="blah" id="GatewayId" ng-options="obj.Id as obj.DisplayName for obj in gateways")
+                                
+
+                    .row
+                        .col-md-4
+                            label Processor:
+                        .col-md-8
+                            select.form-control(required="" ng-model="blahblah" id="processorId" ng-options="obj.Id as obj.Name for obj in processors")
+                                
+
+                    .row
+                        .col-md-4
+                            label Merchant Company:
+                        .col-md-8
+                            input.form-control(type="text" placeholder="Enter Custom Group Name" id="MerchantCompany" required="")
+
+                    .row
+                        .col-md-4
+                            label Gateway Username:
+                        .col-md-8
+                            input.form-control(type="text" placeholder="Enter Custom User Name" id="Merchant.UserNamegate" autocomplete="off")
+
+                    .row
+                        .col-md-4
+                            label Gateway Password
+                        .col-md-8
+                            input.form-control(type="password" placeholder="Enter Your Password" id="Merchant.Passwordgate" autocomplete="off")
+
+                    .row
+                        .col-md-4
+                            label Gateway Type
+                        .col-md-8
+                            select.form-control(id="GatewayType")
+                                option(value="CreditCard") Credit Card
+                                option(value="BankingAccount") Banking Account
+                                option(value="External") External
+
+                    .row
+                        .col-md-4
+                            label Active
+                        .col-md-8
+                            input(type="checkbox" id="steponeActive" checked)
+                    .row
+                        .col-md-6
+                            
+                        .col-md-6.text-right
+                            //input.row_btn.wet_asphalt_btn(type="submit" wz-next="" value="Next Step" ng-click="midStep1()")
+                            a.row_btn.wet_asphalt_btn(href="" wz-next="" type="submit" ng-click="midStep1()")
+                                span Next
+                                i.fa.fa-arrow-right
+
+                    // Pre-Existing Group select
+                form(name="midCreateForm12" ng-if="preExist == true")
+                    .row
+                        .col-md-4
+                            label Pre-Existing Gateway
+                        .col-md-8
+                            select.form-control(ng-model="preExistModel" id="curGates" ng-options="obj.MerchantGatewayId as obj.DisplayName for obj in curGates")
+                                
+                    .row
+                        .col-md-12
+                            p(ng-model="preExistModel") {{preExistModel}}
+                    .row
+                        .col-md-6
+                            
+                        .col-md-6.text-right
+                            //input(type="submit", wz-next="", value="Next Step" ng-click="midStep12()")
+                            a.row_btn.wet_asphalt_btn(href="" type="submit" wz-next="" ng-click="midStep12()")
+                                span Next
+                                i.fa.fa-arrow-right
+        
+
+              wz-step(title="2. MID Config")
+                .row
+                    .col-md-6
+                        .row
+                            .col-md-4
+                                label MID(Sent to procesor):
+                            .col-md-8
+                                input.form-control(type="text" placeholder="MID" id="MIDconfig")
+                    .col-md-6
+                        .row
+                            .col-md-4
+                                label Descriptor:
+                            .col-md-8
+                                input.form-control(type="text"  placeholder="placeholder" id="MIDdescriptor")
+                .row
+                    .col-md-6
+                        .row
+                            .col-md-4
+                                label Display Name:
+                            .col-md-8
+                                input.form-control(type="text"  placeholder="placeholder" id="MIDdisplayName")
+                    .col-md-6
+                        .row
+                            .col-md-4
+                                label Monthly Cap
+                            .col-md-8
+                                input.form-control(type="text" placeholder="placeholder" id="MIDmonthlyCap") 
+                .row.paymentTypeDiv
+                    p Payment Types
+                .row.paymentTypeDiv
+                    .col-md-3
+                        input(type="checkbox" id="amerExpress-box")
+                        i.fa.fa-cc-amex.fa-2x
+                        //label American Express
+                    .col-md-3
+                        input(type="checkbox" id="visa-box")
+                        i.fa.fa-cc-visa.fa-2x
+                        //label Visa
+                    .col-md-3
+                        input(type="checkbox" id="mastercard-box")
+                        i.fa.fa-cc-mastercard.fa-2x
+                        //label Mastercard
+                    .col-md-3
+                        input(type="checkbox" id="discover-box")
+                        i.fa.fa-cc-discover.fa-2x
+                        //label Discover
+
+
+                .row
+                    .col-md-6
+                        .row
+                            .col-md-4
+                                label Daily ReBill Limit:
+                            .col-md-4
+                                select.form-control(id="limitType")
+                                    option Percentage
+                                    option Amount
+                            .col-md-4
+                                input.form-control(type="text" id="dailyRebill")
+
+                    .col-md-6
+                        .row
+                            .col-md-4
+                                label Transaction Fee:
+                            .col-md-8
+                                input.form-control(type="text" id="MIDtransactionFee")
+
+                .row
+                    .col-md-6
+                        .row
+                            .col-md-4
+                                label ChargeBack Fee:
+                            .col-md-8
+                                input.form-control(type="text" id="MIDchargeBackFee")
+                    .col-md-6
+                        .row
+                            .col-md-4
+                                label Reserve Acct Rate:
+                            .col-md-8
+                                input.form-control(type="text" id="MIDreserveAccountRate")
+
+                .row
+                    .col-md-6
+                        .row
+                            .col-md-4
+                                label Discount:
+                            .col-md-8
+                                input.form-control(type="text" id="MIDiscount")
+                    .col-md-6
+                        .row
+                            .col-md-4
+                                label Gateway:
+                            .col-md-8
+                                input.form-control(type="text")
+
+                .row
+                    .col-md-6.text-left
+                        //input.row_btn.wet_asphalt_btn(type="submit", wz-next="", value="Previous Step")
+                        a.row_btn.wet_asphalt_btn(href="" type="submit" wz-previous="")
+                                i.fa.fa-arrow-left
+                                span Previous
+                                
+                    .col-md-6.text-right
+                        //input.row_btn.wet_asphalt_btn(type="submit", wz-next="", value="Next Step" ng-click="midStep13()")
+                        a.row_btn.wet_asphalt_btn(href="" type="submit" wz-next="" ng-click="midStep13()")
+                                span Next
+                                i.fa.fa-arrow-right
+
+              wz-step(title="3. Email Ca Notification")
+
+                .row
+                    form
+                        .col-md-4
+                            p Email Type
+                            .form-group
+                                input(type="checkbox" id="allEmailTypes" ng-model="capToggle")
+                                label All Email Types
+                            .form-group
+                                input(type="checkbox")
+                                label Order Confirmation
+                            .form-group
+                                input(type="checkbox")
+                                label Shipment
+                            .form-group
+                                input(type="checkbox")
+                                label Refund
+                            .form-group
+                                input(type="checkbox" ng-model="capToggle")
+                                label Cap Utilization
+                            //.form-group
+                                select
+                                    option Percentage
+                                    option Value
+                                label Cap Utilization
+                        .col-md-6
+                            p Email Address
+                            input.form-control(type="text" placeholder="Enter Your Email" id="notificationEmail")
+
+                            ul(ng-repeat="email in emails")
+                                aside.clearfix
+                                    .col-md-8
+                                        li {{email}}
+                                    .col-md-4
+                                        a.text-right(href="" ng-click="removeEmail($index)")
+                                            i.fa.fa-remove 
+                                            span remove
+                        .col-md-2
+                            a.row_btn.emerald_btn(href="" ng-click="addEmail()") 
+                                i.fa.fa-plus
+                                span Add Email
+
+                .row(ng-if="capToggle == true")
+                    .col-md-6
+                        select.form-control(ng-model="capType")
+                            option Percentage
+                            option Value
+                    .col-md-6
+                        input.form-control(type="number" placeholder="Enter Percentage" ng-if="capType == 'Percentage'")
+                        input.form-control(type="number" placeholder="Enter Value" ng-if="capType == 'Value'")
+                        
+
+
+                .row
+                    .col-md-6.text-left
+                        //input.row_btn.wet_asphalt_btn(type="submit", wz-next="", value="Previous Step")
+                        a.row_btn.wet_asphalt_btn(href="" type="submit" wz-previous="")
+                                i.fa.fa-arrow-left
+                                span Previous
+                                
+                    .col-md-6.text-right
+                        //input.row_btn.wet_asphalt_btn(type="submit", wz-next="", value="Next Step" ng-click="midStep13()")
+                        a.row_btn.wet_asphalt_btn(href="" type="submit" wz-next="" ng-click="midStep14()")
+                                span Next
+                                i.fa.fa-arrow-right
+              
+              wz-step.virtual_panel(title="4. Verify Settings(VT)")
+
+                    //.row
+                        .col-md-4
+                            p Gateway Service
+                            p data
+                        .col-md-4
+                            p Processor
+                            p {{processorId}}
+                        .col-md-4
+                            p Merchant Company
+                            p {{newMerchantCompany}}
+                    table.table
+                        thead
+                            tr
+                                th Gateway Service
+                                th Processor
+                                th Merchant Company
+                                th Gateway User Name
+                                th Gateway Type
+                                th Active
+                        tbody
+                            tr
+                                td data
+                                td {{processorId || 'not set'}}
+                                td {{newMerchantCompany}}
+                                td {{newGatewayUsername}}
+                                td {{GatewayType}}
+                                td {{IsActive}}
+
+                    table.table
+                        thead
+                            tr
+                                th MID
+                                th Descriptor
+                                th Display Name
+                                th Monthly Cap
+                                th Card Types
+                        tbody
+                            tr
+                                td {{MidConfig}}
+                                td {{Descriptor}}
+                                td {{DisplayName}}
+                                td {{MonthlyCap}}
+                                td data
+
+                    .row            
+                        .col-md-12.text-center
+                            a.row_btn.wet_asphalt_btn(href="" type="submit" wz-next="" ng-click="midStep15()")
+                                    span Verify MID
+                                    i.fa.fa-arrow-right
+                   
+
+
+        .modal-footer.action_group
+            a.cancel_btn(href="" ng-click="cancel()") Exit

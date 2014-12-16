@@ -1,0 +1,6 @@
+<!-- VIEW FOR TESTING PURPOSES--><script type="text/ng-template" id="mockModalContent.html"><div class="modal-header"><h3 class="modal-title"><span class="subtle">Edit</span></h3><button type="button" ng-click="cancel()" class="close">x</button></div></script><div class="row"><div class="col-md-12"><table class="table"><thead><tr><th>ID</th><th>Company</th><th>Actions</th></tr></thead><tbody><tr ng-repeat="worker in workers"><td>{{worker.id}}</td><td>{{worker.company}}</td><td><a href="" ng-click="doEdit(worker)" class="btn btn-default">Edit</a><a href="" class="btn btn-default">Delete</a></td></tr></tbody></table></div></div><!--.rowh2 Users
+	ul(ng-repeat="User in Users")
+		li {{User.UserName}}
+--><!--.row.col-md-12.jumbotron
+	select.form-control(ng-options="User.company for User in workers" ng-model="selectedItem")
+--><div class="row"><div class="col-md-12"><p>PopIn</p><tri-popover></tri-popover></div></div><div class="row"><div class="col-md-12"><div ui-view=""></div></div></div><div class="row"><div class="col-md-12"><select ng-model="blah" ng-options="item.BalancingTypeId as item.BalancingType for item in BalancingTypes"></select></div></div>

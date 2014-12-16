@@ -1,0 +1,404 @@
+.modal-backdrop {
+  height:100%;
+  position:fixed;
+}
+/* Tranasction Modal */
+.sale_info {
+    line-height:2;
+    p span {
+        font-weight:700;
+        margin-right:10px;
+    }
+}
+
+.modal_toggle {
+    background:$red;
+    color:#fff;
+    display:inline-block;
+    padding:15px 60px;
+    &:hover {
+        color:#fff;
+        text-decoration:none;
+    }
+}
+.modal-header {
+    background:$dark;
+    color:#fff;
+    border-bottom:0px;
+    .close {
+        color:#fff;
+        opacity:0.6;
+        float:none;
+    }
+    h3 {
+        display:inline-block;
+        width:95%;
+    }
+}
+.modal-title {
+    color:#fff;
+    .subtle{
+        color:$asbestos;
+    }
+}
+
+.modal-body {
+    padding:20px;
+    input,select {
+        background: #f8f8f8;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        color: #555;
+        height: 40px;
+        padding: 0 0 0 10px;
+
+    }
+    section {
+        width:50%;
+        margin:20px auto;
+    }
+    .subtle{
+        color:$silver;
+    }
+    .action_btn {
+        background: #3498db;
+        color: #fff;
+        display: inline-block;
+        width: 49.5%;
+        padding: 10px;
+        text-align: center;
+    }
+    h3 {
+        margin-bottom:5px;
+    }
+    .editable-wrap {
+        width:80%;
+    }
+}
+.nav-tabs {
+    background:#eee;
+    color:#333;
+    li {
+        a {
+            border-radius:0 !important;
+            border:0px !important;
+            color:#333;
+            &:hover {
+                background:$greensea;
+                color:#fff !important;
+            }
+        }
+    }
+    li.active {
+        a {
+            background:$turq;
+            color:#fff;
+            &:hover {
+                background:$greensea;
+            }
+        }
+    }
+}
+.modal-footer {
+    background:#eee;
+    .action_btn {
+        background:$alizarin;
+        color: #fff;
+        display: inline-block;
+        width: 120px;
+        padding: 10px;
+        text-align: center;
+        &:hover {
+            text-decoration:none;
+            background:$pomegranate;
+        }
+    }
+    .cancel_btn {
+        background:$peterriver;
+        color: #fff;
+        display: inline-block;
+        width: 120px;
+        min-width:0;
+        padding: 10px;
+        text-align: center;
+        &:hover {
+            text-decoration:none;
+            background:$belizehole;
+        }
+    }
+    .create_btn {
+        @extend .cancel_btn;
+        background:$turquoise;
+        &:hover {
+            background:$greensea;
+        }
+    }
+    .save_btn{
+        @extend .cancel_btn;
+        background:$turquoise;
+        color:#FFF;
+        &:hover {
+            background:$greensea;
+        }
+    }
+    
+}
+.remove_btn {
+    background:$alizarin !important;
+    &:hover {
+        background:$pomegranate !important;
+    }
+}
+.userCreateSuccess {
+    background:$greensea;
+    color:#fff;
+    display:none;
+    padding:20px 0;
+    text-align:center;
+}
+.userCreateSuccess2 {
+    background:$greensea;
+    color:#fff;
+    display:none;
+    padding:20px 0;
+    text-align:center;
+}
+.userError {
+    background:$pomegranate;
+    color:#fff;
+    display:none;
+    padding:20px 0;
+    text-align:center;
+}
+.tab-pane {
+    padding:5%;
+}
+/*
+form.form-inline {
+    .long_input {
+        width:90%;
+    }
+}
+*/
+
+////////////////////////
+// Merchant Acct Setup
+////////////////////////
+/*
+form[name="setup_form"] {
+    width:100%;
+    padding:0;
+    .form-group {
+        width:50%;
+    }
+    select {
+        height:40px;
+        width:100%;
+    }
+}
+*/
+form.merchantCreateForm {
+        p {
+            padding:10px 0 !important;
+        }
+}
+
+
+// ------------- VOID MODAL
+.voidFeedback {
+    display:none;
+    margin-top:20px;
+    span {
+        color:$red;
+    }
+}
+// ------------- REFUND MODAL
+.table-refund-input{
+    margin-bottom:30px;
+    td{
+        padding: 0 5px;
+    }
+}
+.amount_input {
+    width:150px;
+    margin:0;
+}
+////////////////////////
+// MERCHANT GROUP EDIT
+////////////////////////
+.merchant_feedback {
+    background:#333;
+    color:#fff;
+    display:none;
+    padding:20px 0;
+    margin-top:15px;
+    text-align:center;
+    .p-title {
+        padding: 0 0 10px 0;
+        margin-bottom: 10px;
+    }
+}
+.merchantEditModal {
+    .editable-wrap {
+        width:80%;  
+    }
+}
+.modal_edit {
+    background:$turquoise !important;
+    color: #fff;
+    display: inline-block;
+    min-width: 120px !important;
+    padding: 10px !important;
+    text-align: center;
+    &:hover{
+        background:$greensea;
+    }
+}
+////////////////////////
+// MID EDIT
+////////////////////////
+.MID_feedback {
+    background:#333;
+    color:#fff;
+    display:none;
+    padding:20px 0;
+    text-align:center;
+}
+.confirm_btn {
+    background:$alizarin;
+    color: #fff;
+    display: inline-block;
+    width: 120px;
+    padding: 8px;
+    margin-top:10px;
+    text-align: center;
+    &:hover {
+        background:$pomegranate;
+        color:#fff;
+        text-decoration:none;
+    }
+}
+.mid_save {
+    background:$turquoise;
+    border: 0;
+    color: #fff;
+    font-size: 12px;
+    width: 40%;
+    padding: 10px;
+    &:hover {
+        background:$greensea;
+    }
+}
+.mid_cancel {
+    @extend .mid_save;
+    background:$alizarin;
+    display:inline-block;
+    &:hover {
+        background:$pomegranate;
+        color:#fff;
+        text-decoration:none !important;
+    }
+}
+
+////////////////////////
+// MID CREATE MODAL
+////////////////////////
+.midCreateModal {
+    input[type="checkbox"] {
+        width:20px;
+        height:25px;
+        line-height:2.8em;
+    }
+    label {
+        font-size:16px;
+        padding-top:10px;
+    }
+    a {
+        i {
+            margin-left:5px;
+        }
+    }
+    .row_btn {
+        width:20%;
+        padding:15px 0;
+    }
+    .modal-body {
+        min-height:300px;
+        padding:80px 20px 20px 20px;
+        section {
+            width:95%;
+        }
+        .row {
+            padding:10px 0;
+        }
+    }
+
+    .steps-indicator {
+        background:#fff;
+        font-size:12px;
+        padding: 25px 0 30px 0;
+        top:0px;
+        li a {
+            border-bottom:5px solid #333;
+            color:#333;
+            display:block;
+            padding:15px 0;
+        }
+        li.current a:before {
+            background:$pumpkin;
+        }
+        li.done a:before {
+            background:$greensea;
+        }
+        li.done a {
+            color:$greensea;
+            border-bottom:5px solid $greensea;
+        }
+        li.current a {
+            color:$pumpkin;
+            font-size:14px;
+            border-bottom:5px solid $pumpkin;
+            font-weight:bold;
+        }
+    }
+    aside {
+        background:#eee;
+        padding:10px 0;
+    }
+
+    .gateway-option {
+        border-bottom:5px solid #777;
+        padding:10px 0;
+        margin-bottom:20px;
+        label {
+            line-height:2em !important;
+        }
+        input {
+            height:20px;
+            margin-left:10px;
+        }
+    }
+    .form-group {
+        margin-bottom:0px;
+    }
+    .emerald_btn, .disabled_btn {
+        width:100%;
+    }
+
+    .paymentTypeDiv {
+        text-align:center;
+        p {
+            color:$greensea;
+        }
+        i {
+            margin-left:5px;
+        }
+    }
+
+}
+.STEPONE {
+    label {
+        display:block;
+        text-align:right;
+    }
+}

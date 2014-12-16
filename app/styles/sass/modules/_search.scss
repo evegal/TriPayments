@@ -1,0 +1,95 @@
+// SEARCH TYPE SELECT
+.searchType {
+    margin:20px 0 0px 0 !important;
+    h2 {
+        padding-bottom:15px;
+    }
+}
+.search_header {
+    background:$skyblue;      
+    padding:10px 0 10px 5px;
+    margin:15px 0;
+}
+a.search_format {
+    background:#999;
+    color:#fff;
+    display: block;
+    font-size:13px;
+    padding: 12px 5px;
+    text-align:center;
+    i {
+        margin-right:5px;
+    }
+    &:hover {
+        text-decoration:none;
+    }
+}
+div a.activeFormat {
+    background:$in_blue;
+    color:#fff !important;
+    &:hover {
+        background:$in_bluemid;
+        text-decoration:none;
+    }
+}
+
+// SEARCH FORM
+.search_actions {
+    a {
+        background:$in_blue;
+        color:#fff;
+        display:inline-block;
+        text-decoration:none;
+        padding:10px 10px;
+        margin:10px 3px;
+        width:45%;
+        text-align:center;
+    }
+    a.new_search_btn {
+        background:$in_bluemid;
+    }
+}
+form.form.searcher {
+    
+    input,select {
+        background:#f8f8f8;
+        border:1px solid #ccc;
+        border-radius:4px;
+        color: #555;
+        height: 40px;
+        padding:0 0 0 10px;
+        width:100%;
+    }
+    input[type="radio"] {
+        height:inherit;
+        width:inherit;
+    }
+    h2 {
+        font-size:17px;
+    }
+    h2.main-area-title {
+        margin:20px 0 15px 0;
+    }
+    
+    input.ng-invalid.ng-dirty, select.ng-valid.ng-dirty {
+        //border:1px solid $ali;
+        background:rgba($red,0.3);
+    }
+    input.ng-valid.ng-dirty, select.ng-valid.ng-dirty {
+        //border:1px solid $turq;
+        background:rgba($green,0.3);
+    }
+    .form-control + .input-icon {
+        background:#f8f8f8;
+        color:$turq;
+        right:20px;
+    }
+    label {
+        margin-bottom:5px;
+        margin-top:10px;
+    }
+   
+}
+form.form-inline {
+    @extend .form.searcher;
+}
