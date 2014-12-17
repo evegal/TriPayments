@@ -428,8 +428,9 @@ var midCreateModalInstance = function($scope,$modalInstance,$log,$http,$rootScop
     
 
     $scope.midStep1 = function(theForm,selectedMerchant,selectedPro) {
-
-        //console.log(selectedPro);
+        console.log('theForm: ' + theForm);
+        console.log('selectedMerchant: ' + selectedMerchant);
+        console.log('selectedPro: ' + selectedPro);
 
         if(theForm.$valid) {
        
@@ -478,14 +479,6 @@ var midCreateModalInstance = function($scope,$modalInstance,$log,$http,$rootScop
             },2500);
 
         }
-    /*
-       
-    */  
-        
-        
-        
-        
-       
     } // END midstep1
 
     $scope.midStep12 = function(theForm,curGate) {
