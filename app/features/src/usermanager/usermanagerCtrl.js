@@ -1,25 +1,5 @@
 app.controller('usermanagerCtrl', function($scope,$http,$state,baseUrl,$rootScope,Notify) {
 
-//$state.current.name = "User Manangement";
-
-  // GET USERS
-  /*
-  UserService.then(function(data) {
-    $scope.Users = data.data;
-    $rootScope.displayedUsers = data.data;
-  });
-  */
-
-  /*
-  $http.get('https://api.tripayments.com/users').success(function(data) {
-    //$rootScope.Users = data;
-    $scope.Users = data;
-  
-    // CSV Export
-    $scope.usersCSV = data;
-  });
-  */
-
   ///////////////////
   // NOTIFY NEW USER
   ///////////////////
@@ -40,14 +20,6 @@ app.controller('usermanagerCtrl', function($scope,$http,$state,baseUrl,$rootScop
     });
 
   });
-  
-  /*
-  $http.get( baseUrl + 'users').success(function(data) {
-    $scope.Users = data;
-    // provide users feedback
-    $scope.currentUsers = data.length;
-  });
-  */
   
  
   $scope.saveUser = function(data,id) {
@@ -82,7 +54,7 @@ app.controller('createUserModalCtrl', function($scope,$modal,$log) {
 });
 
 
-var userCreateInstanceCtrl = function($scope,$modalInstance,$http,$timeout,$rootScope,Notify) {
+var userCreateInstanceCtrl = function($scope,$modalInstance,$http,$timeout,$rootScope,Notify,baseUrl) {
 
     $scope.cancel = function() {
        $modalInstance.close();
@@ -175,7 +147,7 @@ var userCreateInstanceCtrl = function($scope,$modalInstance,$http,$timeout,$root
     
     var promise = $http({
       method:'POST',
-      url:'https://api.tripayments.com/users',
+      url: baseUrl + 'users',
       data:userDetails
     });
 
@@ -231,7 +203,7 @@ app.controller('removeUserModalCtrl', function($scope,$modal,$log) {
   }
 });
 
-var userRemoveInstanceCtrl = function($scope,$modalInstance,$http,$timeout,user,baseUrl,$rootScope,UserService,Notify) {
+var userRemoveInstanceCtrl = function($scope,$modalInstance,$http,$timeout,user,baseUrl,$rootScope,UserService,Notify,baseUrl) {
    $scope.user = user;
    $scope.userId = user.UserId;
 
@@ -246,7 +218,7 @@ var userRemoveInstanceCtrl = function($scope,$modalInstance,$http,$timeout,user,
       
      $http({
         method:'DELETE',
-        url:'https://api.tripayments.com/users/' + $scope.userId
+        url: baseUrl + 'users/' + $scope.userId
      }).success(function(data,status) {
 
       // NOTIFY SERVICE
@@ -260,23 +232,6 @@ var userRemoveInstanceCtrl = function($scope,$modalInstance,$http,$timeout,user,
           $modalInstance.close();
         },500);
      });
-
-      /*
-      var UserIndex = $rootScope.displayedUsers.indexOf(user);
-      
-      $http({
-        method:'DELETE',
-        url:'https://api.tripayments.com/users/' + $scope.userId,
-      }).success(function(status) {
-        console.log('user removed' + status);
-        $('.userCreateSuccess').show();
-        // UPDATE UI
-        $rootScope.displayedUsers.splice(UserIndex,1);
-        $timeout(function() {
-          $modalInstance.close();
-        },500);
-      });
-      */
 
    }
 }
@@ -310,17 +265,6 @@ var userEditInstanceCtrl = function($scope,$modalInstance,$http,$timeout,user,ba
        $modalInstance.close();
     }
 
-    /*
-    $scope.updateUser = function(data,id) {
-      
-        console.log(data);
-        angular.extend(data,{id:id});
-        return $http.put('https://api.tripayments.com/users/' + id, data).success(function(data,status) {
-          console.log("User Updated: " + status);
-        });
-        
-    }
-    */
 
     $scope.updateUser = function(user) {
 
@@ -333,42 +277,12 @@ var userEditInstanceCtrl = function($scope,$modalInstance,$http,$timeout,user,ba
 
       $http({
         method:'PUT',
-        url:'https://api.tripayments.com/users/' + user.UserId,
+        url: baseUrl + 'users/' + user.UserId,
         data:updateQuery
       }).success(function(status,data) {
         console.log(status + ' ' + data);
       });
 
     } // END updateUser
-
-
-
-
-/*
-    $scope.deleteUser = function(user) {
-      
-      $scope.activeUserId = user.UserId;
-      $scope.activeUser = user.UserName;
-      $('.MID_feedback').slideDown(300);
-      // Confirm User Delete
-      $scope.confirmUserDelete = function() {
-        console.log('deleting user');
-        // DELETE REQUEST
-        $http({
-          method:'DELETE',
-          url:'https://api.tripayments.com/users/' + user.UserId
-        }).success(function(data,status) {
-          console.log(data);
-          console.log(status);
-          console.log('user deleted');
-          $('.userCreateSuccess').show();
-          $timeout(function() {
-            $modalInstance.close();
-          },2000);
-        });
-      }
-    } // End Delete
-*/
-
 
 }

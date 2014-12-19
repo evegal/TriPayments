@@ -98,7 +98,13 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider,$httpP
     $httpProvider.interceptors.push('authInterceptorService');
 
 });
+<<<<<<< HEAD
+//app.constant('baseUrl', "http://api.testing.tripayments.com/");
+//app.constant('baseUrl', "http://api.demo.tripayments.com/");
+app.constant('baseUrl', "http://localhost:51535/");
+=======
 
+>>>>>>> 4a2ab81d4c24865f7a4be02e4723e70fa5b07356
 
 app.run(['$rootScope', '$state', '$stateParams', '$location','authService', function ($rootScope, $state, $stateParams, $location,authService,$scope) {
 
