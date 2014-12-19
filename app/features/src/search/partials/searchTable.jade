@@ -5,7 +5,7 @@ table.table.table-striped.ng-table-responsive.primary_search_table(st-table="sho
                           input.form-control(st-search="" type="search" placeholder="Filter through all search results...")
                     tr
                         th.st-header(st-sort="TransactionId" width="6%") Trans ID
-                        th.st-header(st-sort="RequestDate" width="5%") Date
+                        th.st-header(st-sort="RequestDateOnly" width="5%") Date
                         th.st-header(st-sort="Type" width="5%") Type
                         th.st-header(st-sort="Amount" width="5%") Amount
                         th.st-header(st-sort="ResponseDescription" width="5%") Status
@@ -26,7 +26,7 @@ table.table.table-striped.ng-table-responsive.primary_search_table(st-table="sho
                           input.form-control(st-search="'TransactionId'" type="search" placeholder="Filter ID" )
                       td
                         span(tooltip="Filter by entering a date" tooltip-placement="top")
-                          input.form-control(st-search="'RequestDate'" type="search" placeholder="Filter Date")
+                          input.form-control(st-search="'RequestDateOnly'" type="search" placeholder="Filter Date")
                       td
                         span(tooltip="Filter by entering a transaction type" tooltip-placement="top") 
                           input.form-control(st-search="'Type'" type="search" placeholder="Filter Type")
@@ -68,7 +68,7 @@ table.table.table-striped.ng-table-responsive.primary_search_table(st-table="sho
                             a.row_btn.peter_river_btn.full_width(tooltip="See transaction details for {{trans.TransactionId}}" tooltip-placement="top" href="" ng-click="open(trans)" ng-controller="transModalCtrl")
                               i.fa.fa-eye
                               span {{trans.TransactionId}}
-                        td {{trans.RequestDate | date:'shortDate' }}
+                        td {{trans.RequestDateOnly}}
                         td {{trans.Type}}
                         td(ng-class="(trans.Amount > 0) ? 'cash_pos' : 'cash_neg' ") {{trans.Amount | currency }}
                         td

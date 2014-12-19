@@ -335,44 +335,14 @@ app.controller('midCreateModal', function($scope,$modal,$log) {
 
 var midCreateModalInstance = function($scope,$modalInstance,$log,$http,$rootScope,WizardHandler,$timeout,Notify,baseUrl) {
 
-    // GET Notification Types
-    /*
-    $http.get('https://api.tripayments.com/mids/notificationTypes').success(function(data) {
-        //console.log(data);
-    });
-    */
-    
-    //$scope.processors = [];
-
     $http.get(baseUrl + 'gateways/processors').success(function(data) {
         //console.log(data);
         $scope.processors = data;
     });
 
-
-    
-    //console.log($rootScope.modalGroups);
     $scope.Groups = $rootScope.modalGroups
-    // GET COMPANIES
-    /*
-    $http.get('http://api.testing.tripayments.com/companies/22').success(function(data) {
-        console.log(data);
-    });
-    */
 
-    //$scope.items = [];
     $scope.currentGateways = [];
-
-    // GET GATEWAYS
-    /*
-    $http.get('http://api.testing.tripayments.com/gateways').success(function(data) {
-        $scope.gateways = data;
-        angular.forEach(data, function(value,key) {
-            $scope.items.push(value);
-        });
-        
-    }); // END GET REQUEST
-    */
 
     // GET CURRENT USER GATEWAYS
     $http.get(baseUrl + 'gateways/current').success(function(data) {

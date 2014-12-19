@@ -1,4 +1,4 @@
-app.controller('vterminalCtrl', function($rootScope,$scope,$http,$timeout,$state,$timeout) {
+app.controller('vterminalCtrl', function($rootScope,$scope,$http,$timeout,$state,$timeout, baseUrl) {
 
 
 // load MID Groups
@@ -43,7 +43,7 @@ $scope.auth_form = {};
         
         var promise = $http({
             method:'POST',
-            url:'https://api.tripayments.com/vterminal',
+            url: baseUrl + 'vterminal',
             data:Query
         });
 
@@ -118,7 +118,7 @@ $scope.capture_form = {};
         // POST REQUEST
         var promise = $http({
             method:'POST',
-            url:'https://api.tripayments.com/vterminal',
+            url: baseUrl + 'vterminal',
             data:Query
         });
 
@@ -205,7 +205,7 @@ $scope.capture_form = {};
        
         var promise = $http({
             method:'POST',
-            url:'https://api.tripayments.com/vterminal',
+            url: baseUrl + 'vterminal',
             data:Query
         });
 
@@ -274,7 +274,7 @@ $scope.capture_form = {};
         }
 
         // POST REQUEST
-        var promise = $http.post('https://api.tripayments.com/transactions/' + Query.PreviousTransactionNumber + '/refund/' + Query.Amount)
+        var promise = $http.post(baseUrl + 'transactions/' + Query.PreviousTransactionNumber + '/refund/' + Query.Amount)
             .success(function(data,status) {
                 console.log(status);
 
@@ -320,7 +320,7 @@ $scope.capture_form = {};
         }
 
         // POST REQUEST
-        var promise = $http.post('https://api.tripayments.com/transactions/' + Query.PreviousTransactionNumber + '/void')
+        var promise = $http.post(baseUrl + 'transactions/' + Query.PreviousTransactionNumber + '/void')
             .success(function(data,status) {
                 console.log(status);
 

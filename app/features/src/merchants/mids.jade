@@ -28,21 +28,17 @@ include ../modals/removeMidModal.jade
                     th(colspan="10")
                         input.form-control(st-search="" type="search" placeholder="Search all mids")
                 tr
-                    th.st-header(st-sort="Id" style="width:5%") MID#
-                    th.st-header(st-sort="DisplayName") Display Name
-                    th.st-header(st-sort="Gateway") Gateway
-                    th.st-header(st-sort="MonthlyCap" style="width:8%") Monthly Cap
-                    th.st-header(st-sort="CapUtilizationPercentage" style="width:7%") Monthly Cap Status
-                    th.st-header(st-sort="Active" style="width:7%") Status
-                    th.st-header(st-sort="PaymentTypes" style="width:7%") Payment Types
-                    th.st-header MID Group Profile
-                    th.st-header Rollover Profile
-                    th.st-header Actions
+                    th.st-header(st-sort="DisplayName" style="width:15%") Display Name
+                    th.st-header(st-sort="Gateway" style="width:10%") Gateway
+                    th.st-header(st-sort="MonthlyCap" style="width:10%") Monthly Cap
+                    th.st-header(st-sort="CapUtilizationPercentage" style="width:10%") Monthly Cap Status
+                    th.st-header(st-sort="Active" style="width:10%") Status
+                    th.st-header(st-sort="PaymentTypes" style="width:10%") Payment Types
+                    th.st-header-nosort(style="width:10%") MID Group Profile
+                    th.st-header-nosort(style="width:10%") Rollover Profile
+                    th.st-header-nosort(style="width:15%") Actions
             tbody
                 tr
-                    td
-                        span(tooltip="Filter By MID #")
-                            input.form-control(st-search="'Id'" type="search" placeholder="MID #")
                     td
                         span(tooltip="Filter By Display Name")
                             input.form-control(st-search="'DisplayName'" type="search" placeholder="Display Name")
@@ -62,16 +58,12 @@ include ../modals/removeMidModal.jade
                         span(tooltip="Filter By Payment Types")
                             input.form-control(st-search="'PaymentTypes'" type="search" placeholder="Payment Types")
                     td
-                        span(tooltip="Filter By Group Profile")
-                            input.form-control(st-search="'GroupMembership'" type="search" placeholder="Group Membership")
                     td
-                        span(tooltip="Filter By Group Rollover Profile")
-                            input.form-control(st-search="'RolloverParents'" type="search" placeholder="Rollover Profile")
+
 
 
 
                 tr(ng-repeat="mid in shownMids")
-                    td {{mid.Id}}
                     td {{mid.DisplayName}}
                     td {{mid.Gateway}}
                     td {{mid.MonthlyCap | currency}}
@@ -79,45 +71,12 @@ include ../modals/removeMidModal.jade
                         progressbar(value="mid.CapUtilizationPercentage") 
                             span {{mid.CapUtilizationPercentage}} %
                     td 
-                        //span.success {{getStatus(mid)}}
-                        //span(ng-class="(mid.Active) ? 'success' : 'failed' ") {{getStatus(mid)}}
                         tri-status(status="{{mid.Active}}" ng-class="(mid.Active) ? 'success' : 'failed' ")
-                    //td {{mid.PaymentTypeIds}}
-
                     td.paymentTypes {{doShit(mid)}} 
                         span(ng-bind-html="payments") {{payments}}
 
-                    //td.paymentTypes
-                        i.fa.fa-cc-visa.fa-2x
-                        i.fa.fa-cc-discover.fa-2x
-                        i.fa.fa-cc-amex.fa-2x
-                    //td {{mid.GroupMembership}}
                     td
-                        //a(href="") 
-                            span(popover="{{dynamicPop}}" popover-title="Groups") Belongs to {{setGroups(mid)}} Groups
-                        //a(href="" tooltip-html-unsafe="{{groupTip}}") Belongs To {{setGroups(mid)}} Groups
-                        //a.groupAnchor(href="" my-dir) Belongs To {{setGroups(mid)}} Groups
-                        //a.groupAnchor(clients-array="clients" pop-lister)
-                        //a.groupAnchor(href="") 
-                            span Belongs to {{setGroups(mid)}} Groups
-                            ul.floater
-                                li hey there
-                        //a.groupAnchor(href="")
-                            span Belongs to {{setGroups(mid)}} Groups
-                            div.floater
-                                ul(ng-repeat="group in groupTip track by $index")
-                                    li {{group}}
-                        //a.groupAnchor
-                            span Belongs to {{setGroups(mid)}} Groups
-                            div.floater
-                                ol(ng-repeat="group in groupNames[$index] track by $index")
-                                    li {{group.Name}}
-                        tri-group
-
-                               
-
-
-                    //td {{mid.RolloverParents || 'not set'}}
+                        tri-group                               
                     td
                         a.groupAnchor(href="") 
                             span {{showRolloverParents(mid)}} Rollover MID(s)

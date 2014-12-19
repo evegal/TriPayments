@@ -116,20 +116,6 @@ app.controller('resetPasswordCtrl', function($scope,$location,$http,$timeout,bas
                 },1000);
             }
 
-        // POST RESET
-        /*
-        $http({
-            method:'POST',
-            url:'https://api.tripayments.com/users/resetPassword',
-            data:passQuery
-        }).success(function(data,status) {
-            console.log('password updated');
-            console.log(status);
-
-            $location.path('/reset_success');
-        });
-        */
-
         } else {
             console.log('all bad');
             $('.user_help').slideDown(300);
@@ -143,14 +129,6 @@ app.controller('resetPasswordCtrl', function($scope,$location,$http,$timeout,bas
         
     }; // END submit
 
-    /*
-    var Url = $location.$$url;
-    //var regex = /&amp/;
-    var check = Url.match(/&amp/);
-    var replaced = Url.replace(/&amp/,'&');
-
-    console.log(replaced);
-    */
 
 }); // END resetPasswordCtrl
 

@@ -1,11 +1,19 @@
 var app = angular.module("myApp", ['ui.router','LocalStorageModule','angular-loading-bar','ui.bootstrap','smart-table','ngSanitize','mgo-angular-wizard','ngCsv','ngClipboard','angular-momentjs']);
 
-
 app.constant('ngAuthSettings', {
+
     //apiServiceBaseUri: 'https://auth.tripayments.com/',
     apiServiceBaseUri: 'http://auth.demo.tripayments.com/',
+    //apiServiceBaseUri: 'https://auth.testing.tripayments.com/',
     clientId: 'tpLocal'
 });
+//////////////////////////////////
+//   Base Url for all end points
+//////////////////////////////////
+
+//app.constant('baseUrl', "http://api.tripayments.com/");
+app.constant('baseUrl', "http://api.demo.tripayments.com/");
+//app.constant('baseUrl', "http://api.testing.tripayments.com/");
 
 
 app.config(function($stateProvider, $urlRouterProvider, $locationProvider,$httpProvider) {
@@ -90,13 +98,15 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider,$httpP
     $httpProvider.interceptors.push('authInterceptorService');
 
 });
-//app.constant('baseUrl', "http://api.testing.tripayments.com/");
-app.constant('baseUrl', "http://api.demo.tripayments.com/");
+
 
 app.run(['$rootScope', '$state', '$stateParams', '$location','authService', function ($rootScope, $state, $stateParams, $location,authService,$scope) {
 
     $rootScope.$state = $state;
     $rootScope.$stateParams = $stateParams;
+
+    console.log($location.$$host);
+    console.log($location);
 
     // AUTH SERVICE
     authService.fillAuthData();

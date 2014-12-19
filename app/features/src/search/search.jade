@@ -22,9 +22,11 @@ include ../modals/refund_modal.html
                                         include partials/calendar1-1.jade
                                     .col-md-2
                                         select.form-control(ng-options="item as item for item in Hours" ng-model="fromHours")
+                                            option(value="") Hour
                                         
                                     .col-md-2
                                         select.form-control(ng-options="item as item for item in Mins" ng-model="fromMins")
+                                            option(value="") Min
                                            
                                         
                             .col-md-4
@@ -34,16 +36,16 @@ include ../modals/refund_modal.html
                                         include partials/calendar1-2.jade
                                     .col-md-2
                                         select.form-control(ng-options="item as item for item in Hours" ng-model="toHours")
-                                            
+                                            option(value="") Hour
                                         
                                     .col-md-2
                                         select.form-control(ng-options="item as item for item in Mins" ng-model="toMins")
-                                           
+                                            option(value="") Min
                                         
                             .col-md-4
                                 label Preset Date Range:
                                 select.form-control(ng-model="snapForm.fromDate")
-                                    option Select An Item
+                                    option(value="") Select a date range
                                     option(value="{{Yesterday}}") Yesterday
                                     //option Last Week
                                     //option Last Month
@@ -59,6 +61,7 @@ include ../modals/refund_modal.html
                             .col-md-4
                                 label Gateway
                                 select.form-control(ng-model="snapForm.gateway" ng-options="obj.Id as obj.DisplayName for obj in gateways")
+                                    option(value="") Select a gateway
                                     
                         .row
                             .col-md-12
@@ -268,7 +271,7 @@ include ../modals/refund_modal.html
                                 span Transaction Search:
 
 
-.search_feedback
+.dash.search_feedback
       .panel.panel-default.table_search_results
         .panel-heading.search_table_heading
             .row

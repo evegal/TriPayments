@@ -334,7 +334,7 @@ app.controller('searchCtrl', function($rootScope,$scope,$http,$filter,baseUrl,$s
     // SEND POST REQUEST
     $http({
       method:'POST',
-      url:'http://api.testing.tripayments.com/transactions/snapshot',
+      url:baseUrl + 'transactions/snapshot',
       data:snapQuery
     }).success(function(data) {
       
@@ -420,7 +420,7 @@ app.controller('searchCtrl', function($rootScope,$scope,$http,$filter,baseUrl,$s
     // QUERY POST REQUEST
     $http({
       method:'POST',
-      url:'https://api.tripayments.com/transactions/v2',
+      url:baseUrl + 'transactions/v2',
       data:transQuery
     }).success(function(data) {
 
