@@ -91,7 +91,8 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider,$httpP
 
 });
 //app.constant('baseUrl', "http://api.testing.tripayments.com/");
-app.constant('baseUrl', "http://api.demo.tripayments.com/");
+//app.constant('baseUrl', "http://api.demo.tripayments.com/");
+app.constant('baseUrl', "http://localhost:51535/");
 
 app.run(['$rootScope', '$state', '$stateParams', '$location','authService', function ($rootScope, $state, $stateParams, $location,authService,$scope) {
 

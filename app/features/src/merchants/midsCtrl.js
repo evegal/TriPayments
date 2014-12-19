@@ -481,7 +481,7 @@ var midCreateModalInstance = function($scope,$modalInstance,$log,$http,$rootScop
         }
     } // END midstep1
 
-    $scope.midStep12 = function(theForm,curGate) {
+    $scope.midStep12 = function(theForm) {
 
         /*
         var Query =  {
@@ -493,14 +493,13 @@ var midCreateModalInstance = function($scope,$modalInstance,$log,$http,$rootScop
         if(theForm.$valid) {
 
         var Query = {
-          "ExistingMerchantGatewayId":curGate,  
+          "ExistingMerchantGatewayId": $scope.ChosenGateway.MerchantGatewayId,  
           "IsActive": true
-        }
-
+        };
         
         $http({
             method:'POST',
-            url: baseUrl + 'setup/gateway',
+            url: baseUrl + 'mids/setup/gateway',
             data:Query
         }).success(function(data) {
             console.log(data);
@@ -509,7 +508,6 @@ var midCreateModalInstance = function($scope,$modalInstance,$log,$http,$rootScop
             $scope.gatewayId = data.gatewayId;
             
             WizardHandler.wizard().next();
-
         });
         
         } else {

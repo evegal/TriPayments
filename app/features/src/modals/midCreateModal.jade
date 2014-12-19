@@ -101,7 +101,7 @@ script(type="text/ng-template" id="midCreateContent.html")
                         .col-md-6
                             
                         .col-md-6.text-right
-                            a.row_btn.emerald_btn(href="" type="submit" wz-next="" ng-click="midStep12()")
+                            a.row_btn.emerald_btn(href="" type="submit" ng-click="midStep12(midCreateForm12)")
                                 span Next
                                 i.fa.fa-arrow-right
                             //input.row_btn.wet_asphalt_btn(type="submit" value="Next")
@@ -113,6 +113,7 @@ script(type="text/ng-template" id="midCreateContent.html")
         
 
               wz-step(title="2. MID Config")
+               form(name="createMidStep2" novalidate)
                 .row
                     .col-md-6
                         .row
@@ -209,14 +210,12 @@ script(type="text/ng-template" id="midCreateContent.html")
 
                 .row
                     .col-md-6.text-left
-                        //input.row_btn.wet_asphalt_btn(type="submit", wz-next="", value="Previous Step")
                         a.row_btn.wet_asphalt_btn(href="" type="submit" wz-previous="")
                                 i.fa.fa-arrow-left
                                 span Previous
                                 
                     .col-md-6.text-right
-                        //input.row_btn.wet_asphalt_btn(type="submit", wz-next="", value="Next Step" ng-click="midStep13()")
-                        a.row_btn.wet_asphalt_btn(href="" type="submit" wz-next="" ng-click="midStep13()")
+                        a.row_btn.wet_asphalt_btn(href="" type="submit" wz-next="" ng-click="midStep13(createMidStep2)")
                                 span Next
                                 i.fa.fa-arrow-right
 
