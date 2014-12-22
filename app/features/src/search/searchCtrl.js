@@ -822,7 +822,7 @@ var refundModalInstanceCtrl = function($scope,$modalInstance,trans,$http,$timeou
       var refundAmount = document.getElementById('refundAmount').value;
       $scope.refundAmount = refundAmount;
 
-      if(refundAmount != '' && $scope.refundAmount < amount) {
+      if(refundAmount != '' && $scope.refundAmount <= parseFloat(amount)) {
 
       $('.MID_feedback').slideDown(300);
       $('#refundBtn').addClass('hidden');
