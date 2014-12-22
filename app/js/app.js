@@ -3,7 +3,12 @@ var app = angular.module("myApp", ['ui.router','LocalStorageModule','angular-loa
 app.constant('ngAuthSettings', {
 
     //apiServiceBaseUri: 'https://auth.tripayments.com/',
+    //clientId: 'tpPortal'
+
     apiServiceBaseUri: 'http://auth.demo.tripayments.com/',
+    //clientId: 'tpDemo'
+
+
     //apiServiceBaseUri: 'https://auth.testing.tripayments.com/',
     clientId: 'tpLocal'
 });
@@ -105,8 +110,8 @@ app.run(['$rootScope', '$state', '$stateParams', '$location','authService', func
     $rootScope.$state = $state;
     $rootScope.$stateParams = $stateParams;
 
-    console.log($location.$$host);
     console.log($location);
+    console.log($location.$$host);
 
     // AUTH SERVICE
     authService.fillAuthData();

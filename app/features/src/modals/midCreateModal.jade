@@ -8,28 +8,28 @@ script(type="text/ng-template" id="midCreateContent.html")
               wz-step(title="1. Gateway Config")
                 .gateway-option
                         label Do you want to setup from your pre-existing gateways?
-                        input(type="checkbox" ng-model="preExist")
+                        input(tooltip="Re-use a gateway that you already configured" type="checkbox" ng-model="preExist")
                 form.STEPONE(name="midCreateForm1" ng-if="preExist == false" novalidate)
                     
                     .row
                         .col-md-4
                             label Choose Gateway Service:
                         .col-md-8
-                            select.form-control(required="" ng-model="selectedMerchant" id="GatewayId" ng-options="obj.Id as obj.DisplayName for obj in gateways")
-                                
+                            select.form-control(tooltip="Select a gateway service from a list of available gateways" tooltip-placement="top" required="" ng-model="selectedMerchant" id="GatewayId" ng-options="obj.Id as obj.DisplayName for obj in gateways")
+                                option(value="") Select an item
 
                     .row
                         .col-md-4
                             label Processor:
                         .col-md-8
-                            select.form-control(required="" ng-model="selectedPro" id="processorId" ng-options="obj.Id as obj.Name for obj in processors")
-                                
+                            select.form-control(tooltip="The name of the processor for this merchant account" tooltip-placement="top" required="" ng-model="selectedPro" id="processorId" ng-options="obj.Id as obj.Name for obj in processors")
+                                option(value="") Select an item
 
                     .row
                         .col-md-4
                             label Merchant Company:
                         .col-md-8
-                            input.form-control(required="" ng-model="MerchantCompany" type="text" placeholder="Enter Custom Group Name" id="MerchantCompany")
+                            input.form-control(tooltip="The name you want to associate with this gateway" tooltip-placement="top" required="" ng-model="MerchantCompany" type="text" placeholder="Enter Custom Group Name" id="MerchantCompany")
 
                     .row
                         .col-md-4
@@ -47,7 +47,7 @@ script(type="text/ng-template" id="midCreateContent.html")
                         .col-md-4
                             label Gateway Type
                         .col-md-8
-                            select.form-control(id="GatewayType")
+                            select.form-control(tooltip="Choose the kind of payment processed by this gateway" tooltip-placement="top" id="GatewayType")
                                 option(value="CreditCard") Credit Card
                                 option(value="BankingAccount") Banking Account
                                 option(value="External") External
@@ -78,6 +78,7 @@ script(type="text/ng-template" id="midCreateContent.html")
                             label Pre-Existing Gateway
                         .col-md-8
                             select.form-control(required="" ng-change="selectUpdate(currentGate)" ng-model="currentGate" ng-options="obj.MerchantGatewayId as obj.DisplayName for obj in curGates")
+                                option(value="") Select an item
                     
 
                     .row(ng-if="ChosenGateway.MerchantGatewayId != null")
@@ -118,48 +119,44 @@ script(type="text/ng-template" id="midCreateContent.html")
                     .col-md-6
                         .row
                             .col-md-4
-                                label MID(Sent to procesor):
+                                label MID:
                             .col-md-8
-                                input.form-control(type="text" placeholder="MID" id="MIDconfig")
+                                input.form-control(tooltip="MID or Processor ID is provided by your Merchant Account Provider" tooltip-placement="top" type="text" placeholder="Enter mid" id="MIDconfig")
                     .col-md-6
                         .row
                             .col-md-4
                                 label Descriptor:
                             .col-md-8
-                                input.form-control(type="text"  placeholder="placeholder" id="MIDdescriptor")
+                                input.form-control(tooltip="Text available for order confirmation it's passed to the gateway.  If dynamic descriptor is supposed to be provided by gateway." tooltip-placement="top" type="text"  placeholder="Enter descriptor" id="MIDdescriptor")
                 .row
                     .col-md-6
                         .row
                             .col-md-4
-                                label Display Name:
+                                label Name:
                             .col-md-8
-                                input.form-control(type="text"  placeholder="placeholder" id="MIDdisplayName")
+                                input.form-control(tooltip="What will show in our reports to this Merchant Account" tooltip-placement="top" type="text"  placeholder="Enter display name" id="MIDdisplayName")
                     .col-md-6
                         .row
                             .col-md-4
                                 label Monthly Cap
                             .col-md-8
-                                input.form-control(type="text" placeholder="placeholder" id="MIDmonthlyCap") 
+                                input.form-control(tooltip="Used for load balancing and routing to prevent transactions to decline because your account exceeds the cap." tooltip-placement="top" type="text" placeholder="Enter monthly cap" id="MIDmonthlyCap") 
                 .row.paymentTypeDiv
-                    p Payment Types
+                    p 
+                        label(tooltip="Select allowed payment types." tooltip-placement="top") Payment Types
                 .row.paymentTypeDiv
                     .col-md-3
                         input(type="checkbox" id="amerExpress-box")
                         i.fa.fa-cc-amex.fa-2x
-                        //label American Express
                     .col-md-3
                         input(type="checkbox" id="visa-box")
                         i.fa.fa-cc-visa.fa-2x
-                        //label Visa
                     .col-md-3
                         input(type="checkbox" id="mastercard-box")
                         i.fa.fa-cc-mastercard.fa-2x
-                        //label Mastercard
                     .col-md-3
                         input(type="checkbox" id="discover-box")
                         i.fa.fa-cc-discover.fa-2x
-                        //label Discover
-
 
                 .row
                     .col-md-6
@@ -167,18 +164,18 @@ script(type="text/ng-template" id="midCreateContent.html")
                             .col-md-4
                                 label Daily ReBill Limit:
                             .col-md-4
-                                select.form-control(id="limitType")
+                                select.form-control(tooltip="Rebill limit set to percent or amount." tooltip-placement="top" id="limitType")
                                     option Percentage
                                     option Amount
                             .col-md-4
-                                input.form-control(type="text" id="dailyRebill")
+                                input.form-control(type="text" id="dailyRebill" placeholder="value")
 
                     .col-md-6
                         .row
                             .col-md-4
                                 label Transaction Fee:
                             .col-md-8
-                                input.form-control(type="text" id="MIDtransactionFee")
+                                input.form-control(tooltip="Transaction Fee charged by your Merchant Account provider.  Used for reporting." tooltip-placement="top" type="text" id="MIDtransactionFee" placeholder="Enter transaction fee")
 
                 .row
                     .col-md-6
@@ -186,13 +183,13 @@ script(type="text/ng-template" id="midCreateContent.html")
                             .col-md-4
                                 label ChargeBack Fee:
                             .col-md-8
-                                input.form-control(type="text" id="MIDchargeBackFee")
+                                input.form-control(tooltip="Used for reporting." tooltip-placement="top" type="text" id="MIDchargeBackFee" placeholder="Enter chargeback fee")
                     .col-md-6
                         .row
                             .col-md-4
                                 label Reserve Acct Rate:
                             .col-md-8
-                                input.form-control(type="text" id="MIDreserveAccountRate")
+                                input.form-control(tooltip="Used for reporting assing in estimating cash flow." tooltip-placement="top" type="text" id="MIDreserveAccountRate" placeholder="Enter reserve rate")
 
                 .row
                     .col-md-6
@@ -200,24 +197,28 @@ script(type="text/ng-template" id="midCreateContent.html")
                             .col-md-4
                                 label Discount:
                             .col-md-8
-                                input.form-control(type="text" id="MIDiscount")
+                                input.form-control(tooltip="Used for reporting." tooltip-placement="top" type="text" id="MIDiscount" placeholder="Enter discount")
                     .col-md-6
                         .row
                             .col-md-4
-                                label Gateway:
+                                label.fa.fa-info-circle( ) Gateway Fee:
                             .col-md-8
-                                input.form-control(type="text")
+                                input.form-control(tooltip="Used for reporting." tooltip-placement="top" placeholder="Enter gateway fee" type="text")
 
                 .row
                     .col-md-6.text-left
-                        a.row_btn.wet_asphalt_btn(href="" type="submit" wz-previous="")
-                                i.fa.fa-arrow-left
-                                span Previous
-                                
+                        a.row_btn.disabled_btn(href="" type="submit" wz-previous="")
+                            i.fa.fa-arrow-left
+                            span Previous
+
                     .col-md-6.text-right
-                        a.row_btn.wet_asphalt_btn(href="" type="submit" wz-next="" ng-click="midStep13(createMidStep2)")
-                                span Next
-                                i.fa.fa-arrow-right
+                        a.row_btn.emerald_btn(href="" type="submit" wz-next="" ng-click="midStep13(createMidStep2)")
+                            span Next
+                            i.fa.fa-arrow-right
+
+
+
+
 
               wz-step(title="3. Email Ca Notification")
 
