@@ -694,10 +694,23 @@ var midCreateModalInstance = function($scope,$modalInstance,$log,$http,$rootScop
     }
 
     $scope.removeEmail = function(email, index) {
-        console.log('this is the email');
-        console.log(email);
+        var midId = $scope.newMidId;
 
-        //$scope.emails.splice(index,1);
+        var Query = {
+            "MidId":$scope.newMidId,
+            "Recipient":email
+        }
+
+        $http({
+            method:'DELETE',
+            url:baseUrl + 'mids/'+ midId +'/notifications/' + email ,
+            data:Query
+        }).success(function(data,status) {
+            console.log(status);
+            console.log(data);
+            $scope.emails.splice(index,1);
+        });
+
     }
 
     
