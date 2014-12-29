@@ -25,6 +25,11 @@ body {
     margin-left: -15px !important;
 }
 
+.required-blank, .ng-dirty.ng-touched.ng-invalid{
+    border: solid 1px $alizarin;
+  }
+
+
 .nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
 
 

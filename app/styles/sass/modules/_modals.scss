@@ -149,7 +149,7 @@
         background:$pomegranate !important;
     }
 }
-.userCreateSuccess {
+.successMsg, .userCreateSuccess {
     background:$greensea;
     color:#fff;
     display:none;
@@ -163,7 +163,7 @@
     padding:20px 0;
     text-align:center;
 }
-.userError {
+.errorMsg, .userError {
     background:$pomegranate;
     color:#fff;
     display:none;
@@ -306,8 +306,7 @@ form.merchantCreateForm {
 .midCreateModal {
     input[type="checkbox"] {
         width:20px;
-        height:25px;
-        line-height:2.8em;
+        height:0px !important;
     }
     label {
         font-size:16px;
@@ -396,9 +395,15 @@ form.merchantCreateForm {
     }
 
 }
-.STEPONE {
+.stepOne {
     label {
         display:block;
         text-align:right;
     }
+}
+.add_email{
+    margin-top:20px;
+}
+#notificationEmail{
+    margin-top:10px;
 }

@@ -1,40 +1,5 @@
 app.controller('midsCtrl', function($scope,$http,Notify) {
 
-    /*
-    $scope.setGroups = function(mid) {
-            var Glen = mid.GroupMembership;
-            var bucket = [];   
-            var groupNames = [];     
-
-            var stuff = [];
-            // Dynamic PopOver
-            //$scope.dynamicPop = mid.GroupMembership;
-
-            for(var i in mid.GroupMembership) {
-                bucket.push(i);
-
-                if(mid.GroupMembership.hasOwnProperty(i)) {
-                    //onsole.log(i + " =  " + mid.GroupMembership[i])
-
-                    groupNames.push(mid.GroupMembership[i]);
-
-                }
-
-            }
-
-            $scope.dynamicPop = groupNames;
-            //$scope.groupTip = groupNames;
-            $scope.tempGroups = groupNames;
-
-            $scope.groupTip = groupNames;
-
-            //$scope.groupTip = '<p>somegroup</p>';
-
-            return bucket.length;
-    } // END setGroups
-    */
-
-
     $scope.showRolloverParents = function(mid) {
 
         if(mid) {
@@ -297,7 +262,7 @@ var EnableMidCtrlInstance = function($scope,$modalInstance,$log,mid,$http,Notify
     $scope.enableMID = function() {
 
         $http({
-            method:'PUT',
+            method:'PATCH',
             url: baseUrl + 'mids/' + mid.Id,
             data:newQuery
         }).success(function(data,status) {
@@ -398,9 +363,6 @@ var midCreateModalInstance = function($scope,$modalInstance,$log,$http,$rootScop
     
 
     $scope.midStep1 = function(theForm,selectedMerchant,selectedPro) {
-        console.log('theForm: ' + theForm);
-        console.log('selectedMerchant: ' + selectedMerchant);
-        console.log('selectedPro: ' + selectedPro);
 
         if(theForm.$valid) {
        
@@ -413,7 +375,12 @@ var midCreateModalInstance = function($scope,$modalInstance,$log,$http,$rootScop
             "IsActive":document.getElementById('steponeActive').checked
            }
            
-           //$scope.gatewayId = +document.getElementById('GatewayId').value
+           
+           // get actual txt of dropdown not just id 
+           var selectedGate = document.getElementById('GatewayId');
+           $scope.gatewayIdTxt = selectedGate.options[selectedGate.selectedIndex].text;
+
+
            $scope.processorId = document.getElementById('processorId').value;
            $scope.newMerchantCompany = document.getElementById('MerchantCompany').value;
            $scope.newGatewayUsername = document.getElementById('Merchant.UserNamegate').value;
@@ -437,28 +404,20 @@ var midCreateModalInstance = function($scope,$modalInstance,$log,$http,$rootScop
                 WizardHandler.wizard().next();
 
             });
-            
-            
 
         } else {
             
-            $scope.wrongInput = 'Please Complete New Merchant Form';
-            $('.nameError').slideDown(500);
+            $scope.errorMsg = 'Please fill in all fields in this form.';
+            $('.errorMsg').slideDown(500);           
             $timeout(function() {
-                $('.nameError').slideUp(500);
-            },2500);
+                $('.errorMsg').slideUp(500);
+            },3000);
 
         }
     } // END midstep1
 
     $scope.midStep12 = function(theForm) {
 
-        /*
-        var Query =  {
-            "ExistingMerchantGatewayId":+document.getElementById('curGates').value,
-            "IsActive":true
-        }
-        */
 
         if(theForm.$valid) {
 
@@ -482,9 +441,9 @@ var midCreateModalInstance = function($scope,$modalInstance,$log,$http,$rootScop
         
         } else {
             $scope.emptyField = 'Please Make A Selection';
-            $('.nameError').slideDown(500);
+            $('.errorMsg').slideDown(500);
             $timeout(function() {
-                $('.nameError').slideUp(500);
+                $('.errorMsg').slideUp(500);
             },2500);
         }       
         
@@ -496,133 +455,140 @@ var midCreateModalInstance = function($scope,$modalInstance,$log,$http,$rootScop
     //////////////////
     $scope.midStep13 = function(theForm) {
 
-        //console.log($scope.gatewayId);
-        //console.log(theForm);
+
         if(theForm.$valid) {
 
-        $scope.paymentTypes = [];
+            $scope.paymentTypes = [];
 
-        var amexType = +document.getElementById('amerExpress-box').checked;
-        var visaType = +document.getElementById('visa-box').checked;
-        var masterType = +document.getElementById('mastercard-box').checked;
-        var discoverType = +document.getElementById('discover-box').checked;
+            // bind card checkboxes
+            var amexType = +document.getElementById('amerExpress-box').checked;
+            var visaType = +document.getElementById('visa-box').checked;
+            var masterType = +document.getElementById('mastercard-box').checked;
+            var discoverType = +document.getElementById('discover-box').checked;
 
-        if(amexType) {
-            var amex = 1;
-            $scope.paymentTypes.push(amex);
-        } else {
-            //console.log('amex not set');
-        }
+            if(amexType) {
+                var amex = 1;
+                $scope.paymentTypes.push(amex);
+            } 
 
-        if(visaType) {
-            var visa = 2;
-            $scope.paymentTypes.push(visa);
-        } else {
-            //console.log('visa not set');
-        }
+            if(visaType) {
+                var visa = 2;
+                $scope.paymentTypes.push(visa);
+            } 
 
-        if(masterType) {
-            var master = 3;
-            $scope.paymentTypes.push(master);
-        } else {
-            //console.log('master not set');
-        }
+            if(masterType) {
+                var master = 3;
+                $scope.paymentTypes.push(master);
+            } 
 
-        if(discoverType) {
-            var master = 4;
-            $scope.paymentTypes.push(master);
-        } else {
-                //console.log('master not set');
-        }
+            if(discoverType) {
+                var master = 4;
+                $scope.paymentTypes.push(master);
+            } 
 
-        var checkP = [];
-        checkP.push(amexType,visaType,masterType,discoverType);
+            var checkP = [];
+            checkP.push(amexType,visaType,masterType,discoverType);
 
-        //console.log(checkP);
-        for(var i=0;i<checkP.length;i++) {
-            //console.log(checkP[i]);
-            if(checkP[i] === 1) {
-                var itCheck = true;
+            //console.log(checkP);
+            for(var i=0;i<checkP.length;i++) {
+                if(checkP[i] === 1) {
+                    var cardSelectCheck = true;
+                }
             }
-        }
+           
+            // parse MonthyCap 
+            var monthlyCapAmt =  parseFloat(document.getElementById('MIDmonthlyCap').value);
 
-        
+            var Query = {
+                "limitType":document.getElementById('limitType').value,
+                "DailyRebillProcessingLimit":+document.getElementById('dailyRebill').value,
+                "Mid":document.getElementById('MIDconfig').value,
+                "Descriptor":document.getElementById('MIDdescriptor').value,
+                "DisplayName":document.getElementById('MIDdisplayName').value,
+                "MonthlyCap":monthlyCapAmt,
+                "PaymentTypeIds":$scope.paymentTypes,
+                "GatewayId":$scope.gatewayId,
+                "MerchantGatewayId":$scope.NewExistGateway,
+                "GatewayFeeRetail":document.getElementById('MIDgatewayFee').value,
+                "TransactionFee":document.getElementById('MIDtransactionFee').value,
+                "ChargebackFee":document.getElementById('MIDchargeBackFee').value,
+                "ReserveAccountRate":document.getElementById('MIDreserveAccountRate').value,
+                "RetailDiscountRate":document.getElementById('MIDiscount').value
+            };
 
-        // check paymentTypes
-        //console.log($scope.paymentTypes);
+            $scope.Descriptor = document.getElementById('MIDdescriptor').value;
+            $scope.MidConfig = document.getElementById('MIDconfig').value;
+            $scope.DisplayName = document.getElementById('MIDdisplayName').value;
+            $scope.MonthlyCap = document.getElementById('MIDmonthlyCap').value;
+
+                //if cards have been selected proceed
+                if(cardSelectCheck) {
+                    //is this a new mid then post
+                    if (!$scope.newMidId){
+                        console.log('this is new MID');
+
+                        $http({
+                            method:'POST',
+                            url: baseUrl + 'mids/setup/mid',
+                            data:Query
+                        }).success(function(data,status) {
+                            
+                            Notify.sendMsg('NewMidCreated', data);
+
+                            $scope.newMidId = data.newMidId;
+                            console.log($scope.newMidId);
+                            WizardHandler.wizard().next();
+                            //console.log($scope.newMidId); // logs INT
+
+                        });
+
+                    //Not new patch
+                    } else {
+                        console.log($scope.newMidId);
+                        console.log('not new MID ');
+                        Query.MidId = $scope.newMidId;
+
+                        console.log('newQuery');
+                        console.log(Query);
+
+                        
+                        $http({
+                            method:'PUT',
+                            url: baseUrl + 'mids/' + $scope.newMidId,
+                            data:Query
+                        }).success(function(data,status) {
+                            
+                            Notify.sendMsg('UpdateMidBindingModel', data);
+
+                            //$scope.newMidId = data.newMidId;
+                            //console.log($scope.newMidId);
+                            WizardHandler.wizard().next();
+                            //console.log($scope.newMidId); // logs INT
+
+                        });
+                        
+
+                    }
+                
 
 
-        /*
-        var Query = {
-            "Mid":document.getElementById('MIDconfig').value,
-            "Descriptor":document.getElementById('MIDdescriptor').value,
-            "DisplayName":document.getElementById('MIDdisplayName').value,
-            "MonthlyCap":+document.getElementById('MIDmonthlyCap').value,
-            "TransactionFee":+document.getElementById('MIDtransactionFee').value,
-            "ChargebackFee":+document.getElementById('MIDchargeBackFee').value,
-            "ReserveAccountRate":+document.getElementById('MIDreserveAccountRate').value,
-            "RetailDiscountRate":+document.getElementById('MIDiscount').value
-        }
-        */
-
-        
-        var Query = {
-            "limitType":document.getElementById('limitType').value,
-            "DailyRebillProcessingLimit":+document.getElementById('dailyRebill').value,
-            "Mid":document.getElementById('MIDconfig').value,
-            "Descriptor":document.getElementById('MIDdescriptor').value,
-            "DisplayName":document.getElementById('MIDdisplayName').value,
-            "MonthlyCap":+document.getElementById('MIDmonthlyCap').value,
-            "PaymentTypeIds":$scope.paymentTypes,
-            "gatewayId":$scope.gatewayId,
-            "merchantGatewayId":$scope.NewExistGateway,
-            "TransactionFee":+document.getElementById('MIDtransactionFee').value,
-            "ChargebackFee":+document.getElementById('MIDchargeBackFee').value,
-            "ReserveAccountRate":+document.getElementById('MIDreserveAccountRate').value,
-            "RetailDiscountRate":+document.getElementById('MIDiscount').value
-        };
-
-        $scope.Descriptor = document.getElementById('MIDdescriptor').value;
-        $scope.MidConfig = document.getElementById('MIDconfig').value;
-        $scope.DisplayName = document.getElementById('MIDdisplayName').value;
-        $scope.MonthlyCap = +document.getElementById('MIDmonthlyCap').value;
-
-        if(itCheck) {
-            console.log('found it');
-         
-        
-        $http({
-            method:'POST',
-            url: baseUrl + 'mids/setup/mid',
-            data:Query
-        }).success(function(data,status) {
+                } else {
+                    $scope.errorMsg = 'Please select the payment types';
+                    $('.errorMsg').slideDown(500);
+                    $timeout(function() {
+                        $('.errorMsg').slideUp(500);
+                    },2500);
+                }
             
-            Notify.sendMsg('NewMidCreated', data);
+            
 
-            $scope.newMidId = data.newMidId;
-            console.log($scope.newMidId);
-            WizardHandler.wizard().next();
-            //console.log($scope.newMidId); // logs INT
-
-        });
-
-        } else {
-            $scope.wrongInput = 'Please Enter A Payment Type';
-            $('.nameError').slideDown(500);
-            $timeout(function() {
-                $('.nameError').slideUp(500);
-            },2500);
-        }
-        
-        
-
-         } else {
-            $scope.wrongInput = 'Please Make A Selection';
-            $('.nameError').slideDown(500);
-            $timeout(function() {
-                $('.nameError').slideUp(500);
-            },2500);
-         }
+             } else {
+                $scope.errorMsg = 'Please ensure that the required fields (*) are entered.';
+                $('.errorMsg').slideDown(500);
+                $timeout(function() {
+                    $('.errorMsg').slideUp(500);
+                },3000);
+             }
         
         
         
@@ -635,122 +601,130 @@ var midCreateModalInstance = function($scope,$modalInstance,$log,$http,$rootScop
     ////////////
     $scope.emails = [];
 
-    $scope.addEmail = function() {
 
-        var userEmail = document.getElementById('notificationEmail').value;
-
-    
-            var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-            //console.log(re.test(userEmail));
-            if(re.test(userEmail)) {
-                // push to emails Array
-                $scope.emails.push(userEmail);
-                // clear input
-                document.getElementById('notificationEmail').value = '';
-
-            } else {
-                //alert('Please Enter Valid Email');
-                $scope.wrongInput = 'Please Enter A Valid Email';
-                $('.nameError').slideDown(500);
-                $timeout(function() {
-                    $('.nameError').slideUp(500);
-                },2500);
-            }        
-
-    }
-
-    $scope.removeEmail = function(index) {
-        //console.log(index);
-
-        $scope.emails.splice(index,1);
-    }
-
-    
     $scope.allTypeChange = function() {
         var parentCheck = document.getElementById('allEmailTypes').checked;
 
         if(parentCheck) {
-            //document.getElementById('orderConfirm').checked = true;
-            //document.getElementById('shipment').checked = true;
+            document.getElementById('orderConfirm').checked = true;
+            document.getElementById('shipment').checked = true;
             document.getElementById('refundCheck').checked = true;
             document.getElementById('capToggle').checked = true;
 
             $scope.capToggle = true;
 
         } else {
-            //document.getElementById('orderConfirm').checked = false;
-            //document.getElementById('shipment').checked = false;
+            document.getElementById('orderConfirm').checked = false;
+            document.getElementById('shipment').checked = false;
             document.getElementById('refundCheck').checked = false;
             document.getElementById('capToggle').checked = false;
 
             $scope.capToggle = false;
         }
         
-    }
+    }    
+    
+    $scope.addEmail = function() {
 
-    $scope.midStep14 = function(theForm) {
-
-
-        var allEmail = document.getElementById('allEmailTypes').checked;
-        //var orderConfirm = document.getElementById('orderConfirm').checked;
-        //var shipment = document.getElementById('shipment').checked;
-        var refundCheck = document.getElementById('refundCheck').checked;
+        var userEmail = document.getElementById('notificationEmail').value,
+            allEmail = document.getElementById('allEmailTypes').checked,
+            orderConfirm = document.getElementById('orderConfirm').checked,
+            shipment = document.getElementById('shipment').checked,
+            refundCheck = document.getElementById('refundCheck').checked,
+            notificationType = [];
 
         if(allEmail) {
-            var notificationType = 1;
+            notificationType.push(1);
         }
-        /*
         if(orderConfirm) {
-            var notificationType = 2;
+            notificationType.push(2);
         }
         if(shipment) {
-            var notificationType = 3;
+            notificationType.push(3);
         }
-        */
-
         if(refundCheck) {
-            var notificationType = 4;
+            notificationType.push(4);
         }
+   
+            var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+            if(notificationType != '' ){
 
 
+                if(re.test(userEmail)) {
+                    // push to emails Array
+                    $scope.emails.push(userEmail);
 
-        var Query = {
-            "MidId":$scope.newMidId,
-            "Recipients":$scope.emails,
-            "NotificationTypeId":notificationType
-        }
+                    var Query = {
+                        "MidId":$scope.newMidId,
+                        "Recipient":userEmail,
+                        "NotificationTypeIds":notificationType
+                    }
 
-        console.log(Query);
+                   
+                    $http({
+                        method:'POST',
+                        url:baseUrl + 'mids/setup/notifications',
+                        data:Query
+                    }).success(function(data,status) {
+                        console.log(status);
+                        console.log(data);
 
-        
-        $http({
-            method:'POST',
-            url:baseUrl + 'mids/setup/notifications',
-            data:Query
-        }).success(function(data,status) {
-            console.log(status);
-            console.log(data);
+                    });
 
+                    // clear input
+                    document.getElementById('notificationEmail').value = '';
+
+                } else {
+                    $scope.errorMsg = 'Please enter a valid email';
+                    $('.errorMsg').slideDown(500);
+                    $timeout(function() {
+                        $('.errorMsg').slideUp(500);
+                    },2500);
+                } 
+
+            } else{
+                $scope.errorMsg = 'Please select an email type';
+                $('.errorMsg').slideDown(500);
+                $timeout(function() {
+                    $('.errorMsg').slideUp(500);
+                },2500);                    
+            }
+
+    }
+
+    $scope.removeEmail = function(email, index) {
+        console.log('this is the email');
+        console.log(email);
+
+        //$scope.emails.splice(index,1);
+    }
+
+    
+    $scope.midStep14 = function(theForm) {
+        var userEmail = document.getElementById('notificationEmail').value;
+
+        if (userEmail == '' ) {
             // NEXT STEP
             WizardHandler.wizard().next();
-        });
-        
-        
-        
-
+        } else {
+            $scope.errorMsg = 'Please add your email.';
+            $('.errorMsg').slideDown(500);
+            $timeout(function() {
+                $('.errorMsg').slideUp(500);
+            },2500); 
+        }
     }
 
     ////////////////////
     //  STEP 4 - VERIFY
     ////////////////////
     $scope.midStep15 = function() {
-        console.log($scope.newMidId);
-        
+       
         var Query =  {
             "MidId":$scope.newMidId
         }
-
-        
+       
         $http({
             method:'POST',
             url: baseUrl + 'mids/setup/verifyMid',
@@ -759,17 +733,14 @@ var midCreateModalInstance = function($scope,$modalInstance,$log,$http,$rootScop
             console.log(data);
             console.log(status);
 
-            if(data === 'false') {
-                //$scope.verfiyFail = 'Verification Failed';
-                $('.nameError').slideDown(500);
-                $timeout(function() {
-                    $('.nameError').slideUp(500);
-                },2500);
-
-            } else if(data === 'true') {
-                
-                $('.verify_btn').hide();
-                $('.userCreateSuccess').show();
+            if(data === false) {
+                $scope.errorMsg = 'Verification Failed.  However your mid has been created please edit your mid and re-verify before use.';
+                $('.final_btn').hide();
+                $('.errorMsg').slideDown(500);
+            } else if(data === true) {
+                $scope.successMsg = 'Verification Successful.'; 
+                $('.final_btn').hide();
+                $('.successMsg').show();
             }
 
         });
