@@ -533,7 +533,7 @@ var midCreateModalInstance = function($scope,$modalInstance,$log,$http,$rootScop
                             data:Query
                         }).success(function(data,status) {
                             
-                            Notify.sendMsg('NewMidCreated', data);
+                            Notify.sendMsg('NewMidUpdate', data);
 
                             $scope.newMidId = data.newMidId;
                             console.log($scope.newMidId);
@@ -558,7 +558,7 @@ var midCreateModalInstance = function($scope,$modalInstance,$log,$http,$rootScop
                             data:Query
                         }).success(function(data,status) {
                             
-                            Notify.sendMsg('UpdateMidBindingModel', data);
+                            Notify.sendMsg('NewMidUpdate', data);
 
                             //$scope.newMidId = data.newMidId;
                             //console.log($scope.newMidId);
@@ -754,6 +754,9 @@ var midCreateModalInstance = function($scope,$modalInstance,$log,$http,$rootScop
                 $scope.successMsg = 'Verification Successful.'; 
                 $('.final_btn').hide();
                 $('.successMsg').show();
+
+               Notify.sendMsg('NewMidUpdate', data);
+
             }
 
         });

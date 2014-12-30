@@ -141,7 +141,7 @@ app.controller("appCtrl", function($rootScope,$scope,$state,$timeout,$http,baseU
     ////////////////////
     //    NEW MID
     ////////////////////
-    Notify.getMsg('NewMidCreated', function(event,data) {
+    Notify.getMsg('NewMidUpdate', function(event,data) {
 
         $http.get(baseUrl + 'mids').success(function(data) {
             $scope.mids = data;

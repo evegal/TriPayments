@@ -10,6 +10,8 @@ app.factory('Notify', ['$rootScope', function($rootScope) {
             $rootScope.$emit(msg,data);
 
             console.log('message sent');
+            console.log(msg);
+            console.log(data);
         };
 
         notify.getMsg = function(msg,func,scope) {
