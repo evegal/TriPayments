@@ -101,12 +101,15 @@
 }
 .modal-footer {
     background:#eee;
+    a{
+        margin-left:5px;
+    }
     .action_btn {
         background:$alizarin;
         color: #fff;
         display: inline-block;
-        width: 120px;
-        padding: 10px;
+        min-width: 120px;
+        padding: 10px 20px;
         text-align: center;
         &:hover {
             text-decoration:none;
@@ -117,9 +120,8 @@
         background:$peterriver;
         color: #fff;
         display: inline-block;
-        width: 120px;
-        min-width:0;
-        padding: 10px;
+        min-width: 120px;
+        padding: 10px 20px;
         text-align: center;
         &:hover {
             text-decoration:none;

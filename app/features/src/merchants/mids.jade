@@ -90,9 +90,12 @@ include ../modals/removeMidModal.jade
                         a.row_btn.disable_mid_btn(ng-click="openMID($index,mid)" ng-controller="DeleteMidCtrl" ng-show="{{mid.Active}}") 
                             i.fa.fa-toggle-off
                             span Disable
-                        a.row_btn.emerald_btn(ng-click="open($index,mid)" ng-controller="EnableMidCtrl" ng-show="{{!mid.Active}}")
+                        a.row_btn.emerald_btn(ng-click="open($index,mid)" ng-controller="EnableMidCtrl" ng-show="{{!mid.Active}} && {{mid.Verified == true}}")
                             i.fa.fa-toggle-on
                             span Enable
+                        a.row_btn.disabled_mid_btn(ng-show="{{mid.Verified == false}}" tooltip="This mid has not been verified.  Please edit and verify this MID before enabling." ng-click="openIt(mid)" ng-controller="editMidModalCtrl")
+                            i.fa.fa-toggle-on
+                            span Enable                            
                         a.row_btn.delete_mid_btn(ng-click="open($index,mid)" ng-controller="removeMidModal")
                             i.fa.fa-trash
                             span Delete

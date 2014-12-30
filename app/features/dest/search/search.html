@@ -147,8 +147,14 @@
             <!-- Response -->
               <h3 class="text-center jumbotron voidFeedback">Action Status: <span>{{voidStatus}}</span></h3>              
             <!--Buttons -->
-              <a href=""  class="action_btn" ng-click="processVoid(trans.TransactionId)">Void</a>
-              <a href="" class="cancel_btn" ng-click="cancelVoid()">Cancel</a>
+              <a href=""  class="row_btn alazarin_btn" ng-click="processVoid(trans.TransactionId)">
+                <i class="fa fa-ban"></i>
+                <span>Void</span>
+              </a>
+              <a href="" class="cancel_btn" ng-click="cancelVoid()">
+                <i class="fa fa-sign-out"></i>
+                <span>Cancel</span>
+              </a>
             </section>
         </div>
      </script>
