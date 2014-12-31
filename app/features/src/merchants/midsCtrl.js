@@ -21,7 +21,7 @@ app.controller('midsCtrl', function($scope,$http,Notify) {
     
 
     
-    $scope.doShit = function(mid) {
+    $scope.findPayType = function(mid) {
 
         if(mid) {
 

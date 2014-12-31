@@ -28,7 +28,7 @@ include ../modals/removeMidModal.jade
                     th(colspan="10")
                         input.form-control(st-search="" type="search" placeholder="Search all mids")
                 tr
-                    th.st-header(st-sort="DisplayName" style="width:15%") Display Name
+                    th.st-header(st-sort="DisplayName" st-sort-default style="width:15%") Display Name
                     th.st-header(st-sort="Gateway" style="width:10%") Gateway
                     th.st-header(st-sort="MonthlyCap" style="width:10%") Monthly Cap
                     th.st-header(st-sort="CapUtilizationPercentage" style="width:10%") Monthly Cap Status
@@ -60,9 +60,6 @@ include ../modals/removeMidModal.jade
                     td
                     td
 
-
-
-
                 tr(ng-repeat="mid in shownMids")
                     td {{mid.DisplayName}}
                     td {{mid.Gateway}}
@@ -72,7 +69,7 @@ include ../modals/removeMidModal.jade
                             span {{mid.CapUtilizationPercentage}} %
                     td 
                         tri-status(status="{{mid.Active}}" ng-class="(mid.Active) ? 'success' : 'failed' ")
-                    td.paymentTypes {{doShit(mid)}} 
+                    td.paymentTypes {{findPayType(mid)}} 
                         span(ng-bind-html="payments") {{payments}}
 
                     td
