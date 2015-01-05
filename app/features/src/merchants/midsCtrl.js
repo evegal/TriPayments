@@ -64,10 +64,10 @@ app.controller('midsCtrl', function($scope,$http,Notify) {
 
 });
 
-app.controller('editMidModalCtrl', function($scope,$modal,$log) {
+app.controller('midEditModalCtrl', function($scope,$modal,$log) {
     $scope.openIt = function(mid) {
      var modalInstance = $modal.open({
-        templateUrl:'midsModalContent2.html',
+        templateUrl:'midsModalContent.html',
         controller:midEditInstanceCtrl,
         size:'lg',
         resolve: {
@@ -79,13 +79,146 @@ app.controller('editMidModalCtrl', function($scope,$modal,$log) {
     }
 });
 
-var midEditInstanceCtrl = function($scope,$modalInstance,mid,$rootScope,$http,baseUrl) {
 
-    // MID TO EDIT
-    //$scope.mid = mid;
-    $scope.original = mid;
-    $scope.copyCat = angular.copy(mid);
-    $scope.mid = $scope.copyCat;
+var midEditInstanceCtrl = function($scope,$modalInstance,$log,$http,$rootScope,WizardHandler,$timeout,Notify,baseUrl,mid) {
+    // Editing existing mid
+    console.log('Mid Instance Control.')
+    
+    // Get current Values for this MID
+    $http.get(baseUrl + 'mids/' + mid.Id).success(function(data) {
+        $scope.original = data;
+        $scope.dataPresent = data;
+        console.log($scope.dataPresent);
+
+        $scope.MIDconfig = $scope.dataPresent.Mid;
+        $scope.MIDdescriptor = $scope.dataPresent.Descriptor;
+        $scope.MIDdisplayName = $scope.dataPresent.CrmDisplayName;
+        $scope.MIDmonthlyCap = $scope.dataPresent.MonthlyCap;
+        $scope.MIDlimitType = $scope.dataPresent.LimitType;
+        $scope.MIDdailyRebill = $scope.dataPresent.DailyRebillProcessingLimit;
+        $scope.MIDtransactionFee = $scope.dataPresent.TransactionFee;
+        $scope.MIDchargeBackFee = $scope.dataPresent.ChargebackFee;
+        $scope.MIDreserveAccountRate = $scope.dataPresent.ReserveAccountRate;
+        $scope.MIDiscount = $scope.dataPresent.RetailDiscountRate;
+        
+        // api is passing a null value versus a 0 like the rest of the fields.
+        if($scope.dataPresent.GatewayFeeRetail == null ){
+            $scope.MIDgatewayFee= 0;
+        } else {
+            $scope.MIDgatewayFee = $scope.dataPresent.GatewayFeeRetail;
+        }
+       
+        // Payment check boxes
+        for (var i = 0; i < $scope.dataPresent.PaymentTypes.length; i++){
+            if($scope.dataPresent.PaymentTypes[i].Id == 1){
+                $scope.amex = true;
+            }
+            if($scope.dataPresent.PaymentTypes[i].Id == 2){
+                $scope.visa = true;
+            }
+            if($scope.dataPresent.PaymentTypes[i].Id == 3){
+                $scope.master = true;
+            }
+            if($scope.dataPresent.PaymentTypes[i].Id == 4){
+                $scope.discover = true;
+            }
+        }
+
+    });
+        
+    $scope.editMidConfig = function(theForm) {
+        console.log(theForm);
+        if(theForm.$valid && theForm.$dirty) {
+            console.log('something had been changed');
+
+            var Query = {
+                "limitType":document.getElementById('limitType').value,
+                "DailyRebillProcessingLimit":+document.getElementById('dailyRebill').value,
+                "Mid":document.getElementById('MIDconfig').value,
+                "Descriptor":document.getElementById('MIDdescriptor').value,
+                "DisplayName":document.getElementById('MIDdisplayName').value,
+                "MonthlyCap":+document.getElementById('MIDmonthlyCap').value,
+                "GatewayFeeRetail":+document.getElementById('MIDgatewayFee').value,
+                "TransactionFee":+document.getElementById('MIDtransactionFee').value,
+                "ChargebackFee":+document.getElementById('MIDchargeBackFee').value,
+                "ReserveAccountRate":+document.getElementById('MIDreserveAccountRate').value,
+                "RetailDiscountRate":+document.getElementById('MIDiscount').value
+            };
+
+            $http({
+                method:'PUT',
+                url: baseUrl + 'mids/' + mid.Id,
+                data:Query
+            }).success(function(data,status) {
+                Notify.sendMsg('NewMidUpdate', data);
+
+                $scope.successMsg = 'Update Successful.';
+                $('.successMsg').slideDown(500);
+                $timeout(function() {
+                    $('.successMsg').slideUp(500);
+                    WizardHandler.wizard().next();
+                },1500);
+                
+            });
+
+        } else {
+            $scope.successMsg = 'No Updates.';
+            $('.successMsg').slideDown(500);
+            $timeout(function() {
+                $('.successMsg').slideUp(500);
+                WizardHandler.wizard().next();
+            },1500);
+        }
+           
+    //Get all email notifications for this MID
+    $http.get(baseUrl + 'mids/' + mid.Id + '/notifications').success(function(data) {
+        console.log('Email Data');
+        console.log(data);
+
+    });    
+
+
+    //MID Verification DATA
+    $scope.MidConfig = document.getElementById('MIDconfig').value;
+    $scope.Descriptor = document.getElementById('MIDdescriptor').value;
+    $scope.DisplayName = document.getElementById('MIDdisplayName').value;
+    $scope.MonthlyCap = document.getElementById('MIDmonthlyCap').value;
+    $scope.IsActive = $scope.dataPresent.IsActive;
+
+    $scope.midStep15 = function() {
+       
+        var Query =  {
+            "MidId":mid.Id
+        }
+       
+        $http({
+            method:'POST',
+            url: baseUrl + 'mids/setup/verifyMid',
+            data:Query
+        }).success(function(data,status) {
+            console.log(data);
+            console.log(status);
+
+            if(data === false) {
+                $scope.errorMsg = 'Verification Failed.  However your mid has been created please edit your mid and re-verify before use.';
+                $('.final_btn').hide();
+                $('.errorMsg').slideDown(500);
+            } else if(data === true) {
+                $scope.successMsg = 'Verification Successful.'; 
+                $('.final_btn').hide();
+                $('.successMsg').show();
+
+               Notify.sendMsg('NewMidUpdate', data);
+
+            }
+
+        });
+        
+
+    } // END verify
+    
+
+    }
 
     
     // CLOSE MODAL
@@ -497,7 +630,6 @@ var midCreateModalInstance = function($scope,$modalInstance,$log,$http,$rootScop
             }
            
             // parse MonthyCap 
-            var monthlyCapAmt =  parseFloat(document.getElementById('MIDmonthlyCap').value);
 
             var Query = {
                 "limitType":document.getElementById('limitType').value,
@@ -505,15 +637,15 @@ var midCreateModalInstance = function($scope,$modalInstance,$log,$http,$rootScop
                 "Mid":document.getElementById('MIDconfig').value,
                 "Descriptor":document.getElementById('MIDdescriptor').value,
                 "DisplayName":document.getElementById('MIDdisplayName').value,
-                "MonthlyCap":monthlyCapAmt,
+                "MonthlyCap":+document.getElementById('MIDmonthlyCap').value,
                 "PaymentTypeIds":$scope.paymentTypes,
                 "GatewayId":$scope.gatewayId,
                 "MerchantGatewayId":$scope.NewExistGateway,
-                "GatewayFeeRetail":document.getElementById('MIDgatewayFee').value,
-                "TransactionFee":document.getElementById('MIDtransactionFee').value,
-                "ChargebackFee":document.getElementById('MIDchargeBackFee').value,
-                "ReserveAccountRate":document.getElementById('MIDreserveAccountRate').value,
-                "RetailDiscountRate":document.getElementById('MIDiscount').value
+                "GatewayFeeRetail":+document.getElementById('MIDgatewayFee').value,
+                "TransactionFee":+document.getElementById('MIDtransactionFee').value,
+                "ChargebackFee":+document.getElementById('MIDchargeBackFee').value,
+                "ReserveAccountRate":+document.getElementById('MIDreserveAccountRate').value,
+                "RetailDiscountRate":+document.getElementById('MIDiscount').value
             };
 
             $scope.Descriptor = document.getElementById('MIDdescriptor').value;

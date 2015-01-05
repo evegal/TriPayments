@@ -1,0 +1,158 @@
+script(type="text/ng-template" id="midsModalContent.html")
+    .midCreateModal
+        .modal-header
+            h3 Edit MID
+            button.close(type="button" ng-click="cancel()") X
+        .modal-body
+            wizard(on-finish="finishedWizard()")
+              wz-step(title="2. MID Config")
+               form.stepOne(name="editMidConfigForm" novalidate)
+                .row
+                    .col-md-6
+                        .row
+                            .col-md-4
+                                label *MID:
+                            .col-md-8  
+                                input.form-control(required="" ng-model="MIDconfig" id="MIDconfig" type="text"  placeholder="Enter mid  (Required)"  tooltip="MID or Processor ID is provided by your Merchant Account Provider (Required)" tooltip-placement="top")
+                    .col-md-6
+                        .row
+                            .col-md-4
+                                label *Descriptor:
+                            .col-md-8
+                                input.form-control(required="" ng-model="MIDdescriptor" id="MIDdescriptor" type="text" tooltip="Text available for order confirmation it's passed to the gateway.  If dynamic descriptor is supposed to be provided by gateway. (Required)" tooltip-placement="top" placeholder="Enter descriptor (Required)" )
+                .row
+                    .col-md-6
+                        .row
+                            .col-md-4
+                                label *Display Name:
+                            .col-md-8
+                                input.form-control(required="" ng-model="MIDdisplayName" id="MIDdisplayName" type="text" tooltip-placement="top" placeholder="Enter display name (Required)" tooltip="What will show in our reports to this Merchant Account (Required)")
+                    .col-md-6
+                        .row
+                            .col-md-4
+                                label *Monthly Cap:
+                            .col-md-8
+                                input.form-control(required="" ng-model="MIDmonthlyCap" type="number" id="MIDmonthlyCap" tooltip="Used for load balancing and routing to prevent transactions to decline because your account exceeds the cap.  (Required)" tooltip-placement="top" placeholder="Enter monthly cap  (Required)" ) 
+                .row.paymentTypeDiv
+                    p 
+                        label(tooltip="Select allowed payment types.  (Required)" tooltip-placement="top") *Payment Types: (Required)
+                .row.paymentTypeDiv
+                    .col-md-3
+                        input(ng-model="amex" id="amerExpress-box" type="checkbox")
+                        i.fa.fa-cc-amex.fa-2x
+                    .col-md-3
+                        input(ng-model="visa" id="visa-box" type="checkbox")
+                        i.fa.fa-cc-visa.fa-2x
+                    .col-md-3
+                        input(ng-model="master" id="mastercard-box" type="checkbox")
+                        i.fa.fa-cc-mastercard.fa-2x
+                    .col-md-3
+                        input(ng-model="discover" id="discover-box" type="checkbox")
+                        i.fa.fa-cc-discover.fa-2x
+
+                .row
+                    .col-md-6
+                        .row
+                            .col-md-4
+                                label Daily ReBill Limit:
+                            .col-md-4
+                                select.form-control(ng-model="MIDlimitType" id="limitType" tooltip="Rebill limit set to percent or amount (optional)" tooltip-placement="top")
+                                    option Percentage
+                                    option Amount
+                            .col-md-4
+                                input.form-control(ng-model="MIDdailyRebill" id="dailyRebill" type="number" placeholder="value (optional)")
+
+                    .col-md-6
+                        .row
+                            .col-md-4
+                                label Transaction Fee:
+                            .col-md-8
+                                input.form-control(ng-model="MIDtransactionFee" id="MIDtransactionFee" tooltip="Transaction Fee charged by your Merchant Account provider.  Used for reporting.  (optional)" tooltip-placement="top" type="number" placeholder="Enter transaction fee (optional)")
+
+                .row
+                    .col-md-6
+                        .row
+                            .col-md-4
+                                label ChargeBack Fee:
+                            .col-md-8
+                                input.form-control(ng-model="MIDchargeBackFee" id="MIDchargeBackFee" placeholder="Enter chargeback fee (optional)" tooltip="Used for reporting (optional)" tooltip-placement="top" type="number")
+                    .col-md-6
+                        .row
+                            .col-md-4
+                                label Reserve Acct Rate:
+                            .col-md-8
+                                input.form-control(ng-model="MIDreserveAccountRate" id="MIDreserveAccountRate" tooltip="Used for reporting assing in estimating cash flow. (optional)" tooltip-placement="top" type="number" placeholder="Enter reserve rate (optional)")
+
+                .row
+                    .col-md-6
+                        .row
+                            .col-md-4
+                                label Discount:
+                            .col-md-8
+                                input.form-control(ng-model="MIDiscount" id="MIDiscount" tooltip="Used for reporting. (optional)" tooltip-placement="top" type="number" placeholder="Enter discount (optional)")
+                    .col-md-6
+                        .row
+                            .col-md-4
+                                label Gateway Fee:
+                            .col-md-8
+                                input.form-control(ng-model="MIDgatewayFee" id="MIDgatewayFee" type="number" tooltip="Used for reporting (optional)" tooltip-placement="top" placeholder="Enter gateway fee (optional)" )
+
+                .row
+                    .col-md-6.text-left
+                        a.row_btn.emerald_btn(href="" type="submit" wz-previous="")
+                            i.fa.fa-arrow-left
+                            span Previous
+
+                    .col-md-6.text-right
+                        a.row_btn.emerald_btn(href="" type="submit" ng-click="editMidConfig(editMidConfigForm)")
+                            span Next
+                            i.fa.fa-arrow-right
+
+                .row.errorMsg
+                    p {{errorMsg}}
+                .row.successMsg
+                    p {{successMsg}}
+
+
+              wz-step.virtual_panel(title="4. Verify Settings(VT)")
+
+                    table.table
+                        thead
+                            tr
+                                th MID
+                                th Descriptor
+                                th Display Name
+                                th Monthly Cap
+                                th Active Status
+                        tbody
+                            tr
+                                td {{MidConfig}}
+                                td {{Descriptor}}
+                                td {{DisplayName}}
+                                td {{MonthlyCap | currency}}
+                                td {{IsActive}}
+
+
+                   
+                    .row
+                        .col-md-6.text-left
+                            a.row_btn.emerald_btn.final_btn(href="" type="submit" wz-previous="")
+                                i.fa.fa-arrow-left
+                                span Previous
+
+                        .col-md-6.text-right
+                            a.row_btn.emerald_btn.final_btn(href="" type="submit" ng-click="midStep15()")
+                                span Verify MID
+                                i.fa.fa-arrow-right
+
+                    .row.errorMsg
+                        p {{errorMsg}}
+
+                    .row.successMsg
+                        p {{successMsg}}
+
+
+        .modal-footer.action_group
+            a.row_btn.cancel_btn(href="" ng-click="cancel()")
+                i.fa.fa-sign-out
+                span Exit
