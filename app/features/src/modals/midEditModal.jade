@@ -5,7 +5,7 @@ script(type="text/ng-template" id="midsModalContent.html")
             button.close(type="button" ng-click="cancel()") X
         .modal-body
             wizard(on-finish="finishedWizard()")
-              wz-step(title="2. MID Config")
+              wz-step(title="1. MID Config")
                form.stepOne(name="editMidConfigForm" novalidate)
                 .row
                     .col-md-6
@@ -114,7 +114,7 @@ script(type="text/ng-template" id="midsModalContent.html")
                     p {{successMsg}}
 
 
-              wz-step.virtual_panel(title="4. Verify Settings(VT)")
+              wz-step.virtual_panel(title="2. Verify Settings(VT)")
 
                     table.table
                         thead
