@@ -1,24 +1,40 @@
 var app = angular.module("myApp", ['ui.router','LocalStorageModule','angular-loading-bar','ui.bootstrap','smart-table','ngSanitize','mgo-angular-wizard','ngCsv','ngClipboard','angular-momentjs']);
 
-app.constant('ngAuthSettings', {
-
-    //apiServiceBaseUri: 'https://auth.tripayments.com/',
-    //clientId: 'tpPortal'
-
-    apiServiceBaseUri: 'http://auth.demo.tripayments.com/',
-    //clientId: 'tpDemo'
-
-
-    //apiServiceBaseUri: 'https://auth.testing.tripayments.com/',
-    clientId: 'tpLocal'
-});
 //////////////////////////////////
-//   Base Url for all end points
+//   Base Auth & Url for all end points
 //////////////////////////////////
 
-//app.constant('baseUrl', "http://api.tripayments.com/");
-app.constant('baseUrl', "http://api.demo.tripayments.com/");
-//app.constant('baseUrl', "http://api.testing.tripayments.com/");
+if (location.hostname == 'portal.tripayments.com') {
+    console.log('apiServiceBaseUri: https://auth.tripayments.com/  && clientId: tpPortal && baseUrl: http://api.tripayments.com/');
+    app.constant('ngAuthSettings', {
+        //Prod Auth Setup
+        apiServiceBaseUri: 'https://auth.tripayments.com/',
+        clientId: 'tpPortal'
+    });
+
+    app.constant('baseUrl', "https://api.tripayments.com/");
+
+} else if (location.hostname == 'localhost'){
+    console.log('apiServiceBaseUri: http://auth.demo.tripayments.com/ && clientId: tpLocal && baseUrl: http://api.demo.tripayments.com/');
+    // Local Auth Setup
+    app.constant('ngAuthSettings', {
+        apiServiceBaseUri: 'http://auth.demo.tripayments.com/',
+        clientId: 'tpLocal'
+    });
+
+    app.constant('baseUrl', "http://api.demo.tripayments.com/");
+    //app.constant('baseUrl', "http://api.testing.tripayments.com/");
+
+} else {
+    console.log('apiServiceBaseUri: http://auth.demo.tripayments.com/ && clientId: tpDemo && baseUrl: http://api.demo.tripayments.com/');
+    // Demo Auth Setup
+    app.constant('ngAuthSettings', {
+        apiServiceBaseUri: 'http://auth.demo.tripayments.com/',
+        clientId: 'digipay'
+    });
+
+    app.constant('baseUrl', "http://api.demo.tripayments.com/");
+}
 
 
 app.config(function($stateProvider, $urlRouterProvider, $locationProvider,$httpProvider) {
@@ -105,13 +121,10 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider,$httpP
 });
 
 
-app.run(['$rootScope', '$state', '$stateParams', '$location','authService', function ($rootScope, $state, $stateParams, $location,authService,$scope) {
+app.run(['$rootScope', '$state', '$stateParams', 'authService', function ($rootScope, $state, $stateParams,authService,$scope) {
 
     $rootScope.$state = $state;
     $rootScope.$stateParams = $stateParams;
-
-    console.log($location);
-    console.log($location.$$host);
 
     // AUTH SERVICE
     authService.fillAuthData();

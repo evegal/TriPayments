@@ -28,10 +28,18 @@ app.factory('Notify', ['$rootScope', function($rootScope) {
 /////////////////
 // AUTH SERVICE
 /////////////////
-app.factory('authService', ['$q', '$injector', 'localStorageService', 'ngAuthSettings', function ($q, $injector, localStorageService, ngAuthSettings) {
+app.factory('authService', ['$q', '$injector', 'localStorageService', 'ngAuthSettings', '$location', function ($q, $injector, localStorageService, ngAuthSettings, $location) {
 
-    //var serviceBase = 'https://auth.tripayments.com/';
-    var serviceBase = 'http://auth.demo.tripayments.com/';
+    var serviceBase = '';
+
+    if($location.$$host == 'portal.tripayments.com' ){
+        console.log('Production = ServiceBaseURL https://auth.tripayments.com/');
+        serviceBase = 'https://auth.tripayments.com/';
+    } else {
+        console.log('Demo = ServiceBaseURL http://auth.demo.tripayments.com/');
+        serviceBase = 'http://auth.demo.tripayments.com/';
+    } 
+
     var $http;
     var authServiceFactory = {};
 
