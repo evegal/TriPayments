@@ -1,0 +1,6 @@
+.daterangePick(ng-controller='secdateCtrl')
+  input.form-control(type='text', ng-model='search_form.toDate', datepicker-popup='{{format}}', is-open='opened', min-date="'minDate'", max-date="'maxDate'", datepicker-options='dateOptions', date-disabled='disabled(date, mode)', ng-required='false', close-text='Close', placeholder="To Date   {{toDate | date:'MM/dd/yy'}}")
+  |               
+  span.input-group-btn
+    button.btn.btn-default(type='button', ng-click='open($event)')
+      i.glyphicon.glyphicon-calendar

@@ -1,5 +1,7 @@
 // LOGIN CTRL 
-app.controller('loginCtrl', ['$scope', '$location', 'authService', function ($scope, $location, authService) {
+app.controller('loginCtrl', ['$scope', '$location', 'authService', 'appLogo', function ($scope, $location, authService, appLogo) {
+
+    $scope.logoName = appLogo;
 
     $scope.loginData = {
         userName: "",

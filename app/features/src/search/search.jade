@@ -8,12 +8,13 @@ include ../modals/refund_modal.html
     .panel.panel-default.snap-panel-options
         .panel-heading
             .row
-                .col-md-8
-                    h2.panel-title Transaction Snapshot:
+                .col-md-2(tooltip="Results from the Transaction Snapshot will provide a high level view of transactions per MID." tooltip-placement="top")
+                    h2.panel-title
+                        i.fa.fa-info-circle
+                        |  Transaction Snapshot:
         .panel-body
             .row
                 form.form.searcher.snap-shot(name="snapForm" ng-submit="snapFormSubmit()")
-                        h2.search_header SnapShot
                         .row
                             .col-md-4
                                 label Start Date:
@@ -69,32 +70,71 @@ include ../modals/refund_modal.html
                                     i.fa.fa-search
                                     span Snapshot Search
 
-
     .panel.panel-default.panel-options
         .panel-heading
             .row
-                .col-md-8
-                    h2.panel-title Transaction Search:
+                .col-md-2
+                    h2.panel-title(tooltip="Results from the Transaction Search will provide a detail level of transactions that meet your search criteria." tooltip-placement="top")
+                        i.fa.fa-info-circle
+                        |  Transaction Search:
+                .col-md-6
+                    .row
                 //.col-md-4
                     .row
                         .col-md-6
-                            a.search_format.single_format(href="" ng-model="searchType" ng-click="singleFormat()") 
+                            a.search_format.single_format(href="" ng-model="searchType" ng-click="singleFormat()" tooltip="Display each transaction individually." tooltip-placement="top")
                                 i.fa.fa-file-o
                                 span Single Format:
                                 
                         .col-md-6
-                            a.search_format.group_format(href="" ng-model="searchType" ng-click="groupFormat()") 
+                            a.search_format.group_format(href="" ng-model="searchType" ng-click="groupFormat()"  tooltip="Display transactions grouped." tooltip-placement="top") 
                                 i.fa.fa-files-o
                                 span Group Format:
-                                
+
+
         .panel-body
             .row(ng-show="searchType == 'single'")
-                form.form.searcher(ng-submit="submit()" name="search_form" novalidate)
-                    h2.date_title.search_header Date Selection:
+                form.form.searcher.trans-form(ng-submit="submit()" name="search_form" novalidate)
                     .row
-                        .col-sm-8
-                            include partials/filler.html
-                        .col-sm-4
+                        .col-md-12.col-lg-4
+                            label Start Date:
+                            .row
+                                .col-md-8
+                                    include partials/calendarSingle1.jade
+                                //.col-md-2
+                                    select.form-control(ng-options="item as item for item in Hours" ng-model="fromHours")
+                                        option(value="") Hour
+                                //.col-md-2
+                                    select.form-control(ng-options="item as item for item in Mins" ng-model="fromMins")
+                                        option(value="") Min
+
+
+
+                        .col-md-4
+                            label End Date:
+                            .row
+                                .col-md-8
+                                    include partials/calendarSingle2.jade
+                                //.col-md-2
+                                    select.form-control(ng-options="item as item for item in Hours" ng-model="toHours")
+                                        option(value="") Hour
+                                        
+                                //.col-md-2
+                                    select.form-control(ng-options="item as item for item in Mins" ng-model="toMins")
+                                        option(value="") Min
+
+                        
+                        //.col-md-6.col-lg-4
+                            label Preset Date Range:
+                            select.form-control(ng-model="transForm.fromDate")
+                                option Select An Item
+                                option(value="{{Yesterday}}") Yesterday
+                                option.pastSet(value="{{past3Days}}") Past 3 Days
+                                option.pastSet(value="{{past7Days}}") Past 7 Days
+                                option.pastSet(value="{{past90Days}}") Past 90 Days
+                                option.pastSet(value="{{past180Days}}") Past 180 Days
+                                option.pastSet(value="{{past360Days}}") Past 365 Days
+
                     h2.search_header User Details:
                     .row
                         .col-md-4
@@ -279,13 +319,13 @@ include ../modals/refund_modal.html
                     h2.panel-title Search Results 
                         span {{resultAmount}}
                 .col-md-6
-                    a.def_btn.wet_asphalt_btn.float-right(href="" ng-csv="transactionCSV" filename="transactions.csv" ng-show="transactionCSV.length") 
+                    a.def_btn.wet_asphalt_btn.float-right(href="" ng-csv="transactionCSV" filename="transactions.csv" ng-show="transactionCSV.length" tooltip="Export results to excel" tooltip-placement="top")
                         i.fa.fa-file-excel-o
                         span Export Excel
-                    a.def_btn.belize_hole_btn.float-right.margin-right(tooltip="Begin a new search" tooltip-placement="top" href="" ng-click="new_search()") 
+                    a.def_btn.belize_hole_btn.float-right.margin-right(href="" ng-click="new_search()" tooltip="Begin a new search" tooltip-placement="top" ) 
                         i.fa.fa-search  
                         span New Search
-                    a.def_btn.peter_river_btn.float-right.margin-right(tooltip="Modify existing search" tooltip-placement="top" href="" ng-click="modform()")
+                    a.def_btn.peter_river_btn.float-right.margin-right(href="" ng-click="modform()" tooltip="Modify existing search" tooltip-placement="top")
                         i.fa.fa-search-plus
                         span Modify Search
         .panel-body

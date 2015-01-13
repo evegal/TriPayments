@@ -1,5 +1,6 @@
-app.controller("appCtrl", function($rootScope,$scope,$state,$timeout,$http,baseUrl,Notify) {
+app.controller("appCtrl", function($rootScope,$scope,$state,$timeout,$http,baseUrl,Notify,appLogo) {
 
+  $scope.logoName = appLogo; 
   
   $("#menu-toggle").click(function(e) {
         e.preventDefault();

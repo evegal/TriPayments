@@ -3,7 +3,7 @@ div(id="wrapper")
                 ul.sidebar-nav
                     li.sidebar-brand
                         p.brand
-                            img(src="../../../images/logo.png")             
+                            img(ng-src="../../../images/{{logoName}}.png")
                     li 
                         a(ng-class="{{'app.search' | isState }}" ui-sref=".search" ng-click="checkState()") 
                             i.fa.fa-icon.fa-search
@@ -21,11 +21,17 @@ div(id="wrapper")
                                 a(ng-class="noteState3()" ui-sref="app.merchants.groups")
                                     i.fa.fa-cogs
                                     span Manage MID Groups
+                    //li 
+                        a(ng-class="{{'app.recurring_payments' | isState }}" ui-sref=".recurring_payments" ng-click="checkState()") 
+                            i.fa.fa-icon.fa-refresh
+                            span Recurring Payments
+                            
                     li 
                         a(ng-class="{{'app.virtual_terminal' | isState }}" ui-sref=".virtual_terminal" ng-click="checkState()") 
                             i.fa.fa-icon.fa-terminal
                             span Virtual Terminal
                    
+
                     li(data-ng-hide="!authentication.isAuth")
                         a(ng-class="{{'app.usermanager' | isState }}" ui-sref=".usermanager" ng-click="checkState()")
                             i.fa.fa-icon.fa-users

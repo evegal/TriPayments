@@ -3,7 +3,7 @@
     .text-center.fa-2x.login_box
         form.form(ng-submit="loginSub()" name="loginForm" novalidate ng-class="")
             p.login-logo 
-                 img(src="../../images/logo.png")
+                 img(ng-src="../../images/{{logoName}}.png")
             p Sign In To Your Account
             
             input.form-control(type="text" placeholder="Username" id="username" ng-model="loginData.userName" required="" autofocus="")

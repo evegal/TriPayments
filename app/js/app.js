@@ -5,18 +5,17 @@ var app = angular.module("myApp", ['ui.router','LocalStorageModule','angular-loa
 //////////////////////////////////
 
 var fullHost = location.hostname,
-    parts = fullHost.split('.'),
-    sub = parts[0];
-
+    parts = fullHost.split('.');
 
 if(parts.length == 4){
     //Demo Settings
-    console.log('location.hostname = ' + location.hostname + ' apiServiceBaseUri: http://auth.demo.tripayments.com/ && clientId: '+ parts[0] +' && baseUrl: http://api.demo.tripayments.com/');
+    console.log('location.hostname = ' + location.hostname + ' apiServiceBaseUri: http://auth.demo.tripayments.com/ && clientId: '+ parts[1] +' && baseUrl: http://api.demo.tripayments.com/');
     app.constant('ngAuthSettings', {
         apiServiceBaseUri: 'http://auth.demo.tripayments.com/',
         clientId: parts[1]
     });
     app.constant('baseUrl', "http://api.demo.tripayments.com/");
+    app.value('appLogo', parts[1]);
 
 } else if (parts.length == 3){
     //Prod Settings
@@ -27,6 +26,7 @@ if(parts.length == 4){
         clientId: parts[0]
     });
     app.constant('baseUrl', "https://api.tripayments.com/");
+    app.value('appLogo', parts[0]);
 
 } else {
     //Local Settings
@@ -36,7 +36,11 @@ if(parts.length == 4){
         clientId: 'tpLocal'
     });
     app.constant('baseUrl', "http://api.demo.tripayments.com/");
+    app.value('appLogo', parts[0]);
 }
+
+
+
 
 
 

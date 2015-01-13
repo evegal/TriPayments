@@ -224,50 +224,7 @@ app.controller('searchCtrl', function($rootScope,$scope,$http,$filter,baseUrl,$s
   }
   createMins();
   
-  //////////////////////
-  // DATE RANGE SETTINGS
-  //////////////////////
-  /*
-  $scope.dateRanges = [
-      {"name":"Yesterday","value":$moment().subtract(1, 'days').format('L')},
-      {"name":"Past 3 Days","value":$moment().subtract(3, 'days').format('L')},
-      {"name":"Past 7 Days","value":$moment().subtract(7, 'days').format('L')},
-  ];
 
-
-  $scope.updateOptions = function(transForm) {
-    
-    console.log(transForm.dateOptions);
-
-  }
-  ///////////////////
-  // PROCESS OPTIONS
-  ///////////////////
-  $scope.processOptions = function(transForm) {
-
-    // THIS WILL OVERRIDE PASS RANGES
-
-    //console.log(transForm.toDate);
-    //transForm.toDate = '09/01/2014';
-    //transForm.toDate = $moment().subtract(7, 'days').format('L');
-    var fromD = transForm.fromDate;
-    var roughtoD = transForm.toDate;
-    var datefilter = $filter('date');
-    var toD = datefilter(roughtoD,'MM/dd/yy');
-
-    //console.log(fromD);
-    //console.log(toD);
-
-    //console.log(transForm);
-
-    console.log($scope.dateOptions);
-
-    //var myDateOptions = $('.myDateOptions');
-    //console.log(myDateOptions.children());
-
-  };
-  */
-  
 
   /////////////
   // MOMENT JS

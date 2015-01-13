@@ -1,6 +1,7 @@
 // RESET PASSWORD
-app.controller('resetCtrl', function($scope,$http,$rootScope,$location,$timeout,baseUrl) {
+app.controller('resetCtrl', function($scope,$http,$rootScope,$location,$timeout,baseUrl,appLogo) {
     
+    $scope.logoName = appLogo;
     $scope.resetForm = {};
 
     $scope.submit = function() {
@@ -48,15 +49,17 @@ app.controller('resetCtrl', function($scope,$http,$rootScope,$location,$timeout,
 /////////////////
 // RESET EMAIL
 /////////////////
-app.controller('resetEmailCtrl', function($scope,$rootScope) {
+app.controller('resetEmailCtrl', function($scope,$rootScope,appLogo) {
 
+    $scope.logoName = appLogo;
     $scope.subEmail = $rootScope.resetEmail;
 
 });
 ///////////////////
 // RESET PASSWORD
 ///////////////////
-app.controller('resetPasswordCtrl', function($scope,$location,$http,$timeout,baseUrl) {
+app.controller('resetPasswordCtrl', function($scope,$location,$http,$timeout,baseUrl,appLogo) {
+    $scope.logoName = appLogo;
     /*
     var userObject = $location.search();
     var bucket = [];
@@ -135,7 +138,9 @@ app.controller('resetPasswordCtrl', function($scope,$location,$http,$timeout,bas
 //////////////////////////
 // RESET PASSWORD SUCCESS
 //////////////////////////
-app.controller('resetSuccessCtrl', function($scope,$location) {
+app.controller('resetSuccessCtrl', function($scope,$location,appLogo) {
+
+    $scope.logoName = appLogo; 
 
     $scope.backToLogin = function() {
         $location.path('/login');
