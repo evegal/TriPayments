@@ -8,10 +8,11 @@ include ../modals/refund_modal.html
     .panel.panel-default.snap-panel-options
         .panel-heading
             .row
-                .col-md-2(tooltip="Results from the Transaction Snapshot will provide a high level view of transactions per MID." tooltip-placement="top")
+                .col-md-2
                     h2.panel-title
-                        i.fa.fa-info-circle
-                        |  Transaction Snapshot:
+                        span(tooltip="Results from the Transaction Snapshot will provide a high level view of transactions per merchant account." tooltip-placement="top")
+                            i.fa.fa-info-circle
+                            |  Transaction Snapshot:
         .panel-body
             .row
                 form.form.searcher.snap-shot(name="snapForm" ng-submit="snapFormSubmit()")
@@ -74,9 +75,10 @@ include ../modals/refund_modal.html
         .panel-heading
             .row
                 .col-md-2
-                    h2.panel-title(tooltip="Results from the Transaction Search will provide a detail level of transactions that meet your search criteria." tooltip-placement="top")
-                        i.fa.fa-info-circle
-                        |  Transaction Search:
+                    h2.panel-title
+                        span(tooltip="Results from the Transaction Search will provide a detail level of transactions that meet your search criteria." tooltip-placement="top")
+                            i.fa.fa-info-circle
+                            |  Transaction Search:
                 .col-md-6
                     .row
                 //.col-md-4

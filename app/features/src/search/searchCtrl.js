@@ -612,6 +612,7 @@ app.controller('snapstartDateCtrl', function($scope){
 
   $scope.initDate = new Date('2013-15-20');
   $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+  $scope.format = $scope.formats[3];
 
 });
 
@@ -647,6 +648,7 @@ app.controller('snapendDateCtrl', function($scope){
 
   $scope.initDate = new Date('2013-15-20');
   $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+  $scope.format = $scope.formats[3];
 
 });
 
@@ -715,7 +717,7 @@ app.controller('transendDateCtrl', function($scope) {
 
   $scope.initDate = new Date('2013-15-20');
   $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-    $scope.format = $scope.formats[3];
+  $scope.format = $scope.formats[3];
 });
 
 // TRANSACTION MODAL
