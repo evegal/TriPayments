@@ -44,7 +44,7 @@ if(parts.length == 4){
 
 
 
-app.config(function($stateProvider, $urlRouterProvider, $locationProvider,$httpProvider) {
+app.config(function($stateProvider, $urlRouterProvider, $locationProvider,$httpProvider,datepickerConfig) {
 
     $urlRouterProvider.otherwise('/login');
 
@@ -124,6 +124,8 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider,$httpP
         url:'/single',
         templateUrl:'../features/dest/mock/mockSingle.html'
     });
+
+    datepickerConfig.showWeeks = false;
 
     // REMOVE HASH(#) FROM URL
     //$locationProvider.html5Mode(true);
