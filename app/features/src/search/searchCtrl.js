@@ -9,8 +9,6 @@ app.controller('searchCtrl', function($rootScope,$scope,$http,$filter,baseUrl,$s
   // Set Default for Search Type 
   $scope.searchType = 'single';
   $('.single_format').addClass('activeFormat');
-
-
   
   // Toggle to single search format
   $scope.singleFormat = function() {
@@ -169,27 +167,27 @@ app.controller('searchCtrl', function($rootScope,$scope,$http,$filter,baseUrl,$s
   //////////////////////////
   $scope.toggleSearch = function() {
   
-  var txt = $('.advanced_fields').is(':visible') ? 'Advanced Search' : 'Hide Advanced Search';
-             $('.advanced_search').text(txt);
-             $('.advanced_fields').slideToggle();
-  }
+    var txt = $('.advanced_fields').is(':visible') ? 'Advanced Search' : 'Hide Advanced Search';
+               $('.advanced_search').text(txt);
+               $('.advanced_fields').slideToggle();
+    }
 
-  //////////////////////////
-  // SELECT MENUS
-  //////////////////////////
-  $scope.statusItems = [
-      {value:"0", text:"Success"},
-      {value:"1", text:"Declined"},
-      {value:"2", text:"Error"}
-  ];
+    //////////////////////////
+    // SELECT MENUS
+    //////////////////////////
+    $scope.statusItems = [
+        {value:"0", text:"Success"},
+        {value:"1", text:"Declined"},
+        {value:"2", text:"Error"}
+    ];
 
-  $scope.transItems = [
-      {value:"1", text:"Charge"},
-      {value:"2", text:"Void"},
-      {value:"3", text:"Refund"},
-      {value:"4", text:"Authorize"},
-      {value:"6", text:"Capture"}
-  ];
+    $scope.transItems = [
+        {value:"1", text:"Charge"},
+        {value:"2", text:"Void"},
+        {value:"3", text:"Refund"},
+        {value:"4", text:"Authorize"},
+        {value:"6", text:"Capture"}
+    ];
 
 
 //-----------------------------------------//
@@ -231,12 +229,6 @@ app.controller('searchCtrl', function($rootScope,$scope,$http,$filter,baseUrl,$s
   /////////////
 
   $scope.Yesterday = $moment().subtract(1, 'days').format('L');
-
-  //$scope.lastWeek = $moment().subtract(7, 'days').format('L');
-  //$scope.lastMonth = $moment().subtract(30, 'days').format('L');
-  //$scope.lastQuar = $moment().subtract(90, 'days').format('L');
-  //$scope.lastYear = $moment().subtract(365, 'days').format('L');
-
   $scope.past3Days = $moment().subtract(3, 'days').format('L');
   $scope.past7Days = $moment().subtract(7, 'days').format('L');
   $scope.past90Days = $moment().subtract(90, 'days').format('L');
@@ -249,6 +241,8 @@ app.controller('searchCtrl', function($rootScope,$scope,$http,$filter,baseUrl,$s
   $scope.snapForm = {};
 
   $scope.snapFormSubmit = function() {
+
+    console.log('snapform submission');
 
   //set todays date if dates not defined -- ALL OF THIS IN A SERVICE!
     if ($scope.snapForm.fromDate == undefined){$scope.snapForm.fromDate = new Date();}
@@ -281,10 +275,10 @@ app.controller('searchCtrl', function($rootScope,$scope,$http,$filter,baseUrl,$s
     // QUERY OBJECT
     snapQuery = {
       "FromDate":$scope.FROMDATE,
+      "ToDate":$scope.TODATE,
       "GatewayId":$scope.snapForm.gateway
     };
 
-    // "ToDate":$scope.TODATE
 
     console.log(snapQuery);
 
