@@ -38,7 +38,34 @@ app.controller('searchCtrl', function($rootScope,$scope,$http,$filter,baseUrl,$s
     // Date formating
     var datefilter = $filter('date'),
         formatDate = datefilter($scope.search_form.fromDate,'MM/dd/yy'),
-        formatDate2 = datefilter($scope.search_form.toDate, 'MM/dd/yy');
+        formatDate2 = datefilter($scope.search_form.toDate, 'MM/dd/yy'),
+        fromHr = $scope.singleFromHours,
+        fromMin = $scope.singleFromMins,
+        toHr = $scope.singleToHours,
+        toMin = $scope.singleToMins;
+
+    // TIME SETTINGS FROM DATE
+    if(fromHr === undefined && fromMin === undefined){
+      $scope.fromDATE = formatDate + ' 00:00';
+    } else if (fromHr && fromMin === undefined){
+      $scope.fromDATE = formatDate + ' ' + fromHr + ':00';
+    } else if (fromHr === undefined && fromMin){
+      $scope.fromDATE = formatDate + ' 00:' + fromMin;
+    } else {
+      $scope.fromDATE = formatDate + ' ' + fromHr + ':'+ fromMin;
+    }
+
+
+  // TIME SETTINGS TO DATE
+    if(toHr === undefined && toMin === undefined){
+      $scope.toDATE = formatDate2 + ' 23:59';
+    } else if (toHr && toMin === undefined){
+      $scope.toDATE = formatDate2 + ' ' + toHr + ':59';
+    } else if (toHr === undefined && toMin){
+      $scope.toDATE = formatDate2 + ' 23:' + toMin;
+    } else {
+      $scope.toDATE = formatDate2 + ' ' + toHr + ':'+ toMin;
+    }
     
     // Create Query Object for POST request to Endpoint
     var formQuery =  {
@@ -49,8 +76,8 @@ app.controller('searchCtrl', function($rootScope,$scope,$http,$filter,baseUrl,$s
             "ReferenceNumber":$scope.search_form.refNum,
             "CcLast4":$scope.search_form.cc_digits,
             "Phone":$scope.search_form.phoneNum,
-            "FromDate":formatDate,
-            "ToDate":formatDate2,
+            "FromDate":$scope.fromDATE,
+            "ToDate":$scope.toDATE,
             "Status":$scope.search_form.statusmenu,
             "TransactionType":$scope.search_form.transmenu,
             "MidGroupId":$scope.search_form.midmenu
@@ -69,7 +96,7 @@ app.controller('searchCtrl', function($rootScope,$scope,$http,$filter,baseUrl,$s
           var check = angular.isArray(data);
           if(check) {
             // results returned [array]
-            console.log(data);
+            //console.log(data);
             $scope.data = data;
             $scope.shownData = data;
             $scope.resultAmount = data.length;
@@ -205,7 +232,7 @@ app.controller('searchCtrl', function($rootScope,$scope,$http,$filter,baseUrl,$s
     // loop to create 00-23 range
     for(var i=0;i<=23;i++) {
       // push numbers to Hours Array
-      $scope.Hours.push(i);
+      $scope.Hours.push(('0'+i).slice(-2));
     }
 
   }
@@ -214,9 +241,9 @@ app.controller('searchCtrl', function($rootScope,$scope,$http,$filter,baseUrl,$s
   // Create Minutes in 5min Intervals
   function createMins() {
     $scope.Mins = [];
-    for(var i=0;i<=55;i++) {
+    for(var i=0;i<=59;i++) {
       if(i%5 === 0) {
-        $scope.Mins.push(i);
+        $scope.Mins.push(('0'+i).slice(-2));
       }
     }
   }
@@ -242,40 +269,47 @@ app.controller('searchCtrl', function($rootScope,$scope,$http,$filter,baseUrl,$s
 
   $scope.snapFormSubmit = function() {
 
-    console.log('snapform submission');
-
-  //set todays date if dates not defined -- ALL OF THIS IN A SERVICE!
+  //SET TODAYS DATE IF DATES ARE NOT DEFINED
     if ($scope.snapForm.fromDate == undefined){$scope.snapForm.fromDate = new Date();}
     if ($scope.snapForm.toDate == undefined){$scope.snapForm.toDate = new Date();}
 
-    // Convert Date Format
+    // COVERT DATE FORMAT
     var datefilter = $filter('date'),
         formatDate = datefilter($scope.snapForm.fromDate,'MM/dd/yyyy'),
-        formatDate2 = datefilter($scope.snapForm.toDate, 'MM/dd/yyyy');
+        formatDate2 = datefilter($scope.snapForm.toDate, 'MM/dd/yyyy'),
+        fromHr = $scope.fromHours,
+        fromMin = $scope.fromMins,
+        toHr = $scope.toHours,
+        toMin = $scope.toMins;
 
-    // TIME SETTINGS
-    $scope.fromDATE = formatDate + ' ' + $scope.fromHours + ':' + $scope.fromMins;
-    $scope.toDATE = formatDate2 + ' ' + $scope.toHours + ':' + $scope.toMins;
-
-    // CHECK FROM TIME
-    if($scope.fromHours && $scope.fromMins) {
-      $scope.FROMDATE = $scope.fromDATE;
+    // TIME SETTINGS FROM DATE
+    if(fromHr === undefined && fromMin === undefined){
+      $scope.fromDATE = formatDate + ' 00:00';
+    } else if (fromHr && fromMin === undefined){
+      $scope.fromDATE = formatDate + ' ' + fromHr + ':00';
+    } else if (fromHr === undefined && fromMin){
+      $scope.fromDATE = formatDate + ' 00:' + fromMin;
     } else {
-      $scope.FROMDATE = formatDate;
+      $scope.fromDATE = formatDate + ' ' + fromHr + ':'+ fromMin;
     }
-    
-    // CHECK TOTIME
-    if($scope.toHours && $scope.fromMins) {
-      $scope.TODATE = $scope.toDATE;
+
+
+  // TIME SETTINGS TO DATE
+    if(toHr === undefined && toMin === undefined){
+      $scope.toDATE = formatDate2 + ' 23:59';
+    } else if (toHr && toMin === undefined){
+      $scope.toDATE = formatDate2 + ' ' + toHr + ':59';
+    } else if (toHr === undefined && toMin){
+      $scope.toDATE = formatDate2 + ' 23:' + toMin;
     } else {
-      $scope.TODATE = formatDate2;
+      $scope.toDATE = formatDate2 + ' ' + toHr + ':'+ toMin;
     }
 
 
     // QUERY OBJECT
-    snapQuery = {
-      "FromDate":$scope.FROMDATE,
-      "ToDate":$scope.TODATE,
+    var snapQuery = {
+      "FromDate":$scope.fromDATE,
+      "ToDate":$scope.toDATE,
       "GatewayId":$scope.snapForm.gateway
     };
 
@@ -306,6 +340,7 @@ app.controller('searchCtrl', function($rootScope,$scope,$http,$filter,baseUrl,$s
 
     });
 
+  snapQuery = {};
 
   }; // END FORM SUBMIT
 

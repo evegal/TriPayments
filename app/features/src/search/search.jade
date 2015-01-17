@@ -49,10 +49,6 @@ include ../modals/refund_modal.html
                                 select.form-control(ng-model="snapForm.fromDate")
                                     option(value="") Select a date range
                                     option(value="{{Yesterday}}") Yesterday
-                                    //option Last Week
-                                    //option Last Month
-                                    //option Last Quarter
-                                    //option Last Year
                                     option(value="{{past3Days}}") Past 3 Days
                                     option(value="{{past7Days}}") Past 7 Days
                                     option(value="{{past90Days}}") Past 90 Days
@@ -103,11 +99,11 @@ include ../modals/refund_modal.html
                             .row
                                 .col-md-8
                                     include partials/calendarSingle1.jade
-                                //.col-md-2
-                                    select.form-control(ng-options="item as item for item in Hours" ng-model="fromHours")
+                                .col-md-2
+                                    select.form-control(ng-options="item as item for item in Hours" ng-model="singleFromHours")
                                         option(value="") Hour
-                                //.col-md-2
-                                    select.form-control(ng-options="item as item for item in Mins" ng-model="fromMins")
+                                .col-md-2
+                                    select.form-control(ng-options="item as item for item in Mins" ng-model="singleFromMins")
                                         option(value="") Min
 
 
@@ -117,19 +113,19 @@ include ../modals/refund_modal.html
                             .row
                                 .col-md-8
                                     include partials/calendarSingle2.jade
-                                //.col-md-2
-                                    select.form-control(ng-options="item as item for item in Hours" ng-model="toHours")
+                                .col-md-2
+                                    select.form-control(ng-options="item as item for item in Hours" ng-model="singleToHours")
                                         option(value="") Hour
                                         
-                                //.col-md-2
-                                    select.form-control(ng-options="item as item for item in Mins" ng-model="toMins")
+                                .col-md-2
+                                    select.form-control(ng-options="item as item for item in Mins" ng-model="singleToMins")
                                         option(value="") Min
 
                         
-                        //.col-md-6.col-lg-4
+                        .col-md-6.col-lg-4
                             label Preset Date Range:
-                            select.form-control(ng-model="transForm.fromDate")
-                                option Select An Item
+                            select.form-control(ng-model="search_form.fromDate")
+                                option(value="") Select a date range
                                 option(value="{{Yesterday}}") Yesterday
                                 option.pastSet(value="{{past3Days}}") Past 3 Days
                                 option.pastSet(value="{{past7Days}}") Past 7 Days
