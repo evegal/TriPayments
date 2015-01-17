@@ -61,9 +61,10 @@ app.factory('authService', ['$q', '$injector', 'localStorageService', 'ngAuthSet
     };
 
     var _login = function (loginData) {
-       
-        // PRIOR SETTINGS
-        
+              
+        localStorageService.remove('authorizationData');
+		
+		// PRIOR SETTINGS		
         var data = "grant_type=password&username=" + loginData.userName + "&password=" + loginData.password  + "&client_id=" + ngAuthSettings.clientId;
 
 
