@@ -21,7 +21,7 @@ include ../modals/refund_modal.html
                                 label Start Date:
                                 .row
                                     .col-md-8
-                                        include partials/calendar1-1.jade
+                                        include partials/calendarSnap1.jade
                                     .col-md-2
                                         select.form-control(ng-options="item as item for item in Hours" ng-model="fromHours")
                                             option(value="") Hour
@@ -35,7 +35,7 @@ include ../modals/refund_modal.html
                                 label End Date:
                                 .row
                                     .col-md-8
-                                        include partials/calendar1-2.jade
+                                        include partials/calendarSnap2.jade
                                     .col-md-2
                                         select.form-control(ng-options="item as item for item in Hours" ng-model="toHours")
                                             option(value="") Hour
@@ -193,7 +193,7 @@ include ../modals/refund_modal.html
                             label Start Date:
                             .row
                                 .col-md-8
-                                    include partials/calendar2-1.jade
+                                    include partials/calendarGroup1.jade
                                 .col-md-2
                                     select.form-control(ng-options="item as item for item in Hours" ng-model="fromHours")
                                     
@@ -204,7 +204,7 @@ include ../modals/refund_modal.html
                             label End Date:
                             .row
                                 .col-md-8
-                                    include partials/calendar2-2.jade
+                                    include partials/calendarGroup2.jade
                                 .col-md-2
                                     select.form-control(ng-options="item as item for item in Hours" ng-model="toHours")
                                     
