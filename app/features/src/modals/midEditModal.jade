@@ -1,117 +1,166 @@
 script(type="text/ng-template" id="midsModalContent.html")
-    .midCreateModal
+    .midCreateEditModal
         .modal-header
-            h3 Edit MID
+            h3 Edit MID {{DisplayName}}
             button.close(type="button" ng-click="cancel()") X
         .modal-body
             wizard(on-finish="finishedWizard()")
               wz-step(title="1. MID Config")
-               form.stepOne(name="editMidConfigForm" novalidate)
-                .row
-                    .col-md-6
+                   form.stepOne(name="editMidConfigForm" novalidate)
+                        .row.paymentTypeDiv
+                            p 
+                                label(tooltip="MID basic configuration.  (Required)" tooltip-placement="top") *MID Config: (Required)
                         .row
-                            .col-md-4
-                                label *MID:
-                            .col-md-8  
-                                input.form-control(required="" ng-model="MIDconfig" id="MIDconfig" type="text"  placeholder="Enter mid  (Required)"  tooltip="MID or Processor ID is provided by your Merchant Account Provider (Required)" tooltip-placement="top")
-                    .col-md-6
+                            .col-md-6
+                                .row
+                                    .col-md-4
+                                        label *MID:
+                                    .col-md-8  
+                                        input.form-control(required="" ng-model="MIDconfig" id="MIDconfig" type="text"  placeholder="Enter mid  (Required)"  tooltip="MID or Processor ID is provided by your Merchant Account Provider (Required)" tooltip-placement="top")
+                            .col-md-6
+                                .row
+                                    .col-md-4
+                                        label *Descriptor:
+                                    .col-md-8
+                                        input.form-control(required="" ng-model="MIDdescriptor" id="MIDdescriptor" type="text" tooltip="Text available for order confirmation it's passed to the gateway.  If dynamic descriptor is supposed to be provided by gateway. (Required)" tooltip-placement="top" placeholder="Enter descriptor (Required)" )
                         .row
-                            .col-md-4
-                                label *Descriptor:
-                            .col-md-8
-                                input.form-control(required="" ng-model="MIDdescriptor" id="MIDdescriptor" type="text" tooltip="Text available for order confirmation it's passed to the gateway.  If dynamic descriptor is supposed to be provided by gateway. (Required)" tooltip-placement="top" placeholder="Enter descriptor (Required)" )
-                .row
-                    .col-md-6
-                        .row
-                            .col-md-4
-                                label *Display Name:
-                            .col-md-8
-                                input.form-control(required="" ng-model="MIDdisplayName" id="MIDdisplayName" type="text" tooltip-placement="top" placeholder="Enter display name (Required)" tooltip="What will show in our reports to this Merchant Account (Required)")
-                    .col-md-6
-                        .row
-                            .col-md-4
-                                label *Monthly Cap:
-                            .col-md-8
-                                input.form-control(required="" ng-model="MIDmonthlyCap" type="number" id="MIDmonthlyCap" tooltip="Used for load balancing and routing to prevent transactions to decline because your account exceeds the cap.  (Required)" tooltip-placement="top" placeholder="Enter monthly cap  (Required)" ) 
-                .row.paymentTypeDiv
-                    p 
-                        label(tooltip="Select allowed payment types.  (Required)" tooltip-placement="top") *Payment Types: (Required)
-                .row.paymentTypeDiv
-                    .col-md-3
-                        input(ng-model="amex" id="amerExpress-box" type="checkbox")
-                        i.fa.fa-cc-amex.fa-2x
-                    .col-md-3
-                        input(ng-model="visa" id="visa-box" type="checkbox")
-                        i.fa.fa-cc-visa.fa-2x
-                    .col-md-3
-                        input(ng-model="master" id="mastercard-box" type="checkbox")
-                        i.fa.fa-cc-mastercard.fa-2x
-                    .col-md-3
-                        input(ng-model="discover" id="discover-box" type="checkbox")
-                        i.fa.fa-cc-discover.fa-2x
+                            .col-md-6
+                                .row
+                                    .col-md-4
+                                        label *Display Name:
+                                    .col-md-8
+                                        input.form-control(required="" ng-model="MIDdisplayName" id="MIDdisplayName" type="text" tooltip-placement="top" placeholder="Enter display name (Required)" tooltip="What will show in our reports to this Merchant Account (Required)")
+                            .col-md-6
+                                .row
+                                    .col-md-4
+                                        label *Monthly Cap:
+                                    .col-md-8
+                                        input.form-control(required="" ng-model="MIDmonthlyCap" type="number" id="MIDmonthlyCap" tooltip="Used for load balancing and routing to prevent transactions to decline because your account exceeds the cap.  (Required)" tooltip-placement="top" placeholder="Enter monthly cap  (Required)" ) 
+                        .row.paymentTypeDiv
+                            p 
+                                label(tooltip="Select allowed payment types.  (Required)" tooltip-placement="top") *Payment Types: (Required)
+                        .row.paymentTypeDiv
+                            .col-md-3
+                                input(ng-model="AMEX" id="amerExpress-box" type="checkbox")
+                                i.fa.fa-cc-amex.fa-2x
+                            .col-md-3
+                                input(ng-model="Visa" id="visa-box" type="checkbox")
+                                i.fa.fa-cc-visa.fa-2x
+                            .col-md-3
+                                input(ng-model="Mastercard" id="mastercard-box" type="checkbox")
+                                i.fa.fa-cc-mastercard.fa-2x
+                            .col-md-3
+                                input(ng-model="Discover" id="discover-box" type="checkbox")
+                                i.fa.fa-cc-discover.fa-2x
 
-                .row
-                    .col-md-6
-                        .row
-                            .col-md-4
-                                label Daily ReBill Limit:
-                            .col-md-4
-                                select.form-control(ng-model="MIDlimitType" id="limitType" tooltip="Rebill limit set to percent or amount (optional)" tooltip-placement="top")
-                                    option Percentage
-                                    option Amount
-                            .col-md-4
-                                input.form-control(ng-model="MIDdailyRebill" id="dailyRebill" type="number" placeholder="value (optional)")
+                        .row.paymentTypeDiv
+                            p 
+                                label(tooltip="Select allowed currency types.  (Required)" tooltip-placement="top") *Currency Types: (Required)
+                        .row.currencyTypeDiv
+                            .col-md-3
+                                input(name="curTypeCheckbox" type="checkbox" value="12")
+                                span USD - United States Dollar
+                            .col-md-3
+                                input(name="curTypeCheckbox" type="checkbox" value="3")
+                                span AUD - Australia Dollar
+                            .col-md-3
+                                input(name="curTypeCheckbox" type="checkbox" value="10")
+                                span BRL -Brazil Real
+                            .col-md-3
+                                input(name="curTypeCheckbox" type="checkbox" value="4")
+                                span CAD - Canada Dollar
+                            .col-md-3
+                                input(name="curTypeCheckbox" type="checkbox" value="5")
+                                span DKK - Denmark Krone
+                            .col-md-3
+                                input(name="curTypeCheckbox" type="checkbox" value="2")
+                                span EUR -Euro Member 
+                            .col-md-3
+                                input(name="curTypeCheckbox" type="checkbox" value="1")
+                                span GBP - UK Pound
+                            .col-md-3
+                                input(name="curTypeCheckbox" type="checkbox" value="7")
+                                span JPY - Japan Yen
+                            .col-md-3
+                                input(name="curTypeCheckbox" type="checkbox" value="8")
+                                span NOK - Norway Krone
+                            .col-md-3
+                                input(name="curTypeCheckbox" type="checkbox" value="6")
+                                span NZD - New Zealand Dollar
+                            .col-md-3
+                                input(name="curTypeCheckbox" type="checkbox" value="9")
+                                span SEK - Sweden Krona
+                            .col-md-3
+                                input(name="curTypeCheckbox" type="checkbox" value="11")
+                                span SGD - Singapore Dollar
 
-                    .col-md-6
-                        .row
-                            .col-md-4
-                                label Transaction Fee:
-                            .col-md-8
-                                input.form-control(ng-model="MIDtransactionFee" id="MIDtransactionFee" tooltip="Transaction Fee charged by your Merchant Account provider.  Used for reporting.  (optional)" tooltip-placement="top" type="number" placeholder="Enter transaction fee (optional)")
 
-                .row
-                    .col-md-6
-                        .row
-                            .col-md-4
-                                label ChargeBack Fee:
-                            .col-md-8
-                                input.form-control(ng-model="MIDchargeBackFee" id="MIDchargeBackFee" placeholder="Enter chargeback fee (optional)" tooltip="Used for reporting (optional)" tooltip-placement="top" type="number")
-                    .col-md-6
-                        .row
-                            .col-md-4
-                                label Reserve Acct Rate:
-                            .col-md-8
-                                input.form-control(ng-model="MIDreserveAccountRate" id="MIDreserveAccountRate" tooltip="Used for reporting assing in estimating cash flow. (optional)" tooltip-placement="top" type="number" placeholder="Enter reserve rate (optional)")
+                        .row.paymentTypeDiv
+                            p 
+                                label(tooltip="Select additional MID options.  (Optional)" tooltip-placement="top") Additional MID Options: (Optional)
 
-                .row
-                    .col-md-6
                         .row
-                            .col-md-4
-                                label Discount:
-                            .col-md-8
-                                input.form-control(ng-model="MIDiscount" id="MIDiscount" tooltip="Used for reporting. (optional)" tooltip-placement="top" type="number" placeholder="Enter discount (optional)")
-                    .col-md-6
+                            .col-md-6
+                                .row
+                                    .col-md-4
+                                        label Daily ReBill Limit:
+                                    .col-md-4
+                                        select.form-control(ng-model="MIDlimitType" id="limitType" tooltip="Rebill limit set to percent or amount (optional)" tooltip-placement="top")
+                                            option Percentage
+                                            option Amount
+                                    .col-md-4
+                                        input.form-control(ng-model="MIDdailyRebill" id="dailyRebill" type="number" placeholder="value")
+
+                            .col-md-6
+                                .row
+                                    .col-md-4
+                                        label Transaction Fee:
+                                    .col-md-8
+                                        input.form-control(ng-model="MIDtransactionFee" id="MIDtransactionFee" tooltip="Transaction Fee charged by your Merchant Account provider.  Used for reporting.  (optional)" tooltip-placement="top" type="number" placeholder="Enter transaction fee (optional)")
+
                         .row
-                            .col-md-4
-                                label Gateway Fee:
-                            .col-md-8
-                                input.form-control(ng-model="MIDgatewayFee" id="MIDgatewayFee" type="number" tooltip="Used for reporting (optional)" tooltip-placement="top" placeholder="Enter gateway fee (optional)" )
+                            .col-md-6
+                                .row
+                                    .col-md-4
+                                        label ChargeBack Fee:
+                                    .col-md-8
+                                        input.form-control(ng-model="MIDchargeBackFee" id="MIDchargeBackFee" placeholder="Enter chargeback fee (optional)" tooltip="Used for reporting (optional)" tooltip-placement="top" type="number")
+                            .col-md-6
+                                .row
+                                    .col-md-4
+                                        label Reserve Acct Rate:
+                                    .col-md-8
+                                        input.form-control(ng-model="MIDreserveAccountRate" id="MIDreserveAccountRate" tooltip="Used for reporting assing in estimating cash flow. (optional)" tooltip-placement="top" type="number" placeholder="Enter reserve rate (optional)")
 
-                .row
-                    .col-md-6.text-left
-                        a.row_btn.emerald_btn(href="" type="submit" wz-previous="")
-                            i.fa.fa-arrow-left
-                            span Previous
+                        .row
+                            .col-md-6
+                                .row
+                                    .col-md-4
+                                        label Discount:
+                                    .col-md-8
+                                        input.form-control(ng-model="MIDiscount" id="MIDiscount" tooltip="Used for reporting. (optional)" tooltip-placement="top" type="number" placeholder="Enter discount (optional)")
+                            .col-md-6
+                                .row
+                                    .col-md-4
+                                        label Gateway Fee:
+                                    .col-md-8
+                                        input.form-control(ng-model="MIDgatewayFee" id="MIDgatewayFee" type="number" tooltip="Used for reporting (optional)" tooltip-placement="top" placeholder="Enter gateway fee (optional)" )
 
-                    .col-md-6.text-right
-                        a.row_btn.emerald_btn(href="" type="submit" ng-click="editMidConfig(editMidConfigForm)")
-                            span Next
-                            i.fa.fa-arrow-right
+                        .row
+                            .col-md-6.text-left
+                                a.row_btn.emerald_btn(href="" type="submit" wz-previous="")
+                                    i.fa.fa-arrow-left
+                                    span Previous
 
-                .row.errorMsg
-                    p {{errorMsg}}
-                .row.successMsg
-                    p {{successMsg}}
+                            .col-md-6.text-right
+                                a.row_btn.emerald_btn(href="" type="submit" ng-click="editMidConfig(editMidConfigForm)")
+                                    span Next
+                                    i.fa.fa-arrow-right
+
+                        .row.errorMsg
+                            p {{errorMsg}}
+                        .row.successMsg
+                            p {{successMsg}}
 
 
               wz-step.virtual_panel(title="2. Verify Settings(VT)")

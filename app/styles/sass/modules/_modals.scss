@@ -303,15 +303,15 @@ form.merchantCreateForm {
 }
 
 ////////////////////////
-// MID CREATE MODAL
+// MID CREATE OR EDIT MODAL
 ////////////////////////
-.midCreateModal {
+.midCreateEditModal {
     input[type="checkbox"] {
         width:20px;
         height:20px !important;
     }
     label {
-        font-size:16px;
+        font-size:12px;
         padding-top:10px;
     }
     a {
@@ -330,7 +330,7 @@ form.merchantCreateForm {
             width:95%;
         }
         .row {
-            padding:10px 0;
+            padding:5px 0;
         }
     }
 
@@ -390,17 +390,30 @@ form.merchantCreateForm {
         text-align:center;
         p {
             color:$greensea;
+            cursor:pointer;
         }
         i {
             margin-left:5px;
         }
     }
+    .currencyTypeDiv {
+        text-align:left;
+        font-size:12px;
+        p {
+            color:$greensea;
+        }
+        span {
+            vertical-align: super;
+        }
+    }
 
 }
-.stepOne {
-    label {
-        display:block;
-        text-align:right;
+.midCreateModal{
+    .stepOne {
+        label {
+            display:block;
+            text-align:right;
+        }
     }
 }
 .add_email{

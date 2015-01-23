@@ -60,8 +60,6 @@ app.controller('midsCtrl', function($scope,$http,Notify) {
         }
 
     }
-    
-
 });
 
 app.controller('midEditModalCtrl', function($scope,$modal,$log) {
@@ -81,14 +79,13 @@ app.controller('midEditModalCtrl', function($scope,$modal,$log) {
 
 
 var midEditInstanceCtrl = function($scope,$modalInstance,$log,$http,$rootScope,WizardHandler,$timeout,Notify,baseUrl,mid) {
-    // Editing existing mid
+    // EDITING EXISTING MIDS
     console.log('Mid Instance Control.')
     
-    // Get current Values for this MID
+    // GET CURRENT VALUES FOR MID
     $http.get(baseUrl + 'mids/' + mid.Id).success(function(data) {
         $scope.original = data;
         $scope.dataPresent = data;
-        console.log($scope.dataPresent);
 
         $scope.MIDconfig = $scope.dataPresent.Mid;
         $scope.MIDdescriptor = $scope.dataPresent.Descriptor;
@@ -108,29 +105,15 @@ var midEditInstanceCtrl = function($scope,$modalInstance,$log,$http,$rootScope,W
             $scope.MIDgatewayFee = $scope.dataPresent.GatewayFeeRetail;
         }
        
-        // Payment check boxes
-        for (var i = 0; i < $scope.dataPresent.PaymentTypes.length; i++){
-            if($scope.dataPresent.PaymentTypes[i].Id == 1){
-                $scope.amex = true;
-            }
-            if($scope.dataPresent.PaymentTypes[i].Id == 2){
-                $scope.visa = true;
-            }
-            if($scope.dataPresent.PaymentTypes[i].Id == 3){
-                $scope.master = true;
-            }
-            if($scope.dataPresent.PaymentTypes[i].Id == 4){
-                $scope.discover = true;
-            }
-        }
+        // PAYMENT CHECKBOXES
+        angular.forEach($scope.dataPresent.PaymentTypes, function(value,key) {
+            $scope[ value.Name ] = true;
+        });
 
     });
         
     $scope.editMidConfig = function(theForm) {
-        console.log(theForm);
         if(theForm.$valid && theForm.$dirty) {
-            console.log('something had been changed');
-
             var Query = {
                 "limitType":document.getElementById('limitType').value,
                 "DailyRebillProcessingLimit":+document.getElementById('dailyRebill').value,
@@ -241,12 +224,9 @@ var midEditInstanceCtrl = function($scope,$modalInstance,$log,$http,$rootScope,W
         $scope.rollOver = data;
     });
     */
-
 }
 
-///////////////////////////
 //  MID REMOVE MODAL
-///////////////////////////
 app.controller('removeMidModal', function($scope,$modal,$log) {
     $scope.open = function(index,mid) {
         var modalInstance = $modal.open({
@@ -296,10 +276,7 @@ var removeMidCtrlInstance = function($scope,$modalInstance,$log,index,mid,$http,
 }
 
 
-
-///////////////////////////
 //  MID DISABLE MODAL
-///////////////////////////
 app.controller('DeleteMidCtrl', function($scope,$modal,$log) {
     $scope.openMID = function(index,mid) {
         var modalInstance = $modal.open({
@@ -360,9 +337,7 @@ var DeleteMidCtrlInstance = function($scope,$modalInstance,$log,mid,$http,Notify
 
 }
 
-///////////////////////////
 //  MID ENABLE MODAL
-///////////////////////////
 app.controller('EnableMidCtrl', function($scope,$modal,$log) {
     $scope.open = function(index,mid) {
         var modalInstance = $modal.open({
@@ -417,10 +392,7 @@ var EnableMidCtrlInstance = function($scope,$modalInstance,$log,mid,$http,Notify
 
 }
 
-///////////////////////////
 //  MID CREATION MODAL
-///////////////////////////
-
 app.controller('midCreateModal', function($scope,$modal,$log) {
     $scope.open = function() {
         var modalInstance = $modal.open({
@@ -434,7 +406,6 @@ app.controller('midCreateModal', function($scope,$modal,$log) {
 var midCreateModalInstance = function($scope,$modalInstance,$log,$http,$rootScope,WizardHandler,$timeout,Notify,baseUrl) {
 
     $http.get(baseUrl + 'gateways/processors').success(function(data) {
-        //console.log(data);
         $scope.processors = data;
     });
 
@@ -445,7 +416,6 @@ var midCreateModalInstance = function($scope,$modalInstance,$log,$http,$rootScop
     // GET CURRENT USER GATEWAYS
     $http.get(baseUrl + 'gateways/current').success(function(data) {
         $scope.curGates = data;
-        //console.log(data);
 
         angular.forEach(data, function(value,key) {
             $scope.currentGateways.push(value);
@@ -477,25 +447,19 @@ var midCreateModalInstance = function($scope,$modalInstance,$log,$http,$rootScop
 
 
 
-    // GET PAYMENT TYPES
-    
+    // GET PAYMENT TYPES   
     $http.get( baseUrl + 'mids/paymentTypes').success(function(data) {
         
         angular.forEach(data, function(value,key) {
-            //console.log(data[key]);
         });
 
     });
     
 
-
-
-    // Checkbox 'unchecked' by default
-    $scope.preExist = false;
-
-    
-
-    $scope.midStep1 = function(theForm,selectedMerchant,selectedPro) {
+    // USER SEARCH FOR PREXISTING GATEWAY CONFIG INTIAL IS FALSE
+    $scope.preExist = false;   
+    //MID STEP 1 GATEWAY CONFIGURATION
+    $scope.midCreateGatewayConfig = function(theForm,selectedMerchant,selectedPro) {
 
         if(theForm.$valid) {
        
@@ -507,12 +471,10 @@ var midCreateModalInstance = function($scope,$modalInstance,$log,$http,$rootScop
             "GatewayType":document.getElementById('GatewayType').value,
             "IsActive":document.getElementById('steponeActive').checked
            }
-           
-           
-           // get actual txt of dropdown not just id 
+                     
+           // GET ACTUAL TXT OF DROPDOWN NOT JUST ID
            var selectedGate = document.getElementById('GatewayId');
            $scope.gatewayIdTxt = selectedGate.options[selectedGate.selectedIndex].text;
-
 
            $scope.processorId = document.getElementById('processorId').value;
            $scope.newMerchantCompany = document.getElementById('MerchantCompany').value;
@@ -522,8 +484,6 @@ var midCreateModalInstance = function($scope,$modalInstance,$log,$http,$rootScop
            
            console.log(Query);
 
-           
-           
            $http({
                 method:'POST',
                 url: baseUrl + 'mids/setup/gateway',
@@ -538,8 +498,7 @@ var midCreateModalInstance = function($scope,$modalInstance,$log,$http,$rootScop
 
             });
 
-        } else {
-            
+        } else {           
             $scope.errorMsg = 'Please fill in all fields in this form.';
             $('.errorMsg').slideDown(500);           
             $timeout(function() {
@@ -548,29 +507,28 @@ var midCreateModalInstance = function($scope,$modalInstance,$log,$http,$rootScop
 
         }
     } // END midstep1
-
-    $scope.midStep12 = function(theForm) {
-
+    
+    //MID STEP 1.5 PRE-EXISTING GATEWAY
+    $scope.midPreExistGatewayConfig = function(theForm) {
 
         if(theForm.$valid) {
-
-        var Query = {
-          "ExistingMerchantGatewayId": $scope.ChosenGateway.MerchantGatewayId,  
-          "IsActive": true
-        };
+            var Query = {
+              "ExistingMerchantGatewayId": $scope.ChosenGateway.MerchantGatewayId,  
+              "IsActive": true
+            };
         
-        $http({
-            method:'POST',
-            url: baseUrl + 'mids/setup/gateway',
-            data:Query
-        }).success(function(data) {
-            console.log(data);
+            $http({
+                method:'POST',
+                url: baseUrl + 'mids/setup/gateway',
+                data:Query
+            }).success(function(data) {
+                console.log(data);
 
-            $scope.NewExistGateway = data.newMerchantGatewayId;
-            $scope.gatewayId = data.gatewayId;
-            
-            WizardHandler.wizard().next();
-        });
+                $scope.NewExistGateway = data.newMerchantGatewayId;
+                $scope.gatewayId = data.gatewayId;
+                
+                WizardHandler.wizard().next();
+            });
         
         } else {
             $scope.emptyField = 'Please Make A Selection';
@@ -579,68 +537,35 @@ var midCreateModalInstance = function($scope,$modalInstance,$log,$http,$rootScop
                 $('.errorMsg').slideUp(500);
             },2500);
         }       
-        
-        
-    } // END midStep12
+    } // END MIDSTEP 1.5
 
-    ///////////////////
-    //  STEP 2
-    //////////////////
-    $scope.midStep13 = function(theForm) {
+    //MID STEP 2 CONFIGURE MID OPTIONS
+    $scope.midCreateConfigOptions = function(theForm) {
 
+        // BIND CREDIT CARD CHECKBOXES
+        $scope.paymentTypes = [];
+        $('input[name=cardCheckbox]:checked').each(function() {
+            $scope.paymentTypes.push($(this).val());
+        });
+                   
+        // BIND CURRENCY CHECKBOXES
+        $scope.currencyTypes = [];
+        $('input[name=curTypeCheckbox]:checked').each(function() {
+            $scope.currencyTypes.push($(this).val());
+        });
 
-        if(theForm.$valid) {
-
-            $scope.paymentTypes = [];
-
-            // bind card checkboxes
-            var amexType = +document.getElementById('amerExpress-box').checked;
-            var visaType = +document.getElementById('visa-box').checked;
-            var masterType = +document.getElementById('mastercard-box').checked;
-            var discoverType = +document.getElementById('discover-box').checked;
-
-            if(amexType) {
-                var amex = 1;
-                $scope.paymentTypes.push(amex);
-            } 
-
-            if(visaType) {
-                var visa = 2;
-                $scope.paymentTypes.push(visa);
-            } 
-
-            if(masterType) {
-                var master = 3;
-                $scope.paymentTypes.push(master);
-            } 
-
-            if(discoverType) {
-                var master = 4;
-                $scope.paymentTypes.push(master);
-            } 
-
-            var checkP = [];
-            checkP.push(amexType,visaType,masterType,discoverType);
-
-            //console.log(checkP);
-            for(var i=0;i<checkP.length;i++) {
-                if(checkP[i] === 1) {
-                    var cardSelectCheck = true;
-                }
-            }
-           
-            // parse MonthyCap 
-
+        // ENSURE ALL REQUIRED FIELDS ARE FILLED TO INCLUDE CARD TYPES AND CURRENCY
+        if(theForm.$valid && $scope.paymentTypes.length > 0 && $scope.currencyTypes.length > 0) {
             var Query = {
-                "limitType":document.getElementById('limitType').value,
-                "DailyRebillProcessingLimit":+document.getElementById('dailyRebill').value,
+                "GatewayId":$scope.gatewayId,
+                "MerchantGatewayId":$scope.NewExistGateway,
                 "Mid":document.getElementById('MIDconfig').value,
                 "Descriptor":document.getElementById('MIDdescriptor').value,
                 "DisplayName":document.getElementById('MIDdisplayName').value,
                 "MonthlyCap":+document.getElementById('MIDmonthlyCap').value,
                 "PaymentTypeIds":$scope.paymentTypes,
-                "GatewayId":$scope.gatewayId,
-                "MerchantGatewayId":$scope.NewExistGateway,
+                "CurrencyIds":$scope.currencyTypes,
+                "DailyRebillProcessingLimit":+document.getElementById('dailyRebill').value,
                 "GatewayFeeRetail":+document.getElementById('MIDgatewayFee').value,
                 "TransactionFee":+document.getElementById('MIDtransactionFee').value,
                 "ChargebackFee":+document.getElementById('MIDchargeBackFee').value,
@@ -653,86 +578,48 @@ var midCreateModalInstance = function($scope,$modalInstance,$log,$http,$rootScop
             $scope.DisplayName = document.getElementById('MIDdisplayName').value;
             $scope.MonthlyCap = document.getElementById('MIDmonthlyCap').value;
 
-                //if cards have been selected proceed
-                if(cardSelectCheck) {
-                    //is this a new mid then post
-                    if (!$scope.newMidId){
-                        console.log('this is new MID');
+            //IF THIS ISNT A NEW MID
+            if (!$scope.newMidId){
+                console.log('this is new MID');
 
-                        $http({
-                            method:'POST',
-                            url: baseUrl + 'mids/setup/mid',
-                            data:Query
-                        }).success(function(data,status) {
+                $http({
+                    method:'POST',
+                    url: baseUrl + 'mids/setup/mid',
+                    data:Query
+                }).success(function(data,status) {
                             
-                            Notify.sendMsg('NewMidUpdate', data);
+                    Notify.sendMsg('NewMidUpdate', data);
 
-                            $scope.newMidId = data.newMidId;
-                            console.log($scope.newMidId);
-                            WizardHandler.wizard().next();
-                            //console.log($scope.newMidId); // logs INT
+                    $scope.newMidId = data.newMidId;
+                    console.log($scope.newMidId);
+                    WizardHandler.wizard().next();
+                });
 
-                        });
+            //NOT A NEW MID PATCH EXISTING
+            } else {
+                Query.MidId = $scope.newMidId;
+                      
+                $http({
+                    method:'PUT',
+                    url: baseUrl + 'mids/' + $scope.newMidId,
+                    data:Query
+                }).success(function(data,status) {
+                    Notify.sendMsg('NewMidUpdate', data);
+                    WizardHandler.wizard().next();
+                });
+            }
 
-                    //Not new patch
-                    } else {
-                        console.log($scope.newMidId);
-                        console.log('not new MID ');
-                        Query.MidId = $scope.newMidId;
-
-                        console.log('newQuery');
-                        console.log(Query);
-
-                        
-                        $http({
-                            method:'PUT',
-                            url: baseUrl + 'mids/' + $scope.newMidId,
-                            data:Query
-                        }).success(function(data,status) {
-                            
-                            Notify.sendMsg('NewMidUpdate', data);
-
-                            //$scope.newMidId = data.newMidId;
-                            //console.log($scope.newMidId);
-                            WizardHandler.wizard().next();
-                            //console.log($scope.newMidId); // logs INT
-
-                        });
-                        
-
-                    }
-                
-
-
-                } else {
-                    $scope.errorMsg = 'Please select the payment types';
-                    $('.errorMsg').slideDown(500);
-                    $timeout(function() {
-                        $('.errorMsg').slideUp(500);
-                    },2500);
-                }
-            
-            
-
-             } else {
-                $scope.errorMsg = 'Please ensure that the required fields (*) are entered.';
-                $('.errorMsg').slideDown(500);
-                $timeout(function() {
-                    $('.errorMsg').slideUp(500);
-                },3000);
-             }
-        
-        
-        
-
-
+        } else {
+            $scope.errorMsg = 'Please ensure that the required fields (*) are entered.';
+            $('.errorMsg').slideDown(500);
+            $timeout(function() {
+                $('.errorMsg').slideUp(500);
+            },3000);
+        }
     }
 
-    ////////////
-    //  STEP 3
-    ////////////
+    //MID STEP 3 EMAIL CONFIGURATIONS
     $scope.emails = [];
-
 
     $scope.allTypeChange = function() {
         var parentCheck = document.getElementById('allEmailTypes').checked;
@@ -759,29 +646,21 @@ var midCreateModalInstance = function($scope,$modalInstance,$log,$http,$rootScop
     $scope.addEmail = function() {
 
         var userEmail = document.getElementById('notificationEmail').value,
-            allEmail = document.getElementById('allEmailTypes').checked,
-            orderConfirm = document.getElementById('orderConfirm').checked,
-            shipment = document.getElementById('shipment').checked,
-            refundCheck = document.getElementById('refundCheck').checked,
+            transCheckbox = document.getElementById('transaction').checked,
+            //capCheckbox = document.getElementById('capToggle').checked,
             notificationType = [];
 
-        if(allEmail) {
-            notificationType.push(1);
-        }
-        if(orderConfirm) {
-            notificationType.push(2);
-        }
-        if(shipment) {
-            notificationType.push(3);
-        }
-        if(refundCheck) {
-            notificationType.push(4);
-        }
+        if(transCheckbox) {notificationType.push(2);}
+        //if(capCheckbox) {
+        //    var capType = document.getElementById('capType').value,
+        //        capValue = document.getElementById('capValue').value;
+        //    console.log(capType);
+        //    console.log(capValue);
+        //}
    
             var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
             if(notificationType != '' ){
-
 
                 if(re.test(userEmail)) {
                     // push to emails Array
@@ -792,20 +671,19 @@ var midCreateModalInstance = function($scope,$modalInstance,$log,$http,$rootScop
                         "Recipient":userEmail,
                         "NotificationTypeIds":notificationType
                     }
-
-                   
+                  
                     $http({
                         method:'POST',
                         url:baseUrl + 'mids/setup/notifications',
                         data:Query
                     }).success(function(data,status) {
-                        console.log(status);
                         console.log(data);
-
                     });
 
-                    // clear input
+                    // CLEAR INPUTS
                     document.getElementById('notificationEmail').value = '';
+                    document.getElementById('transaction').checked = false;
+                    //document.getElementById('capToggle').checked = false;
 
                 } else {
                     $scope.errorMsg = 'Please enter a valid email';
@@ -845,8 +723,8 @@ var midCreateModalInstance = function($scope,$modalInstance,$log,$http,$rootScop
 
     }
 
-    
-    $scope.midStep14 = function(theForm) {
+    //MID STEP 3 ADD NOTIFICATION EMAILS TO MID
+    $scope.midCreateNotifyEmail = function(theForm) {
         var userEmail = document.getElementById('notificationEmail').value;
 
         if (userEmail == '' ) {
@@ -859,12 +737,10 @@ var midCreateModalInstance = function($scope,$modalInstance,$log,$http,$rootScop
                 $('.errorMsg').slideUp(500);
             },2500); 
         }
-    }
+    } // END NOTIFICATION EMAILS
 
-    ////////////////////
-    //  STEP 4 - VERIFY
-    ////////////////////
-    $scope.midStep15 = function() {
+    //MID STEP 4 VERIFY CREATED MID
+    $scope.midCreateVerify = function() {
        
         var Query =  {
             "MidId":$scope.newMidId
@@ -892,9 +768,7 @@ var midCreateModalInstance = function($scope,$modalInstance,$log,$http,$rootScop
             }
 
         });
-        
-
-    } // END verify
+    } // END VERIFY
 
     
 

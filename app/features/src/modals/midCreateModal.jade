@@ -1,286 +1,324 @@
 script(type="text/ng-template" id="midCreateContent.html")
-    .midCreateModal
+    .midCreateEditModal.midCreateModal
         .modal-header
             h3 Create New MID
             button.close(type="button" ng-click="cancel()") X
         .modal-body
             wizard(on-finish="finishedWizard()")
-              wz-step(title="1. Gateway Config")
-                .gateway-option
-                        label Do you want to setup from your pre-existing gateways?
-                        input(tooltip="Re-use a gateway that you already configured" type="checkbox" ng-model="preExist")
-                form.stepOne(name="midCreateForm1" ng-if="preExist == false" novalidate)
+                wz-step(title="1. Gateway Config")
+                    .gateway-option
+                            label Do you want to setup from your pre-existing gateways?
+                            input(tooltip="Re-use a gateway that you already configured" type="checkbox" ng-model="preExist")
+                    form.midCreateModal.stepOne(name="midFormGatewayConfig" ng-if="preExist == false" novalidate)
+                        .row
+                            .col-md-4
+                                label *Choose Gateway Service:
+                            .col-md-8
+                                select.form-control(required="" ng-model="selectedMerchant" id="GatewayId" ng-options="obj.Id as obj.DisplayName for obj in gateways" tooltip="Select a gateway service from a list of available gateways  (Required)" tooltip-placement="top")
+                                    option(value="") Select an item
+
+                        .row
+                            .col-md-4
+                                label *Processor:
+                            .col-md-8
+                                select.form-control(required="" ng-model="selectedPro" id="processorId" ng-options="obj.Id as obj.Name for obj in processors" tooltip="The name of the processor for this merchant account (Required)" tooltip-placement="top")
+                                    option(value="") Select an item
+
+                        .row
+                            .col-md-4
+                                label *Merchant Company:
+                            .col-md-8
+                                input.form-control(required="" ng-model="MerchantCompany" id="MerchantCompany" type="text" placeholder="Enter Custom Group Name" tooltip="The name you want to associate with this gateway (Required)" tooltip-placement="top")
+
+                        .row
+                            .col-md-4
+                                label *Gateway Username:
+                            .col-md-8
+                                input.form-control(required="" ng-model="UserNamegate" id="Merchant.UserNamegate"  type="text" placeholder="Enter Custom User Name (Required)" autocomplete="off")
+
+                        .row
+                            .col-md-4
+                                label *Gateway Password
+                            .col-md-8
+                                input.form-control(required="" ng-model="Passwordgate" id="Merchant.Passwordgate" type="password" placeholder="Enter Your Password (Required)" autocomplete="off")
+
+                        .row
+                            .col-md-4
+                                label *Gateway Type
+                            .col-md-8
+                                select.form-control(tooltip="Choose the kind of payment processed by this gateway (Required)" tooltip-placement="top" id="GatewayType")
+                                    option(value="CreditCard") Credit Card
+                                    option(value="BankingAccount") Banking Account
+                                    option(value="External") External
+
+                        .row
+                            .col-md-4
+                                label *Active
+                            .col-md-8
+                                input(ng-model="activeStatus" id="steponeActive" type="checkbox" checked)
+                        .row
+                            .col-md-6.text-left
+                                a.row_btn.disabled_btn(tooltip="Previous selection not available in first step" tooltip-placement="top")
+                                    i.fa.fa-arrow-left
+                                    span Previous
+
+                            .col-md-6.text-right
+                                a.row_btn.emerald_btn(type="submit" value="Next" ng-click="midCreateGatewayConfig(midFormGatewayConfig,selectedMerchant,selectedPro)")
+                                    span Next
+                                    i.fa.fa-arrow-right
+
+                        .row.errorMsg
+                            p {{errorMsg}}
+                    // Pre-Existing Group select
+                    form.preExist(name="midFormPreExistGatewayConfig" ng-if="preExist == true" novalidate)
+                        .row
+                            .col-md-4
+                                label *Pre-Existing Gateway
+                            .col-md-8
+                                select.form-control(required="" ng-model="currentGate" ng-change="selectUpdate(currentGate)" ng-options="obj.MerchantGatewayId as obj.DisplayName for obj in curGates")
+                                    option(value="") Select an item (Required)
+                        
+
+                        .row(ng-if="ChosenGateway.MerchantGatewayId != null")
+                            .row
+                                .col-md-6.text-right Merchant Gateway Id:
+                                .col-md-6 {{ChosenGateway.MerchantGatewayId}}
+                            .row
+                                .col-md-6.text-right Company Name:
+                                .col-md-6 {{ChosenGateway.CompanyName}}
+                            .row
+                                .col-md-6.text-right Active Status:
+                                .col-md-6 {{ChosenGateway.Active}}
+                            .row
+                                .col-md-6.text-right Gateway User:
+                                .col-md-6 {{ChosenGateway.GatewayUsername}}
+                            .row
+                                .col-md-6.text-right Gateway Password:
+                                .col-md-6 {{ChosenGateway.GatewayPassword}}          
+
+                        .row
+                            .col-md-6
+                                
+                            .col-md-6.text-right
+                                a.row_btn.emerald_btn(href="" type="submit" ng-click="midPreExistGatewayConfig(midFormPreExistGatewayConfig)")
+                                    span Next
+                                    i.fa.fa-arrow-right
+                        
+                        .row.errorMsg
+                            p {{wrongUser}}
+                            p {{emptyField}}
+        
+                wz-step(title="2. MID Config")
+                   form.stepTwo(name="midFormCreateConfigOptions" novalidate)
                     .row
-                        .col-md-4
-                            label *Choose Gateway Service:
-                        .col-md-8
-                            select.form-control(required="" ng-model="selectedMerchant" id="GatewayId" ng-options="obj.Id as obj.DisplayName for obj in gateways" tooltip="Select a gateway service from a list of available gateways  (Required)" tooltip-placement="top")
-                                option(value="") Select an item
+                        .col-md-6
+                            .row
+                                .col-md-4
+                                    label *MID:
+                                .col-md-8  
+                                    input.form-control(required="" ng-model="MIDconfig" id="MIDconfig" type="text"  placeholder="Enter mid  (Required)"  tooltip="MID or Processor ID is provided by your Merchant Account Provider (Required)" tooltip-placement="top")
+                        .col-md-6
+                            .row
+                                .col-md-4
+                                    label *Descriptor:
+                                .col-md-8
+                                    input.form-control(required="" ng-model="MIDdescriptor" id="MIDdescriptor" type="text" tooltip="Text available for order confirmation it's passed to the gateway.  If dynamic descriptor is supposed to be provided by gateway. (Required)" tooltip-placement="top" placeholder="Enter descriptor (Required)" )
+                    .row
+                        .col-md-6
+                            .row
+                                .col-md-4
+                                    label *Display Name:
+                                .col-md-8
+                                    input.form-control(required="" ng-model="MIDdisplayName" id="MIDdisplayName" type="text" tooltip-placement="top" placeholder="Enter display name (Required)" tooltip="What will show in our reports to this Merchant Account (Required)")
+                        .col-md-6
+                            .row
+                                .col-md-4
+                                    label *Monthly Cap:
+                                .col-md-8
+                                    input.form-control(required="" ng-model="MIDmonthlyCap" type="number" id="MIDmonthlyCap" tooltip="Used for load balancing and routing to prevent transactions to decline because your account exceeds the cap.  (Required)" tooltip-placement="top" placeholder="Enter monthly cap  (Required)" ) 
+                    .row.paymentTypeDiv
+                        p 
+                            label(tooltip="Select allowed payment types.  (Required)" tooltip-placement="top") *Payment Types: (Required)
+                    .row.paymentTypeDiv
+                        .col-md-3
+                            input(name="cardCheckbox" type="checkbox" value="1")
+                            i.fa.fa-cc-amex.fa-2x
+                        .col-md-3
+                            input(name="cardCheckbox" type="checkbox" value="2")
+                            i.fa.fa-cc-visa.fa-2x
+                        .col-md-3
+                            input(name="cardCheckbox" type="checkbox" value="3")
+                            i.fa.fa-cc-mastercard.fa-2x
+                        .col-md-3
+                            input(name="cardCheckbox" type="checkbox" value="4")
+                            i.fa.fa-cc-discover.fa-2x
+
+                    .row.paymentTypeDiv
+                        p 
+                            label(tooltip="Select allowed currency types.  (Required)" tooltip-placement="top") *Currency Types: (Required)
+                    .row.currencyTypeDiv
+                        .col-md-3
+                            input(name="curTypeCheckbox" type="checkbox" value="12")
+                            span USD - United States Dollar
+                        .col-md-3
+                            input(name="curTypeCheckbox" type="checkbox" value="3")
+                            span AUD - Australia Dollar
+                        .col-md-3
+                            input(name="curTypeCheckbox" type="checkbox" value="10")
+                            span BRL -Brazil Real
+                        .col-md-3
+                            input(name="curTypeCheckbox" type="checkbox" value="4")
+                            span CAD - Canada Dollar
+                        .col-md-3
+                            input(name="curTypeCheckbox" type="checkbox" value="5")
+                            span DKK - Denmark Krone
+                        .col-md-3
+                            input(name="curTypeCheckbox" type="checkbox" value="2")
+                            span EUR -Euro Member 
+                        .col-md-3
+                            input(name="curTypeCheckbox" type="checkbox" value="1")
+                            span GBP - UK Pound
+                        .col-md-3
+                            input(name="curTypeCheckbox" type="checkbox" value="7")
+                            span JPY - Japan Yen
+                        .col-md-3
+                            input(name="curTypeCheckbox" type="checkbox" value="8")
+                            span NOK - Norway Krone
+                        .col-md-3
+                            input(name="curTypeCheckbox" type="checkbox" value="6")
+                            span NZD - New Zealand Dollar
+                        .col-md-3
+                            input(name="curTypeCheckbox" type="checkbox" value="9")
+                            span SEK - Sweden Krona
+                        .col-md-3
+                            input(name="curTypeCheckbox" type="checkbox" value="11")
+                            span SGD - Singapore Dollar
+
+
+                    .row.paymentTypeDiv
+                        p 
+                            label(tooltip="Select additional MID options.  (Optional)" tooltip-placement="top") Additional MID Options: (Optional)
+                    .row
+                        .col-md-6
+                            .row
+                                .col-md-6
+                                    label Daily ReBill Limit:
+                                .col-md-3
+                                    select.form-control(tooltip="Rebill limit set to percent or amount (optional)" tooltip-placement="top" id="limitType")
+                                        option %
+                                        option Amt
+                                .col-md-3
+                                    input.form-control(id="dailyRebill" type="number" placeholder="value")
+
+                        .col-md-6
+                            .row
+                                .col-md-6
+                                    label Transaction Fee:
+                                .col-md-6
+                                    input.form-control(tooltip="Transaction Fee charged by your Merchant Account provider.  Used for reporting.  (optional)" tooltip-placement="top" type="number" id="MIDtransactionFee" placeholder="Enter transaction fee")
 
                     .row
-                        .col-md-4
-                            label *Processor:
-                        .col-md-8
-                            select.form-control(required="" ng-model="selectedPro" id="processorId" ng-options="obj.Id as obj.Name for obj in processors" tooltip="The name of the processor for this merchant account (Required)" tooltip-placement="top")
-                                option(value="") Select an item
+                        .col-md-6
+                            .row
+                                .col-md-6
+                                    label ChargeBack Fee:
+                                .col-md-6
+                                    input.form-control(id="MIDchargeBackFee" placeholder="Enter chargeback fee" tooltip="Used for reporting" tooltip-placement="top" type="number")
+                        .col-md-6
+                            .row
+                                .col-md-6
+                                    label Reserve Acct Rate:
+                                .col-md-6
+                                    input.form-control(tooltip="Used for reporting assing in estimating cash flow. (optional)" tooltip-placement="top" type="number" id="MIDreserveAccountRate" placeholder="Enter reserve rate")
 
                     .row
-                        .col-md-4
-                            label *Merchant Company:
-                        .col-md-8
-                            input.form-control(required="" ng-model="MerchantCompany" id="MerchantCompany" type="text" placeholder="Enter Custom Group Name" tooltip="The name you want to associate with this gateway (Required)" tooltip-placement="top")
+                        .col-md-6
+                            .row
+                                .col-md-6
+                                    label Discount:
+                                .col-md-6
+                                    input.form-control(tooltip="Used for reporting. (optional)" tooltip-placement="top" type="number" id="MIDiscount" placeholder="Enter discount")
+                        .col-md-6
+                            .row
+                                .col-md-6
+                                    label Gateway Fee:
+                                .col-md-6
+                                    input.form-control(id="MIDgatewayFee" type="number" tooltip="Used for reporting (optional)" tooltip-placement="top" placeholder="Enter gateway fee" )
 
-                    .row
-                        .col-md-4
-                            label *Gateway Username:
-                        .col-md-8
-                            input.form-control(required="" ng-model="UserNamegate" id="Merchant.UserNamegate"  type="text" placeholder="Enter Custom User Name (Required)" autocomplete="off")
-
-                    .row
-                        .col-md-4
-                            label *Gateway Password
-                        .col-md-8
-                            input.form-control(required="" ng-model="Passwordgate" id="Merchant.Passwordgate" type="password" placeholder="Enter Your Password (Required)" autocomplete="off")
-
-                    .row
-                        .col-md-4
-                            label *Gateway Type
-                        .col-md-8
-                            select.form-control(tooltip="Choose the kind of payment processed by this gateway (Required)" tooltip-placement="top" id="GatewayType")
-                                option(value="CreditCard") Credit Card
-                                option(value="BankingAccount") Banking Account
-                                option(value="External") External
-
-                    .row
-                        .col-md-4
-                            label *Active
-                        .col-md-8
-                            input(ng-model="activeStatus" id="steponeActive" type="checkbox" checked)
                     .row
                         .col-md-6.text-left
-                            a.row_btn.disabled_btn(tooltip="Previous selection not available in first step" tooltip-placement="top")
+                            a.row_btn.emerald_btn(href="" type="submit" wz-previous="")
                                 i.fa.fa-arrow-left
                                 span Previous
 
                         .col-md-6.text-right
-                            a.row_btn.emerald_btn(type="submit" value="Next" ng-click="midStep1(midCreateForm1,selectedMerchant,selectedPro)")
+                            a.row_btn.emerald_btn(href="" type="submit" ng-click="midCreateConfigOptions(midFormCreateConfigOptions)")
                                 span Next
                                 i.fa.fa-arrow-right
 
                     .row.errorMsg
                         p {{errorMsg}}
 
-                // Pre-Existing Group select
-                form.preExist(name="midCreateForm12" ng-if="preExist == true" novalidate)
+                wz-step(title="3. Email Notification")
                     .row
-                        .col-md-4
-                            label *Pre-Existing Gateway
-                        .col-md-8
-                            select.form-control(required="" ng-model="currentGate" ng-change="selectUpdate(currentGate)" ng-options="obj.MerchantGatewayId as obj.DisplayName for obj in curGates")
-                                option(value="") Select an item (Required)
-                    
+                        form
+                            .col-md-4
+                                p Email Type
+                                //.form-group
+                                    input(id="allEmailTypes" ng-model="allEmailTypes" ng-change="allTypeChange()" value="1" type="checkbox" )
+                                    label All Email Types
+                                .form-group
+                                    input(id="transaction" ng-model="transaction" value="2" type="checkbox")
+                                    label Transaction
+                                //.form-group
+                                    input(id="capToggle" ng-model="capToggle" value="3" type="checkbox")
+                                    label Cap Utilization
 
-                    .row(ng-if="ChosenGateway.MerchantGatewayId != null")
-                        .row
-                            .col-md-6.text-right Merchant Gateway Id:
-                            .col-md-6 {{ChosenGateway.MerchantGatewayId}}
-                        .row
-                            .col-md-6.text-right Company Name:
-                            .col-md-6 {{ChosenGateway.CompanyName}}
-                        .row
-                            .col-md-6.text-right Active Status:
-                            .col-md-6 {{ChosenGateway.Active}}
-                        .row
-                            .col-md-6.text-right Gateway User:
-                            .col-md-6 {{ChosenGateway.GatewayUsername}}
-                        .row
-                            .col-md-6.text-right Gateway Password:
-                            .col-md-6 {{ChosenGateway.GatewayPassword}}          
+                                //.row(ng-if="capToggle == true")
+                                    .col-md-6
+                                        select.form-control(id="capType")
+                                            option(value="") Select an item
+                                            option Percentage
+                                            option Amount
+                                    .col-md-6
+                                        input.form-control(id="capValue" type="number" placeholder="Enter Value") 
+
+
+
+
+                            .col-md-6
+                                p Email Address
+                                input.form-control(type="text" placeholder="Enter Your Email (optional)" id="notificationEmail")
+
+                                ul(ng-repeat="email in emails")
+                                    aside.clearfix
+                                        .col-md-8
+                                            li {{email}}
+                                        .col-md-4
+                                            a.text-right(href="" ng-click="removeEmail(email, $index)")
+                                                i.fa.fa-remove 
+                                                span remove
+                            .col-md-2
+                                a.row_btn.emerald_btn.add_email(href="" ng-click="addEmail()") 
+                                    i.fa.fa-plus
+                                    span Add Email
+
 
                     .row
-                        .col-md-6
-                            
+                        .col-md-6.text-left
+                            a.row_btn.emerald_btn(href="" type="submit" wz-previous="")
+                                i.fa.fa-arrow-left
+                                span Previous
+
                         .col-md-6.text-right
-                            a.row_btn.emerald_btn(href="" type="submit" ng-click="midStep12(midCreateForm12)")
+                            a.row_btn.emerald_btn(href="" type="submit" ng-click="midCreateNotifyEmail()")
                                 span Next
                                 i.fa.fa-arrow-right
-                    
+
                     .row.errorMsg
-                        p {{wrongUser}}
-                        p {{emptyField}}
-        
+                        p {{errorMsg}}
 
-              wz-step(title="2. MID Config")
-               form.stepTwo(name="createMidStep2" novalidate)
-                .row
-                    .col-md-6
-                        .row
-                            .col-md-4
-                                label *MID:
-                            .col-md-8  
-                                input.form-control(required="" ng-model="MIDconfig" id="MIDconfig" type="text"  placeholder="Enter mid  (Required)"  tooltip="MID or Processor ID is provided by your Merchant Account Provider (Required)" tooltip-placement="top")
-                    .col-md-6
-                        .row
-                            .col-md-4
-                                label *Descriptor:
-                            .col-md-8
-                                input.form-control(required="" ng-model="MIDdescriptor" id="MIDdescriptor" type="text" tooltip="Text available for order confirmation it's passed to the gateway.  If dynamic descriptor is supposed to be provided by gateway. (Required)" tooltip-placement="top" placeholder="Enter descriptor (Required)" )
-                .row
-                    .col-md-6
-                        .row
-                            .col-md-4
-                                label *Display Name:
-                            .col-md-8
-                                input.form-control(required="" ng-model="MIDdisplayName" id="MIDdisplayName" type="text" tooltip-placement="top" placeholder="Enter display name (Required)" tooltip="What will show in our reports to this Merchant Account (Required)")
-                    .col-md-6
-                        .row
-                            .col-md-4
-                                label *Monthly Cap:
-                            .col-md-8
-                                input.form-control(required="" ng-model="MIDmonthlyCap" type="number" id="MIDmonthlyCap" tooltip="Used for load balancing and routing to prevent transactions to decline because your account exceeds the cap.  (Required)" tooltip-placement="top" placeholder="Enter monthly cap  (Required)" ) 
-                .row.paymentTypeDiv
-                    p 
-                        label(tooltip="Select allowed payment types.  (Required)" tooltip-placement="top") *Payment Types: (Required)
-                .row.paymentTypeDiv
-                    .col-md-3
-                        input(type="checkbox" id="amerExpress-box")
-                        i.fa.fa-cc-amex.fa-2x
-                    .col-md-3
-                        input(type="checkbox" id="visa-box")
-                        i.fa.fa-cc-visa.fa-2x
-                    .col-md-3
-                        input(type="checkbox" id="mastercard-box")
-                        i.fa.fa-cc-mastercard.fa-2x
-                    .col-md-3
-                        input(type="checkbox" id="discover-box")
-                        i.fa.fa-cc-discover.fa-2x
-
-                .row
-                    .col-md-6
-                        .row
-                            .col-md-4
-                                label Daily ReBill Limit:
-                            .col-md-4
-                                select.form-control(tooltip="Rebill limit set to percent or amount (optional)" tooltip-placement="top" id="limitType")
-                                    option Percentage
-                                    option Amount
-                            .col-md-4
-                                input.form-control(id="dailyRebill" type="number" placeholder="value (optional)")
-
-                    .col-md-6
-                        .row
-                            .col-md-4
-                                label Transaction Fee:
-                            .col-md-8
-                                input.form-control(tooltip="Transaction Fee charged by your Merchant Account provider.  Used for reporting.  (optional)" tooltip-placement="top" type="number" id="MIDtransactionFee" placeholder="Enter transaction fee (optional)")
-
-                .row
-                    .col-md-6
-                        .row
-                            .col-md-4
-                                label ChargeBack Fee:
-                            .col-md-8
-                                input.form-control(id="MIDchargeBackFee" placeholder="Enter chargeback fee (optional)" tooltip="Used for reporting (optional)" tooltip-placement="top" type="number")
-                    .col-md-6
-                        .row
-                            .col-md-4
-                                label Reserve Acct Rate:
-                            .col-md-8
-                                input.form-control(tooltip="Used for reporting assing in estimating cash flow. (optional)" tooltip-placement="top" type="number" id="MIDreserveAccountRate" placeholder="Enter reserve rate (optional)")
-
-                .row
-                    .col-md-6
-                        .row
-                            .col-md-4
-                                label Discount:
-                            .col-md-8
-                                input.form-control(tooltip="Used for reporting. (optional)" tooltip-placement="top" type="number" id="MIDiscount" placeholder="Enter discount (optional)")
-                    .col-md-6
-                        .row
-                            .col-md-4
-                                label Gateway Fee:
-                            .col-md-8
-                                input.form-control(id="MIDgatewayFee" type="number" tooltip="Used for reporting (optional)" tooltip-placement="top" placeholder="Enter gateway fee (optional)" )
-
-                .row
-                    .col-md-6.text-left
-                        a.row_btn.emerald_btn(href="" type="submit" wz-previous="")
-                            i.fa.fa-arrow-left
-                            span Previous
-
-                    .col-md-6.text-right
-                        a.row_btn.emerald_btn(href="" type="submit" ng-click="midStep13(createMidStep2)")
-                            span Next
-                            i.fa.fa-arrow-right
-
-                .row.errorMsg
-                    p {{errorMsg}}
-
-
-              wz-step(title="3. Email Notification")
-
-                .row
-                    form
-                        .col-md-4
-                            p Email Type
-                            .form-group
-                                input(id="allEmailTypes" ng-model="allEmailTypes" ng-change="allTypeChange()" value="1" type="checkbox" )
-                                label All Email Types
-                            .form-group
-                                input(id="orderConfirm" ng-model="orderConfirm" value="2" type="checkbox")
-                                label Order Confirmation
-                            .form-group
-                                input(id="shipment" ng-model="shipment" value="3" type="checkbox")
-                                label Shipment
-                            .form-group
-                                input(id="refundCheck" ng-model="refundCheck" value="4" type="checkbox")
-                                label Refund
-                            .form-group
-                                input(id="capToggle" ng-model="capToggle" type="checkbox")
-                                label Cap Utilization
-
-                        .col-md-6
-                            p Email Address
-                            input.form-control(type="text" placeholder="Enter Your Email (optional)" id="notificationEmail")
-
-                            ul(ng-repeat="email in emails")
-                                aside.clearfix
-                                    .col-md-8
-                                        li {{email}}
-                                    .col-md-4
-                                        a.text-right(href="" ng-click="removeEmail(email, $index)")
-                                            i.fa.fa-remove 
-                                            span remove
-                        .col-md-2
-                            a.row_btn.emerald_btn.add_email(href="" ng-click="addEmail()") 
-                                i.fa.fa-plus
-                                span Add Email
-
-                .row(ng-if="capToggle == true")
-                    .col-md-6
-                        select.form-control(ng-model="capType")
-                            option(value="") Select an item
-                            option Percentage
-                            option Value
-                    .col-md-6
-                        input.form-control(type="number" placeholder="Enter Percentage" ng-if="capType == 'Percentage'")
-                        input.form-control(type="number" placeholder="Enter Value" ng-if="capType == 'Value'")
-
-                .row
-                    .col-md-6.text-left
-                        a.row_btn.emerald_btn(href="" type="submit" wz-previous="")
-                            i.fa.fa-arrow-left
-                            span Previous
-
-                    .col-md-6.text-right
-                        a.row_btn.emerald_btn(href="" type="submit" ng-click="midStep14()")
-                            span Next
-                            i.fa.fa-arrow-right
-
-                .row.errorMsg
-                    p {{errorMsg}}
-
-              wz-step.virtual_panel(title="4. Verify Settings(VT)")
+                wz-step.virtual_panel(title="4. Verify Settings(VT)")
 
                     table.table
                         thead
@@ -307,7 +345,7 @@ script(type="text/ng-template" id="midCreateContent.html")
                                 span Previous
 
                         .col-md-6.text-right
-                            a.row_btn.emerald_btn.final_btn(href="" type="submit" ng-click="midStep15()")
+                            a.row_btn.emerald_btn.final_btn(href="" type="submit" ng-click="midCreateVerify()")
                                 span Verify MID
                                 i.fa.fa-arrow-right
 
