@@ -205,8 +205,8 @@ script(type="text/ng-template" id="midCreateContent.html")
                                     label Daily ReBill Limit:
                                 .col-md-3
                                     select.form-control(tooltip="Rebill limit set to percent or amount (optional)" tooltip-placement="top" id="limitType")
-                                        option %
-                                        option Amt
+                                        option(value="Percentage") %
+                                        option(value="Amount") Amt
                                 .col-md-3
                                     input.form-control(id="dailyRebill" type="number" placeholder="value")
 
@@ -262,19 +262,19 @@ script(type="text/ng-template" id="midCreateContent.html")
                 wz-step(title="3. Email Notification")
                     .row
                         form
-                            .col-md-4
+                            //.col-md-4
                                 p Email Type
-                                //.form-group
+                                .form-group
                                     input(id="allEmailTypes" ng-model="allEmailTypes" ng-change="allTypeChange()" value="1" type="checkbox" )
                                     label All Email Types
                                 .form-group
                                     input(id="transaction" ng-model="transaction" value="2" type="checkbox")
                                     label Transaction
-                                //.form-group
+                                .form-group
                                     input(id="capToggle" ng-model="capToggle" value="3" type="checkbox")
                                     label Cap Utilization
 
-                                //.row(ng-if="capToggle == true")
+                                .row(ng-if="capToggle == true")
                                     .col-md-6
                                         select.form-control(id="capType")
                                             option(value="") Select an item
@@ -286,22 +286,28 @@ script(type="text/ng-template" id="midCreateContent.html")
 
 
 
-                            .col-md-6
+                            .col-md-8
                                 p Email Address
                                 input.form-control(type="text" placeholder="Enter Your Email (optional)" id="notificationEmail")
-
-                                ul(ng-repeat="email in emails")
-                                    aside.clearfix
-                                        .col-md-8
-                                            li {{email}}
-                                        .col-md-4
-                                            a.text-right(href="" ng-click="removeEmail(email, $index)")
-                                                i.fa.fa-remove 
-                                                span remove
+                                
                             .col-md-2
                                 a.row_btn.emerald_btn.add_email(href="" ng-click="addEmail()") 
                                     i.fa.fa-plus
                                     span Add Email
+
+                    .row
+                        table.table
+                            thead(ng-if="emailAdded == true")
+                                tr
+                                    th Email
+                                    th Remove Notification
+                            tbody(ng-repeat="email in emails")
+                                tr
+                                    td {{email}}
+                                    td
+                                        a.mdl_body_btn.alazarin_btn(href="" ng-click="removeEmail(email, $index)")
+                                            i.fa.fa-trash
+                                            span Delete
 
 
                     .row

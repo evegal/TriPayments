@@ -74,6 +74,36 @@
     .editable-wrap {
         width:80%;
     }
+
+    // BUTTONS
+    .mdl_body_btn {
+       color:#fff;
+       display:inline-block;
+       font-size:12px;
+       padding:12px 0px;
+       cursor:pointer;
+       width:70px;
+       text-align:center;
+       &:hover {
+        color:#fff;
+        text-decoration:none;
+       }
+       i {
+        padding-right:4px;
+        @media(max-width:1600px) {
+           padding-right:0px;
+        }
+       }
+       span {
+         @media(max-width:1600px) {
+            display:none;
+         }
+       }
+     }
+
+
+
+
 }
 .nav-tabs {
     background:#eee;
@@ -323,6 +353,10 @@ form.merchantCreateForm {
         width:20%;
         padding:15px 0;
     }
+    .row_inbody_btn {
+        width:35%;
+        padding:10px 0;
+    }    
     .modal-body {
         min-height:300px;
         padding:80px 20px 20px 20px;
@@ -331,6 +365,9 @@ form.merchantCreateForm {
         }
         .row {
             padding:5px 0;
+        }
+        .btn{
+            width: 120px;
         }
     }
 

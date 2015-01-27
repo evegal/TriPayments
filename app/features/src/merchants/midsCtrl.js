@@ -77,11 +77,8 @@ app.controller('midEditModalCtrl', function($scope,$modal,$log) {
     }
 });
 
-
+//  MID EDIT MODAL
 var midEditInstanceCtrl = function($scope,$modalInstance,$log,$http,$rootScope,WizardHandler,$timeout,Notify,baseUrl,mid) {
-    // EDITING EXISTING MIDS
-    console.log('Mid Instance Control.')
-    
     // GET CURRENT VALUES FOR MID
     $http.get(baseUrl + 'mids/' + mid.Id).success(function(data) {
         $scope.original = data;
@@ -110,22 +107,41 @@ var midEditInstanceCtrl = function($scope,$modalInstance,$log,$http,$rootScope,W
             $scope[ value.Name ] = true;
         });
 
+        // CURRENCY CHECKBOXES
+        angular.forEach($scope.dataPresent.Currrencies, function(value,key) {
+            $scope[ value.Currency ] = true;
+        });
     });
         
     $scope.editMidConfig = function(theForm) {
         if(theForm.$valid && theForm.$dirty) {
+
+            // BIND CREDIT CARD CHECKBOXES
+            $scope.paymentTypes = [];
+            $('input[name=cardCheckbox]:checked').each(function() {
+                $scope.paymentTypes.push($(this).val());
+            });
+                       
+            // BIND CURRENCY CHECKBOXES
+            $scope.currencyTypes = [];
+            $('input[name=curTypeCheckbox]:checked').each(function() {
+                $scope.currencyTypes.push($(this).val());
+            });
+
             var Query = {
-                "limitType":document.getElementById('limitType').value,
-                "DailyRebillProcessingLimit":+document.getElementById('dailyRebill').value,
                 "Mid":document.getElementById('MIDconfig').value,
                 "Descriptor":document.getElementById('MIDdescriptor').value,
                 "DisplayName":document.getElementById('MIDdisplayName').value,
                 "MonthlyCap":+document.getElementById('MIDmonthlyCap').value,
-                "GatewayFeeRetail":+document.getElementById('MIDgatewayFee').value,
+                "PaymentTypeIds":$scope.paymentTypes,
+                "CurrencyIds":$scope.currencyTypes,
+                "limitType":document.getElementById('limitType').value,
+                "DailyRebillProcessingLimit":+document.getElementById('dailyRebill').value,
                 "TransactionFee":+document.getElementById('MIDtransactionFee').value,
                 "ChargebackFee":+document.getElementById('MIDchargeBackFee').value,
                 "ReserveAccountRate":+document.getElementById('MIDreserveAccountRate').value,
-                "RetailDiscountRate":+document.getElementById('MIDiscount').value
+                "RetailDiscountRate":+document.getElementById('MIDiscount').value,
+                "GatewayFeeRetail":+document.getElementById('MIDgatewayFee').value             
             };
 
             $http({
@@ -143,25 +159,109 @@ var midEditInstanceCtrl = function($scope,$modalInstance,$log,$http,$rootScope,W
                 },1500);
                 
             });
-
         } else {
-            $scope.successMsg = 'No Updates.';
-            $('.successMsg').slideDown(500);
-            $timeout(function() {
-                $('.successMsg').slideUp(500);
-                WizardHandler.wizard().next();
-            },1500);
+            WizardHandler.wizard().next();
         }
            
-    //Get all email notifications for this MID
+    //GET ALL EMAIL FOR NOTIFICATION
     $http.get(baseUrl + 'mids/' + mid.Id + '/notifications').success(function(data) {
-        console.log('Email Data');
-        console.log(data);
+        
+        $scope.emailData = data;
+        console.log($scope.emailData);
+        //VERIFY PRE-EXISTING EMAILS TO DISPLAY TABLE
+        $scope.emailExist = ($scope.emailData.length > 0 ? true : false);
+    });
+   
+    $scope.emailData = [];
+    $scope.addEditEmail = function() {
 
-    });    
+        var userEmail = document.getElementById('notificationEmail').value,
+            notificationType = [2];
+              
+            var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+            if(notificationType != '' ){
+
+                if(re.test(userEmail)) {
+                    var Query = {
+                        "MidId":mid.Id,
+                        "Recipient":userEmail,
+                        "NotificationTypeIds":notificationType
+                    }
+                  
+                    $http({
+                        method:'POST',
+                        url:baseUrl + 'mids/setup/notifications',
+                        data:Query
+                    }).success(function(data,status) {
+                        console.log(data);
+                        $scope.emailExist = true;
+                        // push to emails Array
+                        $scope.emailData.push(Query);
+                        $scope.emailAdded = true;
+                    });
+
+                    // CLEAR INPUTS
+                    document.getElementById('notificationEmail').value = '';
+
+                } else {
+                    $scope.errorMsg = 'Please enter a valid email';
+                    $('.errorMsg').slideDown(500);
+                    $timeout(function() {
+                        $('.errorMsg').slideUp(500);
+                    },2500);
+                } 
+
+            } else{
+                $scope.errorMsg = 'Please select an email type';
+                $('.errorMsg').slideDown(500);
+                $timeout(function() {
+                    $('.errorMsg').slideUp(500);
+                },2500);                    
+            }
+    }
+
+    $scope.removeEditEmail = function(email, index) {
+
+        var midId = mid.Id,
+            Query = {
+                "MidId":midId,
+                "Recipient":email
+            };
+
+        console.log(Query);
+
+        $http({
+            method:'DELETE',
+            url:baseUrl + 'mids/'+ midId +'/notifications/' + email ,
+            data:Query
+        }).success(function(data,status) {
+            console.log(status);
+            console.log(data);
+            $scope.emailData.splice(index,1);
+            $scope.emailExist = ($scope.emailData.length == 0 ? false : true);
+            console.log($scope.emailExist);
+        });
+    }
+
+    //MID STEP 3 ADD NOTIFICATION EMAILS TO MID
+    $scope.midEditNotifyEmail = function() {
+        var userEmail = document.getElementById('notificationEmail').value;
+
+        if (userEmail == '' ) {
+            // NEXT STEP
+            WizardHandler.wizard().next();
+        } else {
+            $scope.errorMsg = 'Please add your email.';
+            $('.errorMsg').slideDown(500);
+            $timeout(function() {
+                $('.errorMsg').slideUp(500);
+            },2500); 
+        }
+    } // END NOTIFICATION EMAILS
 
 
-    //MID Verification DATA
+    //MID VERIFY DATA FOR VIEW 
     $scope.MidConfig = document.getElementById('MIDconfig').value;
     $scope.Descriptor = document.getElementById('MIDdescriptor').value;
     $scope.DisplayName = document.getElementById('MIDdisplayName').value;
@@ -443,7 +543,7 @@ var midCreateModalInstance = function($scope,$modalInstance,$log,$http,$rootScop
             }
         }
 
-    } // selectUpdate
+    } // END SELECTION PRE-EXISTING GATEWAY
 
 
 
@@ -565,6 +665,7 @@ var midCreateModalInstance = function($scope,$modalInstance,$log,$http,$rootScop
                 "MonthlyCap":+document.getElementById('MIDmonthlyCap').value,
                 "PaymentTypeIds":$scope.paymentTypes,
                 "CurrencyIds":$scope.currencyTypes,
+                "limitType":document.getElementById('limitType').value,
                 "DailyRebillProcessingLimit":+document.getElementById('dailyRebill').value,
                 "GatewayFeeRetail":+document.getElementById('MIDgatewayFee').value,
                 "TransactionFee":+document.getElementById('MIDtransactionFee').value,
@@ -621,6 +722,7 @@ var midCreateModalInstance = function($scope,$modalInstance,$log,$http,$rootScop
     //MID STEP 3 EMAIL CONFIGURATIONS
     $scope.emails = [];
 
+    /* THESE FIELDS ARE COMMENTED OUT DO TO ENDPOINT DOESNT RECIEVE ANY OF THESE OPTIONS    
     $scope.allTypeChange = function() {
         var parentCheck = document.getElementById('allEmailTypes').checked;
 
@@ -641,23 +743,18 @@ var midCreateModalInstance = function($scope,$modalInstance,$log,$http,$rootScop
             $scope.capToggle = false;
         }
         
-    }    
+    } */    
     
     $scope.addEmail = function() {
 
         var userEmail = document.getElementById('notificationEmail').value,
-            transCheckbox = document.getElementById('transaction').checked,
-            //capCheckbox = document.getElementById('capToggle').checked,
-            notificationType = [];
+            notificationType = [2];
 
-        if(transCheckbox) {notificationType.push(2);}
-        //if(capCheckbox) {
-        //    var capType = document.getElementById('capType').value,
-        //        capValue = document.getElementById('capValue').value;
-        //    console.log(capType);
-        //    console.log(capValue);
-        //}
-   
+            // THESE ADDITIONAL VALUES WILL BE MADE AVAIL ON NEXT VERSION
+            //transCheckbox = document.getElementById('transaction').checked,
+            //capCheckbox = document.getElementById('capToggle').checked,
+            //notificationType = []; 
+              
             var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
             if(notificationType != '' ){
@@ -665,6 +762,7 @@ var midCreateModalInstance = function($scope,$modalInstance,$log,$http,$rootScop
                 if(re.test(userEmail)) {
                     // push to emails Array
                     $scope.emails.push(userEmail);
+                    $scope.emailAdded = true;
 
                     var Query = {
                         "MidId":$scope.newMidId,
@@ -682,7 +780,7 @@ var midCreateModalInstance = function($scope,$modalInstance,$log,$http,$rootScop
 
                     // CLEAR INPUTS
                     document.getElementById('notificationEmail').value = '';
-                    document.getElementById('transaction').checked = false;
+                    //document.getElementById('transaction').checked = false;
                     //document.getElementById('capToggle').checked = false;
 
                 } else {

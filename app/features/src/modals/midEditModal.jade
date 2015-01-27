@@ -5,7 +5,7 @@ script(type="text/ng-template" id="midsModalContent.html")
             button.close(type="button" ng-click="cancel()") X
         .modal-body
             wizard(on-finish="finishedWizard()")
-              wz-step(title="1. MID Config")
+                wz-step(title="1. MID Config")
                    form.stepOne(name="editMidConfigForm" novalidate)
                         .row.paymentTypeDiv
                             p 
@@ -41,16 +41,16 @@ script(type="text/ng-template" id="midsModalContent.html")
                                 label(tooltip="Select allowed payment types.  (Required)" tooltip-placement="top") *Payment Types: (Required)
                         .row.paymentTypeDiv
                             .col-md-3
-                                input(ng-model="AMEX" id="amerExpress-box" type="checkbox")
+                                input(ng-model="AMEX" name="cardCheckbox" type="checkbox" value="1")
                                 i.fa.fa-cc-amex.fa-2x
                             .col-md-3
-                                input(ng-model="Visa" id="visa-box" type="checkbox")
+                                input(ng-model="Visa" name="cardCheckbox" type="checkbox" value="2")
                                 i.fa.fa-cc-visa.fa-2x
                             .col-md-3
-                                input(ng-model="Mastercard" id="mastercard-box" type="checkbox")
+                                input(ng-model="Mastercard" name="cardCheckbox" type="checkbox" value="3")
                                 i.fa.fa-cc-mastercard.fa-2x
                             .col-md-3
-                                input(ng-model="Discover" id="discover-box" type="checkbox")
+                                input(ng-model="Discover" name="cardCheckbox" type="checkbox" value="4")
                                 i.fa.fa-cc-discover.fa-2x
 
                         .row.paymentTypeDiv
@@ -58,40 +58,40 @@ script(type="text/ng-template" id="midsModalContent.html")
                                 label(tooltip="Select allowed currency types.  (Required)" tooltip-placement="top") *Currency Types: (Required)
                         .row.currencyTypeDiv
                             .col-md-3
-                                input(name="curTypeCheckbox" type="checkbox" value="12")
+                                input(ng-model="USD" name="curTypeCheckbox" type="checkbox" value="12")
                                 span USD - United States Dollar
                             .col-md-3
-                                input(name="curTypeCheckbox" type="checkbox" value="3")
+                                input(ng-model="AUD" name="curTypeCheckbox" type="checkbox" value="3")
                                 span AUD - Australia Dollar
                             .col-md-3
-                                input(name="curTypeCheckbox" type="checkbox" value="10")
+                                input(ng-model="BRL" name="curTypeCheckbox" type="checkbox" value="10")
                                 span BRL -Brazil Real
                             .col-md-3
-                                input(name="curTypeCheckbox" type="checkbox" value="4")
+                                input(ng-model="CAD" name="curTypeCheckbox" type="checkbox" value="4")
                                 span CAD - Canada Dollar
                             .col-md-3
-                                input(name="curTypeCheckbox" type="checkbox" value="5")
+                                input(ng-model="DKK" name="curTypeCheckbox" type="checkbox" value="5")
                                 span DKK - Denmark Krone
                             .col-md-3
-                                input(name="curTypeCheckbox" type="checkbox" value="2")
+                                input(ng-model="EUR" name="curTypeCheckbox" type="checkbox" value="2")
                                 span EUR -Euro Member 
                             .col-md-3
-                                input(name="curTypeCheckbox" type="checkbox" value="1")
+                                input(ng-model="GBP" name="curTypeCheckbox" type="checkbox" value="1")
                                 span GBP - UK Pound
                             .col-md-3
-                                input(name="curTypeCheckbox" type="checkbox" value="7")
+                                input(ng-model="JPY" name="curTypeCheckbox" type="checkbox" value="7")
                                 span JPY - Japan Yen
                             .col-md-3
-                                input(name="curTypeCheckbox" type="checkbox" value="8")
+                                input(ng-model="NOK" name="curTypeCheckbox" type="checkbox" value="8")
                                 span NOK - Norway Krone
                             .col-md-3
-                                input(name="curTypeCheckbox" type="checkbox" value="6")
+                                input(ng-model="NZD" name="curTypeCheckbox" type="checkbox" value="6")
                                 span NZD - New Zealand Dollar
                             .col-md-3
-                                input(name="curTypeCheckbox" type="checkbox" value="9")
+                                input(ng-model="SEK" name="curTypeCheckbox" type="checkbox" value="9")
                                 span SEK - Sweden Krona
                             .col-md-3
-                                input(name="curTypeCheckbox" type="checkbox" value="11")
+                                input(ng-model="SGD" name="curTypeCheckbox" type="checkbox" value="11")
                                 span SGD - Singapore Dollar
 
 
@@ -106,8 +106,8 @@ script(type="text/ng-template" id="midsModalContent.html")
                                         label Daily ReBill Limit:
                                     .col-md-4
                                         select.form-control(ng-model="MIDlimitType" id="limitType" tooltip="Rebill limit set to percent or amount (optional)" tooltip-placement="top")
-                                            option Percentage
-                                            option Amount
+                                            option(value="Percentage") %
+                                            option(value="Amount") Amt
                                     .col-md-4
                                         input.form-control(ng-model="MIDdailyRebill" id="dailyRebill" type="number" placeholder="value")
 
@@ -162,9 +162,53 @@ script(type="text/ng-template" id="midsModalContent.html")
                         .row.successMsg
                             p {{successMsg}}
 
+                wz-step.virtual_panel(title="2. Email Notification")
+                    .col-md-8
+                        p Email Address
+                        input.form-control(type="text" placeholder="Enter Your Email (optional)" id="notificationEmail")
+                        
+                    .col-md-4
+                        a.row_btn.emerald_btn.add_email(href="" ng-click="addEditEmail()") 
+                            i.fa.fa-plus
+                            span Add Email
 
-              wz-step.virtual_panel(title="2. Verify Settings(VT)")
+                    
+                    .row 
+                    .row
+                        .col-md-12
+                            table.table(ng-if="emailExist == true")
+                                thead
+                                    tr
+                                        th Email
+                                        th Action
+                                tbody(ng-repeat="email in emailData")
+                                    tr
+                                        td {{email.Recipient}}
+                                        //td(ng-repeat="(key, val) in email.NotificationTypes")
+                                            {{val.Name}}
+                                        td
+                                            a.mdl_body_btn.alazarin_btn(href="" ng-click="removeEditEmail(email.Recipient, $index)")
+                                                i.fa.fa-trash
+                                                span Delete 
+                       
+                    .row
+                        .col-md-6.text-left
+                            a.row_btn.emerald_btn.final_btn(href="" type="submit" wz-previous="")
+                                i.fa.fa-arrow-left
+                                span Previous
 
+                        .col-md-6.text-right
+                            a.row_btn.emerald_btn.final_btn(href="" type="submit" ng-click="midEditNotifyEmail()")
+                                span Next
+                                i.fa.fa-arrow-right
+
+                    .row.errorMsg
+                        p {{errorMsg}}
+
+                    .row.successMsg
+                        p {{successMsg}}
+
+                wz-step.virtual_panel(title="3. Verify Settings(VT)")
                     table.table
                         thead
                             tr
@@ -199,7 +243,6 @@ script(type="text/ng-template" id="midsModalContent.html")
 
                     .row.successMsg
                         p {{successMsg}}
-
 
         .modal-footer.action_group
             a.row_btn.cancel_btn(href="" ng-click="cancel()")
