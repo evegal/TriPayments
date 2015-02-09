@@ -107,7 +107,7 @@ table.table.table-striped.ng-table-responsive.primary_search_table(st-table="sho
                         td(ng-show="EmailShow") {{trans.Email}}
                         td.paymentTypes
 
-                          div(ng-if="trans.Type == 'Authorize' && trans.ResultCode == 0")
+                          div(ng-if="trans.Type == 'Authorize' && trans.ResultCode == 0 || trans.Type == 'AuthExisting' && trans.ResultCode == 0")
                             a.row_btn.alazarin_btn.search_width.margin-right(tooltip="Void transaction: {{trans.TransactionId}}" tooltip-placement="top" ng-click="open(trans)" href="" ng-controller="voidModalCtrl") 
                               i.fa.fa-ban
                               span void
@@ -115,7 +115,7 @@ table.table.table-striped.ng-table-responsive.primary_search_table(st-table="sho
                               i.fa.fa-money
                               span Refund
 
-                          div(ng-if="trans.Type == 'Capture' && trans.ResultCode == 0 || trans.Type == 'Charge' && trans.ResultCode == 0")
+                          div(ng-if="trans.Type == 'Capture' && trans.ResultCode == 0 || trans.Type == 'Charge' && trans.ResultCode == 0 || trans.Type == 'ChargeExisting'  && trans.ResultCode == 0")
                             a.row_btn.alazarin_btn.search_width.margin-right(tooltip="Void transaction: {{trans.TransactionId}}" ng-click="open(trans)" href="" ng-controller="voidModalCtrl")
                               i.fa.fa-ban
                               span void
@@ -123,7 +123,7 @@ table.table.table-striped.ng-table-responsive.primary_search_table(st-table="sho
                               i.fa.fa-money
                               span Refund
 
-                          div(ng-if="trans.Type == 'Void' || trans.Type == 'Refund' || trans.Type == 'Credit' || trans.ResultCode !== 0")
+                          div(ng-if="trans.Type == 'Void' || trans.Type == 'Refund' || trans.Type == 'Credit' || trans.Type == 'CreditExisting' || trans.ResultCode !== 0")
                             a.row_btn.alazarin_btn.search_width.margin-right.disabled(tooltip="Unable to void with this processed type" tooltip-placement="top")
                               i.fa.fa-ban
                               span void
