@@ -163,69 +163,50 @@ app.controller("appCtrl", function($rootScope,$scope,$state,$timeout,$http,baseU
   });
 
 
-
-///////////////////
-// LOAD USERS
-///////////////////
-$http.get(baseUrl + 'users').success(function(data) {
-  $scope.Users = data;
-  $scope.shownUsers = $scope.Users;
-
-  //console.log(data);
-  
-  // CSV Export
-  $scope.usersCSV = data;
-});
-
-
   ////////////
   // SIDENAV
   ////////////
-  $scope.isCollapsed = true;
-
-  var currentState = $state.current.name;
-
-  //console.log(currentState);
-
-  if(currentState === 'app.merchants.mids') {
-    $scope.isCollapsed = false;
-  }
-
-  if(currentState === 'app.merchants.groups') {
-    $scope.isCollapsed = false;
-  }
+  $scope.isCollapsed = [true, true];
   
-  $scope.checkState = function() {
+  
+  $scope.checkState = function(e) {
     $timeout(function() {
-      var curState = $state.$current.name;
+      var currentState = $state.current.name;
 
-      //console.log(curState);
-      if(curState === 'app.merchants.mids') {
-         $scope.isCollapsed = false;
-      } else if(curState === 'app.search' || 'app.usermananger' || 'app.virtual_terminal') {
-         $scope.isCollapsed = true;
+      //FIND STATE TO DISPLAY THE DROPDOWNS
+      if(currentState === 'app.merchants.mids') {
+        $scope.merchantParent = "parent";
+        $scope.recurParent = "";
+        $scope.isCollapsed[0] = false;
+        $scope.isCollapsed[1] = true;
+
+      } else if(currentState === 'app.recurring_payments') {
+        $scope.merchantParent = "";
+        $scope.recurParent = "parent";
+        $scope.isCollapsed[0] = true;
+        $scope.isCollapsed[1] = false;
+
+      } else {
+        $scope.merchantParent = "";
+        $scope.recurParent = "";
+        $scope.isCollapsed[0] = true;
+        $scope.isCollapsed[1] = true;
       }
-
     },100);
   }
+
+  $scope.goTo = function(path) {
+    $state.go(path);
+  }
   
-   
+  $scope.noteState2 = function() {
+    return $state.current.name + 'mids';
+  }
+  $scope.noteState3 = function() {
+    return $state.current.name + 'groups';
+  }
 
-   $scope.noteState1 = function() {
-      return $state.current.name + 'daddy';
-   }
 
-   $scope.noteState2 = function() {
-      return $state.current.name + 'mids';
-   }
-
-   $scope.noteState3 = function() {
-      return $state.current.name + 'groups';
-   }
-
-   $scope.setDefault = function() {
-      $state.go('app.merchants.mids');
-   }
 });
 
 ////////////////

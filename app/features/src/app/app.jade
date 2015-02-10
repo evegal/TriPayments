@@ -9,10 +9,10 @@ div(id="wrapper")
                             i.fa.fa-icon.fa-search
                             span Search
                     li 
-                        a(href="" ng-click="setDefault();checkState()" ng-class="noteState1()")
+                        a(href="" ng-click="goTo('app.merchants.mids');checkState(0)" class="{{merchantParent}}")
                             i.fa.fa-bank
                             span Merchant Accounts
-                        ul.mids_subNav(collapse="isCollapsed")
+                        ul.nav_subNav(collapse="isCollapsed[0]")
                             li
                                 a(ng-class="noteState2()" ui-sref="app.merchants.mids")
                                     i.fa.fa-cog
@@ -21,10 +21,23 @@ div(id="wrapper")
                                 a(ng-class="noteState3()" ui-sref="app.merchants.groups")
                                     i.fa.fa-cogs
                                     span Manage MID Groups
-                    //li 
-                        a(ng-class="{{'app.recurring_payments' | isState }}" ui-sref=".recurring_payments" ng-click="checkState()") 
+
+
+                    li 
+                        a(href="" ng-click="goTo('app.recurring_payments');checkState(1)" class="{{recurParent}}")
                             i.fa.fa-icon.fa-refresh
-                            span Recurring Payments
+                            span Recuring Payments
+                        ul.nav_subNav(collapse="isCollapsed[1]")
+                            li
+                                a(ng-class="noteState2()" ui-sref="app.merchants.mids")
+                                    i.fa.fa-tasks
+                                    span Subscriptions
+                            li
+                                a(ng-class="noteState3()" ui-sref="app.merchants.groups")
+                                    i.fa.fa-users
+                                    span Subscribers
+
+
                             
                     li 
                         a(ng-class="{{'app.virtual_terminal' | isState }}" ui-sref=".virtual_terminal" ng-click="checkState()") 

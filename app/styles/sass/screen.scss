@@ -187,6 +187,18 @@ body {
     }
 }
 
+a.parent{
+  background:#f7f7f7;
+  &:after {
+            background:$in_yellow;
+            content:"";
+            position:absolute;
+            top:0;
+            left:0;
+            height:100%;
+            width:5px;
+        }
+}
 
 [ng-class='true'] {
       background:#f7f7f7;
@@ -201,7 +213,7 @@ body {
             width:5px;
         }
 }
-a[class*='merchants'] {
+a[class*='merchants'], a[class*='recurring'] {
   background:#f7f7f7;
   &:after {
             background:$in_yellow;
@@ -213,29 +225,29 @@ a[class*='merchants'] {
             width:5px;
         }
 }
-a[class*='midsmids'] {
+a[class$='midsmids'] {
   font-weight:800;
   &:after {
-            background:$in_blue;
-            content:"";
-            position:absolute;
-            top:0;
-            left:0;
-            height:100%;
-            width:5px;
-        }
+    background:$in_blue;
+    content:"";
+    position:absolute;
+    top:0;
+    left:0;
+    height:100%;
+    width:5px;
+  }
 }
-a[class*='groupsgroups'] {
+a[class$='groupsgroups'] {
   font-weight:800;
   &:after {
-            background:$in_blue;
-            content:"";
-            position:absolute;
-            top:0;
-            left:0;
-            height:100%;
-            width:5px;
-        }
+    background:$in_blue;
+    content:"";
+    position:absolute;
+    top:0;
+    left:0;
+    height:100%;
+    width:5px;
+  }
 }
 ////////////////
 // DASH HEADER
@@ -532,7 +544,7 @@ a[class*='groupsgroups'] {
   background:$carrot;
 }
 
-ul.mids_subNav {
+ul.nav_subNav {
   background:#333;
   a {
     font-size:10px;

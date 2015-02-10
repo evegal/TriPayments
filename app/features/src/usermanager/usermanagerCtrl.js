@@ -1,4 +1,16 @@
 app.controller('usermanagerCtrl', function($scope,$http,$state,baseUrl,$rootScope,Notify) {
+///////////////////
+// LOAD USERS
+///////////////////
+$http.get(baseUrl + 'users').success(function(data) {
+  $scope.Users = data;
+  $scope.shownUsers = $scope.Users;
+
+  //console.log(data);
+  
+  // CSV Export
+  $scope.usersCSV = data;
+});
 
   ///////////////////
   // NOTIFY NEW USER
