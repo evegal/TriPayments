@@ -14,26 +14,26 @@ div(id="wrapper")
                             span Merchant Accounts
                         ul.nav_subNav(collapse="isCollapsed[0]")
                             li
-                                a(ng-class="noteState2()" ui-sref="app.merchants.mids")
+                                a(ng-class="noteState('mids')" ui-sref="app.merchants.mids")
                                     i.fa.fa-cog
                                     span Manage MIDs
                             li
-                                a(ng-class="noteState3()" ui-sref="app.merchants.groups")
+                                a(ng-class="noteState('groups')" ui-sref="app.merchants.groups")
                                     i.fa.fa-cogs
                                     span Manage MID Groups
 
 
                     li 
-                        a(href="" ng-click="goTo('app.recurring_payments');checkState(1)" class="{{recurParent}}")
+                        a(href="" ng-click="goTo('app.recurring_payments.subscriptions');checkState(1)" class="{{recurParent}}")
                             i.fa.fa-icon.fa-refresh
                             span Recuring Payments
                         ul.nav_subNav(collapse="isCollapsed[1]")
                             li
-                                a(ng-class="noteState2()" ui-sref="app.merchants.mids")
+                                a(ng-class="noteState('subscriptions')" ui-sref="app.recurring_payments.subscriptions")
                                     i.fa.fa-tasks
                                     span Subscriptions
                             li
-                                a(ng-class="noteState3()" ui-sref="app.merchants.groups")
+                                a(ng-class="noteState('subscribers')" ui-sref="app.recurring_payments.subscribers")
                                     i.fa.fa-users
                                     span Subscribers
 

@@ -225,7 +225,7 @@ a[class*='merchants'], a[class*='recurring'] {
             width:5px;
         }
 }
-a[class$='midsmids'] {
+a[class$='midsmids'], a[class$='subscriptionssubscriptions'] {
   font-weight:800;
   &:after {
     background:$in_blue;
@@ -237,7 +237,7 @@ a[class$='midsmids'] {
     width:5px;
   }
 }
-a[class$='groupsgroups'] {
+a[class$='groupsgroups'], a[class$='subscriberssubscribers'] {
   font-weight:800;
   &:after {
     background:$in_blue;

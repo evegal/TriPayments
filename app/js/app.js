@@ -99,12 +99,42 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider,$httpP
         templateUrl:'../features/dest/merchants/groups.html',
         controller:'groupsCtrl'
     })
+
+
     .state('app.recurring_payments', {
         url:'/recurring_payments',
-        templateUrl:'../features/dest/recurringpayments/recurringpayments.html',
-        controller:'recurringpaymentsCtrl'
-
+        templateUrl:'../features/dest/recurringpayments/recurringpayments.html'
     })
+    .state('app.recurring_payments.subscriptions', {
+        url:'/subscriptions',
+        templateUrl:'../features/dest/recurringpayments/subscriptions.html',
+        controller:'subscriptionsCtrl'
+    })
+    .state('app.recurring_payments.subscribers', {
+        url:'/subscribers',
+        templateUrl:'../features/dest/recurringpayments/subscribers.html',
+        controller:'subscribersCtrl'
+    })
+
+
+
+
+
+//    .state('app.recurring_payments', {
+  //      url:'/recurring_payments',
+    //    templateUrl:'../features/dest/recurringpayments/recurringpayments.html',
+      //  controller:'recurringpaymentsCtrl'
+
+    //})
+
+
+
+
+
+
+
+
+
     .state('app.virtual_terminal', {
         url:'/virtual_terminal',
         templateUrl:'../features/dest/vterminal/vterminal.html',

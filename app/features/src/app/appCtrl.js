@@ -180,7 +180,7 @@ app.controller("appCtrl", function($rootScope,$scope,$state,$timeout,$http,baseU
         $scope.isCollapsed[0] = false;
         $scope.isCollapsed[1] = true;
 
-      } else if(currentState === 'app.recurring_payments') {
+      } else if(currentState === 'app.recurring_payments.subscriptions') {
         $scope.merchantParent = "";
         $scope.recurParent = "parent";
         $scope.isCollapsed[0] = true;
@@ -195,18 +195,15 @@ app.controller("appCtrl", function($rootScope,$scope,$state,$timeout,$http,baseU
     },100);
   }
 
+  //USES ROUTE TO SEND USER TO CORRECT PATH
   $scope.goTo = function(path) {
     $state.go(path);
   }
-  
-  $scope.noteState2 = function() {
-    return $state.current.name + 'mids';
-  }
-  $scope.noteState3 = function() {
-    return $state.current.name + 'groups';
-  }
 
-
+  //PROVIDES THE NAME OF WHICH NAV BTN HAS BEEN SELECTED FOR PROPER CSS STYLE
+  $scope.noteState = function(name) {
+    return $state.current.name + name;
+  }
 });
 
 ////////////////
