@@ -1,4 +1,5 @@
 //include ../modals/mock.html
+include ../modals/midCreateModal.jade
 include ../modals/midsEditModal.html
 include ../modals/addMIDSmodal.html
 include ../modals/midsConfirmModal.html
@@ -6,10 +7,99 @@ include ../modals/merchantRemoveModal.html
 include ../modals/merchantCreateModal.jade
 include ../modals/merchantEditModal.jade
 
-
+//createSubscriptionModalCtrl
 .row
   h1 Recurring Payments - Subscriptions
 .merchant_view
+  .panel.panel-default
+    .panel-heading
+      .row
+            .col-md-6
+              h2.panel-title
+                i.fa.fa-icon
+                | Subscriptions : {{subscriptionCount}}
+            .col-md-6
+                a.def_btn.wet_asphalt_btn.float-right(href="" ng-csv='subscriptionsCSV' filename="subscribersExport.csv" ng-if="subscriptionCount != 0")
+                  i.fa.fa-file-excel-o 
+                  span Excel Export
+                a.def_btn.emerald_btn.float-right.margin-right(href="" ng-click="open()" ng-controller="midCreateModal") 
+                  i.fa.fa-plus
+                  span Create Subscription
+    .panel-body
+      h3.noResults(ng-if="subscriptionCount == 0") {{'There are currently no subscriptions setup.'}} 
+      accordion(ng-if="subscriptionCount != 0")
+        table.table.ng-table-responsive.table-striped(st-table="displaySubscriptions" st-safe-src="subscriptionsOriginal")
+             thead
+               tr
+                 th(colspan="6")
+                   input.form-control(st-search="" type="search" placeholder="Filter through all subscriptions")
+                 tr
+                   th.st-header(st-sort="subscription.DisplayName" width="20%") Name
+                   th.st-header(st-sort="" width="10%") Recurring Type
+                   th.st-header(st-sort="" width="5%") Day
+                   th.st-header(st-sort="" width="5%") Amount
+                   th.st-header(st-sort="" width="10%") Next Invoice Date
+                   th.st-header-nosort(width="30%") Actions 
+              
+             tbody(ng-repeat="subscription in displaySubscriptions")
+
+
+               tr(id="base{{$index}}")
+                 td {{subscription.DisplayName}}
+                 td Calendar date
+                 td test
+                 //td {{subscription.DaysInBillingCycle}}
+                 td {{subscription.Amount | currency}}
+                 td {{subscription.NextBillingDate | date:'MM/dd/yyyy'}}
+                 td
+                   a.row_btn.emerald_btn.margin-right(href="" ng-click="openMID(merchant); loadMIDS(merchant.Id,merchant); checkWindow(shownMerchants)" ng-controller="addMIDSmodalCtrl")
+                      i.fa.fa-plus
+                      span Add Subscribers
+                   a.row_btn.wet_asphalt_btn.margin-right(href="" ng-click="loadMIDS(merchant.Id,merchant); gotoMID($index,shownMerchants)")
+                      i.fa.fa-eye
+                      span View Subscribers
+                   a.row_btn.turquoise_btn.margin-right(ng-click="open(merchant)" ng-controller="editMerchantModalCtrl") 
+                      i.fa.fa-edit
+                      span Edit Subscription
+                   a.row_btn.alazarin_btn(ng-click="open($index,merchant)" ng-controller="removeMerchantModalCtrl") 
+                      i.fa.fa-trash 
+                      span Delete Subscription
+                 td.hidden_td
+                    tr
+                      td.pushToggle(colspan="6")
+                        accordion-group(heading="" ng-click="loadMIDS(merchant.Id,merchant)" is-open="merchant.open")
+                          table.table.table-striped
+                            thead
+                              tr
+                                th MID Name
+                                th Rollover MID
+                                th Monthly Cap
+                                th Actions
+
+                            tbody
+                              tr(ng-repeat="mid in mids")
+                                td {{mid.DisplayName}}
+                                td {{mid.RolloverMidName}}
+                                td {{mid.MonthlyCap}}
+                                td 
+                                    a.row_btn.turquoise_btn.margin-right(ng-click="openIt(mid)" ng-controller="midsModalCtrl") 
+                                      i.fa.fa-edit
+                                      span Edit
+                                    a.row_btn.alazarin_btn.margin-right(ng-click="openMID($index,mid)" ng-controller="midsConfirmModalCtrl") 
+                                      i.fa.fa-trash
+                                      span Remove
+
+
+
+
+
+
+
+
+
+//.row
+  h1 Recurring Payments - Subscriptions
+//.merchant_view
   .panel.panel-default
     .panel-heading
       .row
