@@ -1,0 +1,152 @@
+script(type="text/ng-template" id="subscriptionCreateModal.html")
+    .midCreateEditModal.midCreateModal
+        .modal-header
+            h3 Create New Subscription
+            button.close(type="button" ng-click="cancel()") X 
+        .modal-body
+            wizard(on-finish="finishedWizard()")
+                wz-step(title="1. Subscription Config")                          
+                    form.midCreateModal.stepOne(name="subscriptionFormProfile" novalidate)
+                        .row
+                            .col-md-6
+                                .row
+                                    .col-md-4
+                                        label *Subscription Name:
+                                    .col-md-8  
+                                        input.form-control(required="" ng-model="subscriptionFormName" id="subscriptionFormName" type="text"  placeholder="Enter subscription name  (Required)"  tooltip="Select a name to identify this subscription. (Required)" tooltip-placement="top")
+                            .col-md-6
+                                .row
+                                    .col-md-4
+                                        label Daily ReBill Limit:
+                                    .col-md-4
+                                        select.form-control(id="limitType" tooltip="Select type of recurring cycle (Required)" tooltip-placement="top")
+                                            option(value="1") Calendar
+                                            option(value="2") Num Days
+                                    .col-md-4
+                                        input.form-control(id="dailyRebill" type="number" placeholder="value" tooltip="Enter value (Required)" tooltip-placement="top")
+                        .row
+                            .col-md-6
+                                .row
+                                    .col-md-4
+                                        label *Recurring Amount:
+                                    .col-md-8
+                                        input.form-control(required="" ng-model="subscriptionFormAmount" id="subscriptionFormAmount" type="number" tooltip-placement="top" placeholder="Enter value. (Required)" tooltip="Enter value for recurring amount (Required)")
+                        .row.paymentTypeDiv
+                            p 
+                                label(tooltip="Select allowed payment types.  (Required)" tooltip-placement="top") *Payment Types: (Required)
+                        .row.paymentTypeDiv
+                            .col-md-3
+                                input(name="cardCheckbox" type="checkbox" value="1")
+                                i.fa.fa-cc-amex.fa-2x
+                            .col-md-3
+                                input(name="cardCheckbox" type="checkbox" value="2")
+                                i.fa.fa-cc-visa.fa-2x
+                            .col-md-3
+                                input(name="cardCheckbox" type="checkbox" value="3")
+                                i.fa.fa-cc-mastercard.fa-2x
+                            .col-md-3
+                                input(name="cardCheckbox" type="checkbox" value="4")
+                                i.fa.fa-cc-discover.fa-2x
+
+                        .row.paymentTypeDiv
+                            p 
+                                label(tooltip="Select allowed currency types.  (Required)" tooltip-placement="top") *Currency Types: (Required)
+                        .row.currencyTypeDiv
+                            .col-md-3
+                                input(name="curTypeCheckbox" type="checkbox" value="12")
+                                span USD - United States Dollar
+                            .col-md-3
+                                input(name="curTypeCheckbox" type="checkbox" value="3")
+                                span AUD - Australia Dollar
+                            .col-md-3
+                                input(name="curTypeCheckbox" type="checkbox" value="10")
+                                span BRL -Brazil Real
+                            .col-md-3
+                                input(name="curTypeCheckbox" type="checkbox" value="4")
+                                span CAD - Canada Dollar
+                            .col-md-3
+                                input(name="curTypeCheckbox" type="checkbox" value="5")
+                                span DKK - Denmark Krone
+                            .col-md-3
+                                input(name="curTypeCheckbox" type="checkbox" value="2")
+                                span EUR -Euro Member 
+                            .col-md-3
+                                input(name="curTypeCheckbox" type="checkbox" value="1")
+                                span GBP - UK Pound
+                            .col-md-3
+                                input(name="curTypeCheckbox" type="checkbox" value="7")
+                                span JPY - Japan Yen
+                            .col-md-3
+                                input(name="curTypeCheckbox" type="checkbox" value="8")
+                                span NOK - Norway Krone
+                            .col-md-3
+                                input(name="curTypeCheckbox" type="checkbox" value="6")
+                                span NZD - New Zealand Dollar
+                            .col-md-3
+                                input(name="curTypeCheckbox" type="checkbox" value="9")
+                                span SEK - Sweden Krona
+                            .col-md-3
+                                input(name="curTypeCheckbox" type="checkbox" value="11")
+                                span SGD - Singapore Dollar
+
+
+                        .row
+                            .col-md-6.text-left
+                                a.row_btn.emerald_btn(href="" type="submit" wz-previous="")
+                                    i.fa.fa-arrow-left
+                                    span Previous
+
+                            .col-md-6.text-right
+                                a.row_btn.emerald_btn(href="" type="submit" ng-click="midCreateConfigOptions(midFormCreateConfigOptions)")
+                                    span Next
+                                    i.fa.fa-arrow-right
+
+                        .row.errorMsg
+                            p {{errorMsg}}
+
+                wz-step(title="2. Email Notification")
+                    .row
+                        form
+                            .col-md-8
+                                p Email Address
+                                input.form-control(type="text" placeholder="Enter Your Email (optional)" id="notificationEmail")
+                                
+                            .col-md-2
+                                a.row_btn.emerald_btn.add_email(href="" ng-click="addEmail()") 
+                                    i.fa.fa-plus
+                                    span Add Email
+
+                    .row
+                        table.table
+                            thead(ng-if="emailAdded == true")
+                                tr
+                                    th Email
+                                    th Remove Notification
+                            tbody(ng-repeat="email in emails")
+                                tr
+                                    td {{email}}
+                                    td
+                                        a.mdl_body_btn.alazarin_btn(href="" ng-click="removeEmail(email, $index)")
+                                            i.fa.fa-trash
+                                            span Delete
+
+
+                    .row
+                        .col-md-6.text-left
+                            a.row_btn.emerald_btn(href="" type="submit" wz-previous="")
+                                i.fa.fa-arrow-left
+                                span Previous
+
+                        .col-md-6.text-right
+                            a.row_btn.emerald_btn(href="" type="submit" ng-click="midCreateNotifyEmail()")
+                                span Next
+                                i.fa.fa-arrow-right
+
+                    .row.errorMsg
+                        p {{errorMsg}}
+
+
+        .modal-footer.action_group
+            a.row_btn.cancel_btn(href="" ng-click="cancel()")
+                i.fa.fa-sign-out
+                span Exit

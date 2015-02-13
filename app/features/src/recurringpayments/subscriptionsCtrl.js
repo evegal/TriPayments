@@ -1,16 +1,13 @@
 app.controller('subscriptionsCtrl', function($timeout,$filter,$rootScope,$scope,$http,$state,baseUrl,Notify,$location) {
 
-///////////////////////////
+///////////////////////////////
 // GET RECURRING SUBSCRIPTIONS
-///////////////////////////
-
-$http.get(baseUrl + 'recurring/plans').
+///////////////////////////////
+$http.get(baseUrl + 'recurring/subscriptions').
   success(function(data, status) {
-
     $scope.originalSubscriptions = data;
     $scope.displaySubscriptions = $scope.originalSubscriptions;
     $scope.subscriptionCount = data.length;
-
     //CSV Export
     $scope.subscriptionsCSV = data;
   }).
@@ -19,19 +16,105 @@ $http.get(baseUrl + 'recurring/plans').
   });
 
 
+  
+  // LOAD MIDS INTO NESTED TABLE
+  $scope.loadMIDS = function(id,merchant,item) {
+    
+    // set current group id to add MIDS
+    $rootScope.currentGroupId = id;
+    $rootScope.currentGroupName = merchant.Name;
+
+    // close all open nested tables
+    
+    // LOAD MIDS FOR SPECIFIC GROUP
+    var url = baseUrl + '/midgroups/' + id + '/mids';
+    $http.get(url).success(function(data) {
+      $scope.mids = data;
+      $rootScope.mids = data;
+
+    
+      Notify.getMsg('RemovedMID', function(event,data) {
+
+        $http.get(url).success(function(data) {
+          $scope.mids = data;
+        });
+
+      });
+
+      Notify.getMsg('UpdatedMID', function(event,data) {
+
+        $http.get(url).success(function(data) {
+          $scope.mids = data;
+        });        
+
+      });
+
+      $scope.isMidLoaded = true;
+      //console.log(data);
+    });
+
+};
+
+$scope.gotoMID = function(index,shownMerchants) {
+
+  /*
+    $timeout(function() {
+      if($scope.isMidLoaded) {
+
+         shownMerchants[index].open = !shownMerchants[index].open;
+
+         // set the location.hash to the id of
+        // the element you wish to scroll to.
+        // each row has a class of base and then the items $index
+        
+          $location.hash('base' + index);
+          //$anchorScroll();
+        
+         
+      } else {
+        
+      }
+    },1000);
+  */
+
+  shownMerchants[index].open = !shownMerchants[index].open;
+
+};
+
+$scope.checkWindow = function(info) {
+   //console.log(index);
+   console.log(info[0]);
+   
+};
+
+$scope.CapValues = [
+  {'value':10},
+  {'value':20},
+  {'value':30},
+  {'value':40},
+  {'value':50},
+  {'value':60},
+  {'value':70},
+  {'value':80},
+  {'value':90},
+];
+
+
+}); // mainMerchantCtrl
+
 
 //  MID CREATION MODAL
-app.controller('midCreateModal', function($scope,$modal,$log) {
+app.controller('subscriptionsCreateModal', function($scope,$modal,$log) {
     $scope.open = function() {
         var modalInstance = $modal.open({
-            templateUrl:'midCreateContent.html',
-            controller:midCreateModalInstance,
+            templateUrl:'subscriptionCreateModal.html',
+            controller:subscriptionCreateModalInstance,
             size:'lg'
         });
     }
 });
 
-var midCreateModalInstance = function($scope,$modalInstance,$log,$http,$rootScope,WizardHandler,$timeout,Notify,baseUrl) {
+var subscriptionCreateModalInstance = function($scope,$modalInstance,$log,$http,$rootScope,WizardHandler,$timeout,Notify,baseUrl) {
 
     $http.get(baseUrl + 'gateways/processors').success(function(data) {
         $scope.processors = data;
@@ -424,203 +507,32 @@ var midCreateModalInstance = function($scope,$modalInstance,$log,$http,$rootScop
 
 
 
-  $scope.shownMerchants = $scope.groupsBulk;
-  
-  // LOAD MIDS INTO NESTED TABLE
-  $scope.loadMIDS = function(id,merchant,item) {
-    
-    // set current group id to add MIDS
-    $rootScope.currentGroupId = id;
-    $rootScope.currentGroupName = merchant.Name;
-
-    // close all open nested tables
-    
-    // LOAD MIDS FOR SPECIFIC GROUP
-    var url = baseUrl + '/midgroups/' + id + '/mids';
-    $http.get(url).success(function(data) {
-      $scope.mids = data;
-      $rootScope.mids = data;
-
-    
-      Notify.getMsg('RemovedMID', function(event,data) {
-
-        $http.get(url).success(function(data) {
-          $scope.mids = data;
-        });
-
-      });
-
-      Notify.getMsg('UpdatedMID', function(event,data) {
-
-        $http.get(url).success(function(data) {
-          $scope.mids = data;
-        });        
-
-      });
-
-      $scope.isMidLoaded = true;
-      //console.log(data);
-    });
-
-};
-
-$scope.gotoMID = function(index,shownMerchants) {
-
-/*
-  $timeout(function() {
-    if($scope.isMidLoaded) {
-
-       shownMerchants[index].open = !shownMerchants[index].open;
-
-       // set the location.hash to the id of
-      // the element you wish to scroll to.
-      // each row has a class of base and then the items $index
-      
-        $location.hash('base' + index);
-        //$anchorScroll();
-      
-       
-    } else {
-      
-    }
-  },1000);
-*/
-
-  shownMerchants[index].open = !shownMerchants[index].open;
-
-};
-
-$scope.checkWindow = function(info) {
-   //console.log(index);
-   console.log(info[0]);
-   
-};
-
-$scope.CapValues = [
-  {'value':10},
-  {'value':20},
-  {'value':30},
-  {'value':40},
-  {'value':50},
-  {'value':60},
-  {'value':70},
-  {'value':80},
-  {'value':90},
-];
 
 
-}); // mainMerchantCtrl
-
-/////////////////
-// GROUP CREATE
-/////////////////
-
-app.controller('createSubscriptionModalCtrl', function($scope,$modal,$log,$http) {
-
-    $scope.open = function() {
-     var modalInstance = $modal.open({
-        templateUrl:'merchantCreateContent.html',
-        controller:merchantCreateInstanceCtrl,
-        size:'lg'
-     });
-  };
-
-});
 
 
-var merchantCreateInstanceCtrl = function($scope,$modalInstance,$http,$timeout,$window,$state,baseUrl,$rootScope,Notify) {
-
-  $http.get( baseUrl + 'currencies').success(function(data) {
-      $scope.currencies = data;
-  });
-
-  $scope.actives = [
-    'exit',
-    'enter',
-    'loading'
-  ];
-
-  // SELECT OPTIONS
-  $scope.BalancingTypes = [
-     {BalancingTypeId:0, BalancingType:"None"},
-     {BalancingTypeId:1, BalancingType:"Cap"},
-     {BalancingTypeId:2, BalancingType:"Priority"}
-  ];
-  $scope.CapValues = [
-    {'value':10},
-    {'value':20},
-    {'value':30},
-    {'value':40},
-    {'value':50},
-    {'value':60},
-    {'value':70},
-    {'value':80},
-    {'value':90},
-  ];
 
 
-   $scope.merchantCreateForm = {};
 
-   $scope.submitUserCreate = function() {
 
-    if(document.getElementById('merchantGroupName').value === '') {
-      $('.nameError').slideDown(300);
-      
-      $scope.createErrorMsg = 'Please Enter A User Name';
-        // hide error messages
-        $timeout(function() {
-          $('.nameError').slideUp(300);
-        },1500);
-    } else {
 
-      $('.merchant_feedback').slideDown(300);
-      $('.create_btn').hide();
-      $('.save_btn').slideDown(300);
-    }
 
-   };
 
-   $scope.ok = function() {
-       
-       var merchantDetails = {
-          "Name":document.getElementById('merchantGroupName').value,
-          "CapLimitNotificationEmails":document.getElementById('MerchantEmail').value,
-          "BalancingType":document.getElementById('BalancingType').value,
-          "Currency":document.getElementById('Currency').value
-    };
-        
 
-       //console.log(merchantDetails);
-       // POST REQUEST
-       var promise = $http({
-          method:'POST',
-          url: baseUrl + 'midgroups',
-          data:merchantDetails
-      }).success(function(data) {
 
-        Notify.sendMsg('NewMerchant', data);
-          //$rootScope.$data.push(merchantDetails);
 
-          //console.log('merchant group added');
-          $('.userCreateSuccess').show();
-          $('.merchant_feedback').hide();
 
-          //$window.location.reload();
-          //$state.go($state.$current, null, {reload: true });
-          $timeout(function() {
-            $modalInstance.close();
-          },1000);
 
-      }).error(function(data,status) {
-          console.log(status);
-      });
 
-   }; // END ok
 
-   $scope.cancel = function() {
-       $modalInstance.close();
-    };
-};
+
+
+
+
+
+
+
+
 
 /////////////////
 // GROUP DELETE

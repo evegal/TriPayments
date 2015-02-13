@@ -1,11 +1,13 @@
 //include ../modals/mock.html
-include ../modals/midCreateModal.jade
-include ../modals/midsEditModal.html
-include ../modals/addMIDSmodal.html
-include ../modals/midsConfirmModal.html
-include ../modals/merchantRemoveModal.html
-include ../modals/merchantCreateModal.jade
-include ../modals/merchantEditModal.jade
+//include ../modals/midsEditModal.html
+//include ../modals/addMIDSmodal.html
+//include ../modals/midsConfirmModal.html
+//include ../modals/merchantRemoveModal.html
+//include ../modals/merchantCreateModal.jade
+//include ../modals/merchantEditModal.jade
+
+
+include ../modals/subscriptionCreateModal.jade
 
 //createSubscriptionModalCtrl
 .row
@@ -22,7 +24,7 @@ include ../modals/merchantEditModal.jade
                 a.def_btn.wet_asphalt_btn.float-right(href="" ng-csv='subscriptionsCSV' filename="subscribersExport.csv" ng-if="subscriptionCount != 0")
                   i.fa.fa-file-excel-o 
                   span Excel Export
-                a.def_btn.emerald_btn.float-right.margin-right(href="" ng-click="open()" ng-controller="midCreateModal") 
+                a.def_btn.emerald_btn.float-right.margin-right(href="" ng-click="open()" ng-controller="subscriptionsCreateModal") 
                   i.fa.fa-plus
                   span Create Subscription
     .panel-body
@@ -46,9 +48,9 @@ include ../modals/merchantEditModal.jade
 
                tr(id="base{{$index}}")
                  td {{subscription.DisplayName}}
-                 td Calendar date
-                 td test
-                 //td {{subscription.DaysInBillingCycle}}
+                 td(ng-if="subscription.PlanType.Id == 1") Calendar Date
+                 td(ng-if="subscription.PlanType.Id == 2") Cycle Days
+                 td {{subscription.CalendarDayOrInterval}}
                  td {{subscription.Amount | currency}}
                  td {{subscription.NextBillingDate | date:'MM/dd/yyyy'}}
                  td
