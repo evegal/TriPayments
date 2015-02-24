@@ -8,30 +8,31 @@ script(type="text/ng-template" id="subscriptionCreateModal.html")
                 wz-step(title="1. Subscription Config")                          
                     form.midCreateModal.stepOne(name="subscriptionFormProfile" novalidate)
                         .row
+                            .col-md-4
+                                label *Subscription Name:
                             .col-md-6
-                                .row
-                                    .col-md-4
-                                        label *Subscription Name:
-                                    .col-md-8  
-                                        input.form-control(required="" ng-model="subscriptionFormName" id="subscriptionFormName" type="text"  placeholder="Enter subscription name  (Required)"  tooltip="Select a name to identify this subscription. (Required)" tooltip-placement="top")
-                            .col-md-6
-                                .row
-                                    .col-md-4
-                                        label Daily ReBill Limit:
-                                    .col-md-4
-                                        select.form-control(id="limitType" tooltip="Select type of recurring cycle (Required)" tooltip-placement="top")
-                                            option(value="1") Calendar
-                                            option(value="2") Num Days
-                                    .col-md-4
-                                        input.form-control(id="dailyRebill" type="number" placeholder="value" tooltip="Enter value (Required)" tooltip-placement="top")
+                                input.form-control(required="" ng-model="subscriptionFormName" id="subscriptionFormName" type="text"  placeholder="Enter subscription name  (Required)"  tooltip="Select a name to identify this subscription. (Required)" tooltip-placement="top")
+
                         .row
-                            .col-md-6
-                                .row
-                                    .col-md-4
-                                        label *Recurring Amount:
-                                    .col-md-8
-                                        input.form-control(required="" ng-model="subscriptionFormAmount" id="subscriptionFormAmount" type="number" tooltip-placement="top" placeholder="Enter value. (Required)" tooltip="Enter value for recurring amount (Required)")
-                        .row.paymentTypeDiv
+                            .col-md-4
+                                label Recurring Type:
+                            .col-md-3
+                                select.form-control(id="subscriptionFormRecurringType" tooltip="Select type of recurring cycle (Required) " tooltip-placement="top")
+                                    option(value="1") Calendar
+                                    option(value="2") Num Days
+                            .col-md-3
+                                input.form-control(id="subscriptionFormDateVal" type="number" placeholder="value" tooltip="Enter value (Required)" tooltip-placement="top")
+
+
+                        .row
+                            .col-md-4
+                                label *Recurring Amount:
+                            .col-md-6  
+                                input.form-control(required="" ng-model="subscriptionFormAmount" id="subscriptionFormAmount" type="number" tooltip-placement="top" placeholder="Enter value. (Required)" tooltip="Enter value for recurring amount (Required)")
+
+
+
+                        .row.modalCenterTxt
                             p 
                                 label(tooltip="Select allowed payment types.  (Required)" tooltip-placement="top") *Payment Types: (Required)
                         .row.paymentTypeDiv
@@ -48,7 +49,7 @@ script(type="text/ng-template" id="subscriptionCreateModal.html")
                                 input(name="cardCheckbox" type="checkbox" value="4")
                                 i.fa.fa-cc-discover.fa-2x
 
-                        .row.paymentTypeDiv
+                        .row.modalCenterTxt
                             p 
                                 label(tooltip="Select allowed currency types.  (Required)" tooltip-placement="top") *Currency Types: (Required)
                         .row.currencyTypeDiv
@@ -89,46 +90,132 @@ script(type="text/ng-template" id="subscriptionCreateModal.html")
                                 input(name="curTypeCheckbox" type="checkbox" value="11")
                                 span SGD - Singapore Dollar
 
-
                         .row
                             .col-md-6.text-left
-                                a.row_btn.emerald_btn(href="" type="submit" wz-previous="")
+                                a.row_btn.disabled_btn(tooltip="Previous selection not available in first step" tooltip-placement="top")
                                     i.fa.fa-arrow-left
                                     span Previous
 
                             .col-md-6.text-right
-                                a.row_btn.emerald_btn(href="" type="submit" ng-click="midCreateConfigOptions(midFormCreateConfigOptions)")
+                                a.row_btn.emerald_btn(href="" type="submit" ng-click="subscriptionCreateConfig(subscriptionFormProfile)")
                                     span Next
                                     i.fa.fa-arrow-right
 
                         .row.errorMsg
                             p {{errorMsg}}
 
-                wz-step(title="2. Email Notification")
-                    .row
-                        form
-                            .col-md-8
-                                p Email Address
-                                input.form-control(type="text" placeholder="Enter Your Email (optional)" id="notificationEmail")
-                                
-                            .col-md-2
-                                a.row_btn.emerald_btn.add_email(href="" ng-click="addEmail()") 
-                                    i.fa.fa-plus
-                                    span Add Email
+                wz-step.stepTwo(title="2. Processing for Subscription")
+                    form.midCreateModal.stepOne(name="subscriptionSelProcessingForm" novalidate)
+                        .row
+                            .col-md-4
+                                label Processing Type:
+                            .col-md-6
+                                select.form-control(ng-model="subscriptionSelProcessingType" id="subscriptionSelProcessingType" tooltip="Please select which MID Group or MID that will process the recurring transactions for this plan. (Required)" tooltip-placement="top")
+                                    option(value="") Select 
+                                    option(value="1") MID Group
+                                    option(value="2") MID
+                        .row(ng-if="subscriptionSelProcessingType == 1")
+                            .col-md-4
+                                label Select MID Group:
+                            .col-md-6
+                                select.form-control(required="" ng-model="currentProcessor" ng-change="selectProcessingType(currentProcessor)" ng-options="obj.Id as obj.DisplayName for obj in subscriptionProcessors.AvailableMidGroups")
+                                    option(value="") Select 
+                        .row(ng-if="subscriptionSelProcessingType == 2")
+                            .col-md-4
+                                label Select MID:
+                            .col-md-6
+                                select.form-control(required="" ng-model="currentProcessor" ng-change="selectProcessingType(currentProcessor)" ng-options="obj.Id as obj.DisplayName for obj in subscriptionProcessors.AvailableMids")
+                                    option(value="") Select 
+
+
+
 
                     .row
-                        table.table
-                            thead(ng-if="emailAdded == true")
-                                tr
-                                    th Email
-                                    th Remove Notification
-                            tbody(ng-repeat="email in emails")
-                                tr
-                                    td {{email}}
-                                    td
-                                        a.mdl_body_btn.alazarin_btn(href="" ng-click="removeEmail(email, $index)")
-                                            i.fa.fa-trash
-                                            span Delete
+                        .col-md-6.text-left
+                            a.row_btn.emerald_btn(href="" type="submit" wz-previous="")
+                                i.fa.fa-arrow-left
+                                span Previous
+
+                        .col-md-6.text-right
+                            a.row_btn.emerald_btn(href="" type="submit" ng-click="subscriptionSelectProcessing(subscriptionSelProcessingForm)")
+                                span Next
+                                i.fa.fa-arrow-right
+
+                    .row.errorMsg
+                        p {{errorMsg}}
+
+
+
+                wz-step(title="3. Decline Rules")
+                    .row.stepOne
+                        form
+                            .row
+                                p Decline Rules for Credit Cards:
+                            .row
+                                .col-md-6
+                                    select.form-control(id="subscriptionFormRecurringType" tooltip="Select the number of attempts once a credit card has been declined. (Required) " tooltip-placement="top")
+                                        option(value="") Select Attempts
+                                        option(value="1") Attempt 1 time
+                                        option(value="2") Attempt 2 times
+                                        option(value="3") Attempt 3 times
+                                        option(value="4") Attempt 4 times
+                                        option(value="5") Attempt 5 times
+                                .col-md-6
+                                    select.form-control(id="subscriptionFormRecurringType" tooltip="Select the number of days between each attempt. (Required) " tooltip-placement="top")
+                                        option(value="") Select Lapse Time
+                                        option(value="1") 1 days lapse
+                                        option(value="2") 2 days lapse
+                                        option(value="3") 3 days lapse
+                                        option(value="4") 4 days lapse
+                                        option(value="5") 5 days lapse
+                                        option(value="6") 6 days lapse
+                                        option(value="7") 7 days lapse
+                                        option(value="8") 8 days lapse
+                                        option(value="9") 9 days lapse
+                                        option(value="10") 10 days lapse
+                                        option(value="11") 11 days lapse
+                                        option(value="12") 12 days lapse
+                                        option(value="13") 13 days lapse
+                                        option(value="14") 14 days lapse
+                                        option(value="15") 15 days lapse
+
+
+                            .row
+                                p Decline Rules for ACH:
+                            .row
+                                .col-md-6
+                                    select.form-control(id="subscriptionFormRecurringType" tooltip="Select the number of attempts once a ACH transaction has been declined. (Required) " tooltip-placement="top")
+                                        option(value="") Select Attempts
+                                        option(value="") Select Attempts
+                                        option(value="1") Attempt 1 time
+                                        option(value="2") Attempt 2 times
+                                        option(value="3") Attempt 3 times
+                                        option(value="4") Attempt 4 times
+                                        option(value="5") Attempt 5 times
+                                .col-md-6
+                                    select.form-control(id="subscriptionFormRecurringType" tooltip="Select the number of days between each attempt. (Required) " tooltip-placement="top")
+                                        option(value="") Select Lapse Time
+                                        option(value="1") 1 day lapse
+                                        option(value="2") 2 days lapse
+                                        option(value="3") 3 days lapse
+                                        option(value="4") 4 days lapse
+                                        option(value="5") 5 days lapse
+                                        option(value="6") 6 days lapse
+                                        option(value="7") 7 days lapse
+                                        option(value="8") 8 days lapse
+                                        option(value="9") 9 days lapse
+                                        option(value="10") 10 days lapse
+                                        option(value="11") 11 days lapse
+                                        option(value="12") 12 days lapse
+                                        option(value="13") 13 days lapse
+                                        option(value="14") 14 days lapse
+                                        option(value="15") 15 days lapse
+
+
+
+
+
+
 
 
                     .row
@@ -144,6 +231,8 @@ script(type="text/ng-template" id="subscriptionCreateModal.html")
 
                     .row.errorMsg
                         p {{errorMsg}}
+
+
 
 
         .modal-footer.action_group

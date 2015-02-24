@@ -1,8 +1,8 @@
 var app = angular.module("myApp", ['ui.router','LocalStorageModule','angular-loading-bar','ui.bootstrap','smart-table','ngSanitize','mgo-angular-wizard','ngCsv','ngClipboard','angular-momentjs']);
 
-//////////////////////////////////
-//   Base Auth & Url for all end points
-//////////////////////////////////
+///////////////////////////////////////
+//   BASE AUTH & URL FOR ALL ENDPOINTS
+///////////////////////////////////////
 
 var fullHost = location.hostname,
     parts = fullHost.split('.');
@@ -39,10 +39,9 @@ if(parts.length == 4){
     app.value('appLogo', parts[0]);
 }
 
-
-
-
-
+/////////////////////////
+//   ROUTES CONFIGURATION
+/////////////////////////
 
 app.config(function($stateProvider, $urlRouterProvider, $locationProvider,$httpProvider,datepickerConfig) {
 

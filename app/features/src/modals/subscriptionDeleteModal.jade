@@ -1,0 +1,23 @@
+script(type='text/ng-template', id='subscriptionDeleteModal.html')
+    .modal-header
+        h3.modal-title
+            span.subtle Delete Subscription: 
+            span {{subscriptionName}}
+        button.close(type="button" ng-click="cancel()") x
+
+    .modal-body
+        p.text-center Are you sure you want to delete {{subscriptionName}}?
+
+        .userCreateSuccess
+            p Subscription Deleted
+
+        .row.errorMsg
+            p {{errorMsg}}
+
+    .modal-footer
+        a.row_btn.action_btn(href="" ng-click="deleteSubscription()") 
+                i.fa.fa-trash
+                span Delete
+        a.row_btn.cancel_btn(href="" ng-click="cancel()")
+                i.fa.fa-sign-out
+                span Exit

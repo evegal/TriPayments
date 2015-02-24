@@ -8,6 +8,7 @@
 
 
 include ../modals/subscriptionCreateModal.jade
+include ../modals/subscriptionDeleteModal.jade
 
 //createSubscriptionModalCtrl
 .row
@@ -19,7 +20,7 @@ include ../modals/subscriptionCreateModal.jade
             .col-md-6
               h2.panel-title
                 i.fa.fa-icon
-                | Subscriptions : {{subscriptionCount}}
+                | Current Subscriptions :
             .col-md-6
                 a.def_btn.wet_asphalt_btn.float-right(href="" ng-csv='subscriptionsCSV' filename="subscribersExport.csv" ng-if="subscriptionCount != 0")
                   i.fa.fa-file-excel-o 
@@ -63,7 +64,7 @@ include ../modals/subscriptionCreateModal.jade
                    a.row_btn.turquoise_btn.margin-right(ng-click="open(merchant)" ng-controller="editMerchantModalCtrl") 
                       i.fa.fa-edit
                       span Edit Subscription
-                   a.row_btn.alazarin_btn(ng-click="open($index,merchant)" ng-controller="removeMerchantModalCtrl") 
+                   a.row_btn.alazarin_btn(ng-click="open($index,subscription.SubscriptionId,subscription.DisplayName)" ng-controller="subscriptionDeleteModalCtrl") 
                       i.fa.fa-trash 
                       span Delete Subscription
                  td.hidden_td

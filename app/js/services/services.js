@@ -1,3 +1,11 @@
+  app.service('SubscriptionsService', function SubServiceFun() {
+    this.getData = [];
+    this.getDataCount = '';
+  })
+
+
+
+
 //////////////////
 // NOTIFY SERVICE
 //////////////////
@@ -6,6 +14,7 @@ app.factory('Notify', ['$rootScope', function($rootScope) {
         var notify = {};
 
         notify.sendMsg = function(msg,data) {
+            console.log('working properly');
             data = data || {};
             $rootScope.$emit(msg,data);
 
@@ -23,8 +32,9 @@ app.factory('Notify', ['$rootScope', function($rootScope) {
         };
 
         return notify;
+}]);
 
-    }]);
+
 /////////////////
 // AUTH SERVICE
 /////////////////
@@ -253,5 +263,4 @@ app.factory('tokensManagerService', ['$http','ngAuthSettings', function ($http,n
     tokenManagerServiceFactory.getRefreshTokens = _getRefreshTokens;
 
     return tokenManagerServiceFactory;
-
 }]);

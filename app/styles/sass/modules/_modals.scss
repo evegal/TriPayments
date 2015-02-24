@@ -423,12 +423,15 @@ form.merchantCreateForm {
         width:100%;
     }
 
-    .paymentTypeDiv {
+    .modalCenterTxt, .paymentTypeDiv{
         text-align:center;
         p {
-            color:$greensea;
-            cursor:pointer;
-        }
+            label{
+                text-align:center;
+                color:$greensea;
+                cursor:pointer;
+            }
+        }   
         i {
             margin-left:5px;
         }

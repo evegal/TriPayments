@@ -8,14 +8,14 @@ app.controller("appCtrl", function($rootScope,$scope,$state,$timeout,$http,baseU
   });
   
 
+
+
   ///////////////////
   // LOAD MIDGROUPS
   ///////////////////
   $rootScope.modalGroups = [];
 
-
     $http.get(baseUrl + 'midgroups').success(function(data) {
-
       $scope.groupsBulk = data;
       $scope.groupAmount = data.length;
 
@@ -28,9 +28,7 @@ app.controller("appCtrl", function($rootScope,$scope,$state,$timeout,$http,baseU
          $rootScope.modalGroups.push(value);
       }); 
 
-  });
-
-
+    });
 
 
   //////////////////////
@@ -40,7 +38,7 @@ app.controller("appCtrl", function($rootScope,$scope,$state,$timeout,$http,baseU
     $scope.groupsBulk.push(data);
   });
 
-   //////////////////////
+  //////////////////////
   // NOTIFY EDIT MERCHANT
   //////////////////////
   Notify.getMsg('MerchantUpdated', function(event,data) {
@@ -54,7 +52,6 @@ app.controller("appCtrl", function($rootScope,$scope,$state,$timeout,$http,baseU
   ///////////////////
   // LOAD CURRENCIES
   ///////////////////
- 
   $http.get(baseUrl + 'currencies').success(function(data) {
       $scope.currencies = data;
   });
@@ -121,7 +118,6 @@ app.controller("appCtrl", function($rootScope,$scope,$state,$timeout,$http,baseU
 
     });
 
-
     ////////////////////
     //    DISABLE MID
     ////////////////////
@@ -136,8 +132,6 @@ app.controller("appCtrl", function($rootScope,$scope,$state,$timeout,$http,baseU
         });
 
     });
-
-
 
     ////////////////////
     //    NEW MID
@@ -154,7 +148,14 @@ app.controller("appCtrl", function($rootScope,$scope,$state,$timeout,$http,baseU
 
   }); // END GET
 
-  
+
+  //////////////////////////
+  // NOTIFY DELETE MERCHANT
+  //////////////////////////
+  Notify.getMsg('RemoveMerchant', function(event,data) {
+    $scope.groupsBulk.splice(data,1);
+  });
+
   //////////////////////////
   // NOTIFY DELETE MERCHANT
   //////////////////////////
