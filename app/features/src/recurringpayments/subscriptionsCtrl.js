@@ -14,16 +14,10 @@ app.controller('subscriptionsCtrl', function($timeout,$filter,$rootScope,$scope,
       $scope.displaySubscriptions = SubCtrlService.SubscriptionsService.getData;
       //CSV Export
       $scope.subscriptionsCSV = data;     
-
     }).
     error(function(status) {
       console.log(status);
     });
-
-
-
-
-
 }); // subscriptionsCtrl
 
 //  SUBSCRIPTION CREATION MODAL
@@ -92,7 +86,6 @@ var subscriptionCreateModalInstance = function($scope,$modalInstance,$log,$http,
                       SubCreateModal.SubscriptionsService.getData.push(data);
                     });
                    
-
                     //GET PROCESSING TYPES
                     $http.get(baseUrl + 'recurring/subscriptions/' + $scope.SubscriptionPlanId + '/available-processors').success(function(data) {
                       $scope.subscriptionProcessors = data;
@@ -108,9 +101,22 @@ var subscriptionCreateModalInstance = function($scope,$modalInstance,$log,$http,
                     },3000);    
                 });
             
-            //NOT A NEW MID PATCH EXISTING
-            } else {               
+            //NOT A NEW SUBSCRIPTION
+            } else {
+              $http({
+                method:'PUT',
+                url:baseUrl + 'recurring/subscriptions/' + $scope.SubscriptionPlanId,
+                data:Query
+              }).success(function(status,data) {
+                // GET SUBSCRIPTION AND PUSH DATA TO SUBSCRIPTION SERVICE
+                $http.get(baseUrl + 'recurring/subscriptions/'+ $scope.SubscriptionPlanId).success(function(data) {
+                  SubCreateModal.SubscriptionsService.getData.push(data);
+                });
+
+                //PROCEED TO FOLLOWING TAB
                 WizardHandler.wizard().next();
+              });
+                
             }
 
         } else {
@@ -119,7 +125,6 @@ var subscriptionCreateModalInstance = function($scope,$modalInstance,$log,$http,
             $timeout(function() {
                 $('.errorMsg').slideUp(500);
             },3000);
-        WizardHandler.wizard().next();
         }
 
     }
@@ -135,27 +140,76 @@ var subscriptionCreateModalInstance = function($scope,$modalInstance,$log,$http,
       var subProcesingType = document.getElementById('subscriptionSelProcessingType').value,
           Query = {};
 
-      if(subProcesingType == 1) {
-        var Query = {
-          "ProcessWithMidGroupId":$scope.selectProcessingID,
-        };
+      if(theForm.$valid){
+        if(subProcesingType == 1) {
+          var Query = {
+            "ProcessWithMidGroupId":$scope.selectProcessingID,
+          };
+        } else {
+          var Query = {
+            "ProcessWithMidId":$scope.selectProcessingID,
+          };
+        }
+
+        $http({
+          method:'POST',
+          url: baseUrl + 'recurring/setup/plan/'+$scope.SubscriptionPlanId+'/processor ',
+          data:Query
+        }).success(function(status) {
+          console.log(status);
+        });
+
+        WizardHandler.wizard().next();
+
       } else {
-        var Query = {
-          "ProcessWithMidId":$scope.selectProcessingID,
-        };
+        $scope.errorMsg = 'Please ensure to select all the required fields (*).';
+        $('.errorMsg').slideDown(500);
+        $timeout(function() {
+            $('.errorMsg').slideUp(500);
+        },3000);
+        WizardHandler.wizard().next();
       }
 
-      $http({
-        method:'POST',
-        url: baseUrl + 'recurring/setup/plan/'+$scope.SubscriptionPlanId+'/processor ',
-        data:Query
-      }).success(function(status) {
-        console.log(status);
-      });
-
-      WizardHandler.wizard().next();
-
     } // END subscriptionSelectProcessing
+
+    //POST THE SUBSCRIPTION DECLINE RULES
+    $scope.subscriptionDeclineRules = function(theForm){
+      console.log('TheForm : ' + theForm);
+      console.log(theForm.$valid);
+
+      if(theForm.$valid){
+        var Query = {
+            "CreditCardRetryLimit":+document.getElementById('subscriptionCCAttempt').value,
+            "AchRetryLimit ":+document.getElementById('subscriptionACHAttempt').value,
+            "DaysBetweenRetryAttempts":+document.getElementById('subscriptionCCAttemptLapse').value,
+            //missing lapse days for ACH and CC
+            "DeclineNotificationRecipients":document.getElementById('subscriptionDeclinedEmail').value,
+        };
+
+        console.log(Query);
+
+        $http({
+          method:'POST',
+          url:baseUrl + 'recurring/setup/plan/' + $scope.SubscriptionPlanId + '/decline-rules',
+          data:Query
+        }).success(function(status,data) {
+          console.log(status);
+          console.log(data);
+          //PROCEED TO FOLLOWING TAB
+          WizardHandler.wizard().next();
+        });   
+      } else {
+        $scope.errorMsg = 'Please ensure to select all the required fields (*).';
+        $('.errorMsg').slideDown(500);
+        $timeout(function() {
+            $('.errorMsg').slideUp(500);
+        },3000);
+      }
+
+
+   
+
+    } // END subscriptionDeclineRules
 
  
 

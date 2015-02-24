@@ -220,6 +220,9 @@ app.controller('searchCtrl', function($rootScope,$scope,$http,$filter,baseUrl,$s
 //-----------------------------------------//
 //-----------------------------------------//
 
+
+var test = "3"
+
   /////////////////
   // GROUP SEARCH 
   /////////////////

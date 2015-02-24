@@ -108,7 +108,7 @@ script(type="text/ng-template" id="subscriptionCreateModal.html")
                     form.midCreateModal.stepOne(name="subscriptionSelProcessingForm" novalidate)
                         .row
                             .col-md-4
-                                label Processing Type:
+                                label *Processing Type:
                             .col-md-6
                                 select.form-control(ng-model="subscriptionSelProcessingType" id="subscriptionSelProcessingType" tooltip="Please select which MID Group or MID that will process the recurring transactions for this plan. (Required)" tooltip-placement="top")
                                     option(value="") Select 
@@ -116,19 +116,16 @@ script(type="text/ng-template" id="subscriptionCreateModal.html")
                                     option(value="2") MID
                         .row(ng-if="subscriptionSelProcessingType == 1")
                             .col-md-4
-                                label Select MID Group:
+                                label *Select MID Group:
                             .col-md-6
                                 select.form-control(required="" ng-model="currentProcessor" ng-change="selectProcessingType(currentProcessor)" ng-options="obj.Id as obj.DisplayName for obj in subscriptionProcessors.AvailableMidGroups")
                                     option(value="") Select 
                         .row(ng-if="subscriptionSelProcessingType == 2")
                             .col-md-4
-                                label Select MID:
+                                label *Select MID:
                             .col-md-6
                                 select.form-control(required="" ng-model="currentProcessor" ng-change="selectProcessingType(currentProcessor)" ng-options="obj.Id as obj.DisplayName for obj in subscriptionProcessors.AvailableMids")
                                     option(value="") Select 
-
-
-
 
                     .row
                         .col-md-6.text-left
@@ -146,91 +143,89 @@ script(type="text/ng-template" id="subscriptionCreateModal.html")
 
 
 
-                wz-step(title="3. Decline Rules")
-                    .row.stepOne
-                        form
-                            .row
-                                p Decline Rules for Credit Cards:
-                            .row
-                                .col-md-6
-                                    select.form-control(id="subscriptionFormRecurringType" tooltip="Select the number of attempts once a credit card has been declined. (Required) " tooltip-placement="top")
-                                        option(value="") Select Attempts
-                                        option(value="1") Attempt 1 time
-                                        option(value="2") Attempt 2 times
-                                        option(value="3") Attempt 3 times
-                                        option(value="4") Attempt 4 times
-                                        option(value="5") Attempt 5 times
-                                .col-md-6
-                                    select.form-control(id="subscriptionFormRecurringType" tooltip="Select the number of days between each attempt. (Required) " tooltip-placement="top")
-                                        option(value="") Select Lapse Time
-                                        option(value="1") 1 days lapse
-                                        option(value="2") 2 days lapse
-                                        option(value="3") 3 days lapse
-                                        option(value="4") 4 days lapse
-                                        option(value="5") 5 days lapse
-                                        option(value="6") 6 days lapse
-                                        option(value="7") 7 days lapse
-                                        option(value="8") 8 days lapse
-                                        option(value="9") 9 days lapse
-                                        option(value="10") 10 days lapse
-                                        option(value="11") 11 days lapse
-                                        option(value="12") 12 days lapse
-                                        option(value="13") 13 days lapse
-                                        option(value="14") 14 days lapse
-                                        option(value="15") 15 days lapse
+                wz-step.stepTwo(title="3. Decline Rules")
+                    form.midCreateModal.stepOne(name="subscriptionDeclineForm" novalidate)
+                        .row
+                            form
+                                .row
+                                    p Decline Rules for Credit Cards:
+                                .row
+                                    .col-md-6
+                                        select.form-control(required="" id="subscriptionCCAttempt" tooltip="Select the number of attempts once a credit card has been declined. (Required) " tooltip-placement="top")
+                                            option(value="") Select Attempts (Credit Card)
+                                            option(value="1") Attempt 1 time
+                                            option(value="2") Attempt 2 times
+                                            option(value="3") Attempt 3 times
+                                            option(value="4") Attempt 4 times
+                                            option(value="5") Attempt 5 times
+                                    .col-md-6
+                                        select.form-control(required="" id="subscriptionCCAttemptLapse" tooltip="Select the number of days between each attempt. (Required) " tooltip-placement="top")
+                                            option(value="") Select lapse time for attempts
+                                            option(value="1") 1 days lapse
+                                            option(value="2") 2 days lapse
+                                            option(value="3") 3 days lapse
+                                            option(value="4") 4 days lapse
+                                            option(value="5") 5 days lapse
+                                            option(value="6") 6 days lapse
+                                            option(value="7") 7 days lapse
+                                            option(value="8") 8 days lapse
+                                            option(value="9") 9 days lapse
+                                            option(value="10") 10 days lapse
+                                            option(value="11") 11 days lapse
+                                            option(value="12") 12 days lapse
+                                            option(value="13") 13 days lapse
+                                            option(value="14") 14 days lapse
+                                            option(value="15") 15 days lapse
 
 
-                            .row
-                                p Decline Rules for ACH:
-                            .row
-                                .col-md-6
-                                    select.form-control(id="subscriptionFormRecurringType" tooltip="Select the number of attempts once a ACH transaction has been declined. (Required) " tooltip-placement="top")
-                                        option(value="") Select Attempts
-                                        option(value="") Select Attempts
-                                        option(value="1") Attempt 1 time
-                                        option(value="2") Attempt 2 times
-                                        option(value="3") Attempt 3 times
-                                        option(value="4") Attempt 4 times
-                                        option(value="5") Attempt 5 times
-                                .col-md-6
-                                    select.form-control(id="subscriptionFormRecurringType" tooltip="Select the number of days between each attempt. (Required) " tooltip-placement="top")
-                                        option(value="") Select Lapse Time
-                                        option(value="1") 1 day lapse
-                                        option(value="2") 2 days lapse
-                                        option(value="3") 3 days lapse
-                                        option(value="4") 4 days lapse
-                                        option(value="5") 5 days lapse
-                                        option(value="6") 6 days lapse
-                                        option(value="7") 7 days lapse
-                                        option(value="8") 8 days lapse
-                                        option(value="9") 9 days lapse
-                                        option(value="10") 10 days lapse
-                                        option(value="11") 11 days lapse
-                                        option(value="12") 12 days lapse
-                                        option(value="13") 13 days lapse
-                                        option(value="14") 14 days lapse
-                                        option(value="15") 15 days lapse
+                                .row
+                                    p Decline Rules for ACH:
+                                .row
+                                    .col-md-6
+                                        select.form-control(required="" id="subscriptionACHAttempt" tooltip="Select the number of attempts once a ACH transaction has been declined. (Required) " tooltip-placement="top")
+                                            option(value="") Select attempts (ACH)
+                                            option(value="1") Attempt 1 time
+                                            option(value="2") Attempt 2 times
+                                            option(value="3") Attempt 3 times
+                                            option(value="4") Attempt 4 times
+                                            option(value="5") Attempt 5 times
+                                    .col-md-6
+                                        select.form-control(required="" id="subscriptionACHAttemptLapse" tooltip="Select the number of days between each attempt. (Required) " tooltip-placement="top")
+                                            option(value="") Select lapse time for attempts
+                                            option(value="1") 1 day lapse
+                                            option(value="2") 2 days lapse
+                                            option(value="3") 3 days lapse
+                                            option(value="4") 4 days lapse
+                                            option(value="5") 5 days lapse
+                                            option(value="6") 6 days lapse
+                                            option(value="7") 7 days lapse
+                                            option(value="8") 8 days lapse
+                                            option(value="9") 9 days lapse
+                                            option(value="10") 10 days lapse
+                                            option(value="11") 11 days lapse
+                                            option(value="12") 12 days lapse
+                                            option(value="13") 13 days lapse
+                                            option(value="14") 14 days lapse
+                                            option(value="15") 15 days lapse
+                                .row
+                                    p Declined Email Notification:
+                                .row
+                                    input.form-control(required="" ng-model="subscriptionDeclinedEmail" id="subscriptionDeclinedEmail" type="text"  placeholder="Enter Email. (Required)"  tooltip="Enter email to receive notification of failed transactions. (Required)" tooltip-placement="top")
 
 
+                        .row
+                            .col-md-6.text-left
+                                a.row_btn.emerald_btn(href="" type="submit" wz-previous="")
+                                    i.fa.fa-arrow-left
+                                    span Previous
 
+                            .col-md-6.text-right
+                                a.row_btn.emerald_btn(href="" type="submit" ng-click="subscriptionDeclineRules(subscriptionDeclineForm)")
+                                    span Next
+                                    i.fa.fa-arrow-right
 
-
-
-
-
-                    .row
-                        .col-md-6.text-left
-                            a.row_btn.emerald_btn(href="" type="submit" wz-previous="")
-                                i.fa.fa-arrow-left
-                                span Previous
-
-                        .col-md-6.text-right
-                            a.row_btn.emerald_btn(href="" type="submit" ng-click="midCreateNotifyEmail()")
-                                span Next
-                                i.fa.fa-arrow-right
-
-                    .row.errorMsg
-                        p {{errorMsg}}
+                        .row.errorMsg
+                            p {{errorMsg}}
 
 
 
