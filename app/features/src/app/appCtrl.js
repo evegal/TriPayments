@@ -8,6 +8,42 @@ app.controller("appCtrl", function($rootScope,$scope,$state,$timeout,$http,baseU
   });
   
 
+  ///////////////////////
+  // SUBSCRIPTION SECTION
+  ///////////////////////
+
+  // LOAD SUBSCRIPTIONS
+  $rootScope.subscriptionModalGroups = [];
+
+    $http.get(baseUrl + 'recurring/subscriptions').success(function(data) {
+      $scope.subscriptionsBulk = data;
+      $scope.subscriptionsAmount = data.length;
+
+      // CSV Export
+      $scope.subscriptionsCSV = data;
+      // copy the references
+      //$scope.shownMerchants = [].concat($scope.groupsBulk);
+
+      angular.forEach(data, function(value,key) {
+         $rootScope.subscriptionModalGroups.push(value);
+      }); 
+
+    });
+
+
+  // NOTIFY ADD SUBCRIPTION
+  Notify.getMsg('NewSubscription', function(event,data) {
+    $scope.subscriptionsBulk.push(data);
+    $scope.subscriptionsAmount += 1;
+  });
+
+  // NOTIFY DELETE SUBSCRIPTION
+  Notify.getMsg('RemoveSubscription', function(event,data) {
+    $scope.subscriptionsBulk.splice(data,1);
+        $scope.subscriptionsAmount -= 1;
+  });
+
+
 
 
   ///////////////////

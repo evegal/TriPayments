@@ -1,4 +1,4 @@
-script(type="text/ng-template" id="subscriptionCreateModal.html")
+script(type="text/ng-template" id="subscriptionEditContent.html")
     .midCreateEditModal.midCreateModal
         .modal-header
             h3 Create New Subscription
@@ -6,12 +6,12 @@ script(type="text/ng-template" id="subscriptionCreateModal.html")
         .modal-body
             wizard(on-finish="finishedWizard()")
                 wz-step(title="1. Subscription Config")
-                    form.midCreateModal.stepOne(name="subscriptionFormProfile" novalidate)
+                    form.midCreateModal.stepOne(name="subscriptionFormEditProfile" novalidate)
                         .row
                             .col-md-4
                                 label *Subscription Name:
                             .col-md-6
-                                input.form-control(required="" ng-model="subscriptionFormName" id="subscriptionFormName" type="text"  placeholder="Enter subscription name  (Required)"  tooltip="Select a name to identify this subscription. (Required)" tooltip-placement="top")
+                                input.form-control(required="" id="subscriptionFormName" ng-model="subscriptionFormName" type="text"  placeholder="Enter subscription name  (Required)"  tooltip="Select a name to identify this subscription. (Required)" tooltip-placement="top")
 
                         .row
                             .col-md-4
@@ -21,7 +21,7 @@ script(type="text/ng-template" id="subscriptionCreateModal.html")
                                     option(value="1") Calendar
                                     option(value="2") Num Days
                             .col-md-3(ng-if="subscriptionFormRecurringType == 1")
-                                select.form-control(required="" id="subscriptionFormDateVal" tooltip="Select the day of the month for the recurring charge to occur. If 29, 30 31 is not availble for certain months the charge will occur on the last day of the month. (Required) " tooltip-placement="top")
+                                select.form-control(required="" id="subscriptionFormDateVal" ng-model="subscriptionFormCalDate" tooltip="Select the day of the month for the recurring charge to occur. If 29, 30 31 is not availble for certain months the charge will occur on the last day of the month. (Required) " tooltip-placement="top")
                                     option(value="") Select Monthly Date
                                     option(value="1") Every 1st
                                     option(value="2") Every 2nd
@@ -72,16 +72,16 @@ script(type="text/ng-template" id="subscriptionCreateModal.html")
                                 label(tooltip="Select allowed payment types.  (Required)" tooltip-placement="top") *Payment Types: (Required)
                         .row.paymentTypeDiv
                             .col-md-3
-                                input(name="cardCheckbox" type="checkbox" value="1")
+                                input(ng-model="AMEX" name="cardCheckbox" type="checkbox" value="1")
                                 i.fa.fa-cc-amex.fa-2x
                             .col-md-3
-                                input(name="cardCheckbox" type="checkbox" value="2")
+                                input(ng-model="Visa" name="cardCheckbox" type="checkbox" value="2")
                                 i.fa.fa-cc-visa.fa-2x
                             .col-md-3
-                                input(name="cardCheckbox" type="checkbox" value="3")
+                                input(ng-model="Mastercard" name="cardCheckbox" type="checkbox" value="3")
                                 i.fa.fa-cc-mastercard.fa-2x
                             .col-md-3
-                                input(name="cardCheckbox" type="checkbox" value="4")
+                                input(ng-model="Discover" name="cardCheckbox" type="checkbox" value="4")
                                 i.fa.fa-cc-discover.fa-2x
 
                         .row.modalCenterTxt
@@ -89,40 +89,40 @@ script(type="text/ng-template" id="subscriptionCreateModal.html")
                                 label(tooltip="Select allowed currency types.  (Required)" tooltip-placement="top") *Currency Types: (Required)
                         .row.currencyTypeDiv
                             .col-md-3
-                                input(name="curTypeCheckbox" type="checkbox" value="12")
+                                input(ng-model="USD" name="curTypeCheckbox" type="checkbox" value="12")
                                 span USD - United States Dollar
                             .col-md-3
-                                input(name="curTypeCheckbox" type="checkbox" value="3")
+                                input(ng-model="AUD" name="curTypeCheckbox" type="checkbox" value="3")
                                 span AUD - Australia Dollar
                             .col-md-3
-                                input(name="curTypeCheckbox" type="checkbox" value="10")
+                                input(ng-model="BRL" name="curTypeCheckbox" type="checkbox" value="10")
                                 span BRL -Brazil Real
                             .col-md-3
-                                input(name="curTypeCheckbox" type="checkbox" value="4")
+                                input(ng-model="CAD" name="curTypeCheckbox" type="checkbox" value="4")
                                 span CAD - Canada Dollar
                             .col-md-3
-                                input(name="curTypeCheckbox" type="checkbox" value="5")
+                                input(ng-model="DKK" name="curTypeCheckbox" type="checkbox" value="5")
                                 span DKK - Denmark Krone
                             .col-md-3
-                                input(name="curTypeCheckbox" type="checkbox" value="2")
+                                input(ng-model="EUR" name="curTypeCheckbox" type="checkbox" value="2")
                                 span EUR -Euro Member 
                             .col-md-3
-                                input(name="curTypeCheckbox" type="checkbox" value="1")
+                                input(ng-model="GBP" name="curTypeCheckbox" type="checkbox" value="1")
                                 span GBP - UK Pound
                             .col-md-3
-                                input(name="curTypeCheckbox" type="checkbox" value="7")
+                                input(ng-model="JPY" name="curTypeCheckbox" type="checkbox" value="7")
                                 span JPY - Japan Yen
                             .col-md-3
-                                input(name="curTypeCheckbox" type="checkbox" value="8")
+                                input(ng-model="NOK" name="curTypeCheckbox" type="checkbox" value="8")
                                 span NOK - Norway Krone
                             .col-md-3
-                                input(name="curTypeCheckbox" type="checkbox" value="6")
+                                input(ng-model="NZD" name="curTypeCheckbox" type="checkbox" value="6")
                                 span NZD - New Zealand Dollar
                             .col-md-3
-                                input(name="curTypeCheckbox" type="checkbox" value="9")
+                                input(ng-model="SEK" name="curTypeCheckbox" type="checkbox" value="9")
                                 span SEK - Sweden Krona
                             .col-md-3
-                                input(name="curTypeCheckbox" type="checkbox" value="11")
+                                input(ng-model="SGD" name="curTypeCheckbox" type="checkbox" value="11")
                                 span SGD - Singapore Dollar
 
                         .row
@@ -132,7 +132,7 @@ script(type="text/ng-template" id="subscriptionCreateModal.html")
                                     span Previous
 
                             .col-md-6.text-right
-                                a.row_btn.emerald_btn(href="" type="submit" ng-click="subscriptionCreateConfig(subscriptionFormProfile)")
+                                a.row_btn.emerald_btn(href="" type="submit" ng-click="subscriptionEditConfig(subscriptionFormEditProfile)")
                                     span Next
                                     i.fa.fa-arrow-right
 
@@ -140,7 +140,7 @@ script(type="text/ng-template" id="subscriptionCreateModal.html")
                             p {{errorMsg}}
 
                 wz-step.stepTwo(title="2. Processing for Subscription")
-                    form.midCreateModal.stepOne(name="subscriptionSelProcessingForm" novalidate)
+                    form.midCreateModal.stepOne(name="subscriptionEditProcessingForm" novalidate)
                         .row
                             .col-md-4
                                 label *Processing Type:
@@ -153,13 +153,13 @@ script(type="text/ng-template" id="subscriptionCreateModal.html")
                             .col-md-4
                                 label *Select MID Group:
                             .col-md-6
-                                select.form-control(required="" ng-model="currentProcessor" ng-change="selectProcessingType(currentProcessor)" ng-options="obj.Id as obj.DisplayName for obj in subscriptionProcessors.AvailableMidGroups")
+                                select.form-control(required="" id="subscriptionMidGroup" ng-model="subscriptionSelProcessingMidGroup" ng-change="selectProcessingType(currentProcessor)" ng-options="obj.Id as obj.DisplayName for obj in subscriptionProcessors.AvailableMidGroups track by subscription.MidGroupId")
                                     option(value="") Select 
                         .row(ng-if="subscriptionSelProcessingType == 2")
                             .col-md-4
                                 label *Select MID:
                             .col-md-6
-                                select.form-control(required="" ng-model="currentProcessor" ng-change="selectProcessingType(currentProcessor)" ng-options="obj.Id as obj.DisplayName for obj in subscriptionProcessors.AvailableMids")
+                                select.form-control(required="" id="subscriptionMid" ng-model="subscriptionSelProcessingMid" ng-change="selectProcessingType(currentProcessor)" ng-options="obj.Id as obj.DisplayName for obj in subscriptionProcessors.AvailableMids track by subscription.MidId")
                                     option(value="") Select 
 
                     .row
@@ -169,7 +169,7 @@ script(type="text/ng-template" id="subscriptionCreateModal.html")
                                 span Previous
 
                         .col-md-6.text-right
-                            a.row_btn.emerald_btn(href="" type="submit" ng-click="subscriptionSelectProcessing(subscriptionSelProcessingForm)")
+                            a.row_btn.emerald_btn(href="" type="submit" ng-click="subscriptionEditProcessing(subscriptionEditProcessingForm)")
                                 span Next
                                 i.fa.fa-arrow-right
 
@@ -179,7 +179,7 @@ script(type="text/ng-template" id="subscriptionCreateModal.html")
 
 
                 wz-step.stepTwo(title="3. Decline Rules")
-                    form.midCreateModal.stepOne(name="subscriptionEditDeclineForm" novalidate)
+                    form.midCreateModal.stepOne(name="subscriptionDeclineForm" novalidate)
                         .row
                             .col-md-3
                                 label *Decline Rules for Credit Cards:
@@ -256,7 +256,7 @@ script(type="text/ng-template" id="subscriptionCreateModal.html")
                                     span Previous
 
                             .col-md-6.text-right
-                                a.row_btn.emerald_btn(href="" type="submit" ng-click="subscriptionEditDeclineRules(subscriptionEditDeclineForm)")
+                                a.row_btn.emerald_btn(href="" type="submit" ng-click="subscriptionDeclineRules(subscriptionDeclineForm)")
                                     span Finish
                                     i.fa.fa-arrow-right
 
@@ -271,3 +271,7 @@ script(type="text/ng-template" id="subscriptionCreateModal.html")
             a.row_btn.cancel_btn(href="" ng-click="cancel()")
                 i.fa.fa-sign-out
                 span Exit
+
+
+
+
