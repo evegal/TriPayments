@@ -71,17 +71,6 @@ app.controller('subscriptionsCtrl', function($timeout,$filter,$rootScope,$scope,
      
   };
 
-  $scope.CapValues = [
-    {'value':10},
-    {'value':20},
-    {'value':30},
-    {'value':40},
-    {'value':50},
-    {'value':60},
-    {'value':70},
-    {'value':80},
-    {'value':90},
-  ];
 
 
 }); // subscriptionsCtrl
@@ -274,7 +263,7 @@ var subscriptionCreateModalInstance = function($scope,$modalInstance,$log,$http,
         $('.errorMsg').slideDown(500);
         $timeout(function() {
             $('.errorMsg').slideUp(500);
-        },3000);
+        },2000);
       }
 
     } // END subscriptionDeclineRules
@@ -362,6 +351,21 @@ var subscriptionEditInstanceCtrl = function($scope,$modalInstance,$http,$timeout
   $scope.subscription = {};
   $scope.subscriptionProcessors = {};
 
+  // PROCESSING METHOD IS SELECTED BASED ON PAYMENT TYPE AND CURRENCY
+  // INCASE OF CHANGE THE USER MUST RESELECT THE PROCESSING METHOD
+  $scope.currencyChange = false;
+  $scope.paymentChange = false;
+
+  $scope.currencyChange = function () {
+    $scope.currencyChangeVal = true;
+    console.log('currency change');
+  };  
+
+  $scope.paymentChange = function () {
+    $scope.paymentChangeVal = true;
+    console.log('payment change');
+  };  
+
   $scope.cancel = function() {
     $modalInstance.close();
   };
@@ -427,17 +431,48 @@ var subscriptionEditInstanceCtrl = function($scope,$modalInstance,$http,$timeout
       })
 
     if(theForm.$dirty && theForm.$valid && $scope.paymentTypes.length > 0 && $scope.currencyTypes.length > 0 ) {
+      var Query = {};
 
-      var Query = {
-        "DisplayName":document.getElementById('subscriptionFormName').value,
-        "PlanTypeId":document.getElementById('subscriptionFormRecurringType').value,
-        "DateOrDays":document.getElementById('subscriptionFormDateVal').value,
-        "Amount":+document.getElementById('subscriptionFormAmount').value,
-        "CardTypeIds":$scope.paymentTypes,
-        "CurrencyIds":$scope.currencyTypes,
-      };
+      if ($scope.currencyChangeVal || $scope.paymentChangeVal) {
+        console.log('changed occured');
+        var Query = {
+          "DisplayName":document.getElementById('subscriptionFormName').value,
+          "PlanTypeId":document.getElementById('subscriptionFormRecurringType').value,
+          "DateOrDays":document.getElementById('subscriptionFormDateVal').value,
+          "Amount":+document.getElementById('subscriptionFormAmount').value,
+          "CardTypeIds":$scope.paymentTypes,
+          "CurrencyIds":$scope.currencyTypes,
+          "MidId":'',
+          "Mid":'',
+          "MidGroupId":'',
+          "MidGroup":'',
+        };
+      } else {
+        console.log('no change');
+        var Query = {
+          "DisplayName":document.getElementById('subscriptionFormName').value,
+          "PlanTypeId":document.getElementById('subscriptionFormRecurringType').value,
+          "DateOrDays":document.getElementById('subscriptionFormDateVal').value,
+          "Amount":+document.getElementById('subscriptionFormAmount').value,
+          "CardTypeIds":$scope.paymentTypes,
+          "CurrencyIds":$scope.currencyTypes,
+        };
+      }
 
-    } else {
+      $http({
+        method:'PUT',
+        url:baseUrl + 'recurring/subscriptions/' + subscriptionId,
+        data:Query
+      }).success(function(status,data) {
+        console.log('put success');
+        //PROCEED TO FOLLOWING TAB
+        WizardHandler.wizard().next();
+      });
+
+    } else if (!theForm.$dirty) {
+      //IF NOTHING HAS CHANGED ON THE FORM
+      WizardHandler.wizard().next();
+    }else {
       //FORM VALUES HAVE BEEN CHANGED TO SOMETHING ERRONEOUS
       $scope.errorMsg = 'Please ensure to fill out all the fields properly.';
       $('.errorMsg').slideDown(500);
@@ -448,8 +483,14 @@ var subscriptionEditInstanceCtrl = function($scope,$modalInstance,$http,$timeout
     
   };
   $scope.subscriptionEditProcessing = function(theForm){
-    console.log(theForm);
-    WizardHandler.wizard().next();
+    console.log($scope.subscription.MidGroupId);
+    console.log($scope.subscription.MidId);
+
+    $scope.subscription.MidGroupId = '';
+    $scope.subscription.MidId = '';
+
+    
+    //WizardHandler.wizard().next();
   };
 
   $scope.subscriptionEditDeclineRules = function(theForm){

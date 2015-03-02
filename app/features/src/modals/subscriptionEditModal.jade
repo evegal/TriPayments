@@ -72,16 +72,16 @@ script(type="text/ng-template" id="subscriptionEditContent.html")
                                 label(tooltip="Select allowed payment types.  (Required)" tooltip-placement="top") *Payment Types: (Required)
                         .row.paymentTypeDiv
                             .col-md-3
-                                input(ng-model="AMEX" name="cardCheckbox" type="checkbox" value="1")
+                                input(ng-model="AMEX" name="cardCheckbox" ng-change="paymentChange()" type="checkbox" value="1")
                                 i.fa.fa-cc-amex.fa-2x
                             .col-md-3
-                                input(ng-model="Visa" name="cardCheckbox" type="checkbox" value="2")
+                                input(ng-model="Visa" name="cardCheckbox" ng-change="paymentChange()" type="checkbox" value="2")
                                 i.fa.fa-cc-visa.fa-2x
                             .col-md-3
-                                input(ng-model="Mastercard" name="cardCheckbox" type="checkbox" value="3")
+                                input(ng-model="Mastercard" name="cardCheckbox" ng-change="paymentChange()" type="checkbox" value="3")
                                 i.fa.fa-cc-mastercard.fa-2x
                             .col-md-3
-                                input(ng-model="Discover" name="cardCheckbox" type="checkbox" value="4")
+                                input(ng-model="Discover" name="cardCheckbox" ng-change="paymentChange()" type="checkbox" value="4")
                                 i.fa.fa-cc-discover.fa-2x
 
                         .row.modalCenterTxt
@@ -89,40 +89,40 @@ script(type="text/ng-template" id="subscriptionEditContent.html")
                                 label(tooltip="Select allowed currency types.  (Required)" tooltip-placement="top") *Currency Types: (Required)
                         .row.currencyTypeDiv
                             .col-md-3
-                                input(ng-model="USD" name="curTypeCheckbox" type="checkbox" value="12")
+                                input(ng-model="USD" name="curTypeCheckbox" ng-change="currencyChange()" type="checkbox" value="12")
                                 span USD - United States Dollar
                             .col-md-3
-                                input(ng-model="AUD" name="curTypeCheckbox" type="checkbox" value="3")
+                                input(ng-model="AUD" name="curTypeCheckbox" ng-change="currencyChange()" type="checkbox" value="3")
                                 span AUD - Australia Dollar
                             .col-md-3
-                                input(ng-model="BRL" name="curTypeCheckbox" type="checkbox" value="10")
+                                input(ng-model="BRL" name="curTypeCheckbox" ng-change="currencyChange()" type="checkbox" value="10")
                                 span BRL -Brazil Real
                             .col-md-3
-                                input(ng-model="CAD" name="curTypeCheckbox" type="checkbox" value="4")
+                                input(ng-model="CAD" name="curTypeCheckbox" ng-change="currencyChange()" type="checkbox" value="4")
                                 span CAD - Canada Dollar
                             .col-md-3
-                                input(ng-model="DKK" name="curTypeCheckbox" type="checkbox" value="5")
+                                input(ng-model="DKK" name="curTypeCheckbox" ng-change="currencyChange()" type="checkbox" value="5")
                                 span DKK - Denmark Krone
                             .col-md-3
-                                input(ng-model="EUR" name="curTypeCheckbox" type="checkbox" value="2")
+                                input(ng-model="EUR" name="curTypeCheckbox" ng-change="currencyChange()" type="checkbox" value="2")
                                 span EUR -Euro Member 
                             .col-md-3
-                                input(ng-model="GBP" name="curTypeCheckbox" type="checkbox" value="1")
+                                input(ng-model="GBP" name="curTypeCheckbox" ng-change="currencyChange()" type="checkbox" value="1")
                                 span GBP - UK Pound
                             .col-md-3
-                                input(ng-model="JPY" name="curTypeCheckbox" type="checkbox" value="7")
+                                input(ng-model="JPY" name="curTypeCheckbox" ng-change="currencyChange()" type="checkbox" value="7")
                                 span JPY - Japan Yen
                             .col-md-3
-                                input(ng-model="NOK" name="curTypeCheckbox" type="checkbox" value="8")
+                                input(ng-model="NOK" name="curTypeCheckbox" ng-change="currencyChange()" type="checkbox" value="8")
                                 span NOK - Norway Krone
                             .col-md-3
-                                input(ng-model="NZD" name="curTypeCheckbox" type="checkbox" value="6")
+                                input(ng-model="NZD" name="curTypeCheckbox" ng-change="currencyChange()" type="checkbox" value="6")
                                 span NZD - New Zealand Dollar
                             .col-md-3
-                                input(ng-model="SEK" name="curTypeCheckbox" type="checkbox" value="9")
+                                input(ng-model="SEK" name="curTypeCheckbox" ng-change="currencyChange()" type="checkbox" value="9")
                                 span SEK - Sweden Krona
                             .col-md-3
-                                input(ng-model="SGD" name="curTypeCheckbox" type="checkbox" value="11")
+                                input(ng-model="SGD" name="curTypeCheckbox" ng-change="currencyChange()" type="checkbox" value="11")
                                 span SGD - Singapore Dollar
 
                         .row
