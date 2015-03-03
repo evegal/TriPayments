@@ -58,14 +58,11 @@ script(type="text/ng-template" id="subscriptionCreateModal.html")
                             .col-md-3(ng-if="subscriptionFormRecurringType == 2")
                                 input.form-control(id="subscriptionFormDateVal" type="number" placeholder="value" tooltip="Enter value (Required)" tooltip-placement="top")
 
-
                         .row
                             .col-md-4
                                 label *Recurring Amount:
                             .col-md-6  
-                                input.form-control(required="" ng-model="subscriptionFormAmount" id="subscriptionFormAmount" type="number" tooltip-placement="top" placeholder="Enter value. (Required)" tooltip="Enter value for recurring amount (Required)")
-
-
+                                input.form-control(required="" ng-model="subscriptionFormAmount" id="subscriptionFormAmount" type="number" tooltip-placement="top" placeholder="Enter value. (Required)" tooltip="Enter value for recurring amount (Required)")                                   
 
                         .row.modalCenterTxt
                             p 
@@ -170,7 +167,7 @@ script(type="text/ng-template" id="subscriptionCreateModal.html")
                             .col-md-3
                                 label *Decline Rules for Credit Cards:
                             .col-md-4
-                                select.form-control(required="" id="subscriptionCCAttempt" tooltip="Select the number of attempts once a credit card has been declined. (Required) " tooltip-placement="top")
+                                select.form-control(required="" ng-model="subscriptionCCAttempt" id="subscriptionCCAttempt" tooltip="Select the number of attempts once a credit card has been declined. (Required) " tooltip-placement="top")
                                     option(value="") Select Attempts (Credit Card)
                                     option(value="1") Attempt 1 time
                                     option(value="2") Attempt 2 times
@@ -178,7 +175,7 @@ script(type="text/ng-template" id="subscriptionCreateModal.html")
                                     option(value="4") Attempt 4 times
                                     option(value="5") Attempt 5 times
                             .col-md-4
-                                select.form-control(required="" id="subscriptionCCAttemptLapse" tooltip="Select the number of days between each attempt. (Required) " tooltip-placement="top")
+                                select.form-control(required="" ng-model="subscriptionCCAttemptLapse" id="subscriptionCCAttemptLapse" tooltip="Select the number of days between each attempt. (Required) " tooltip-placement="top")
                                     option(value="") Select lapse time for attempts
                                     option(value="1") 1 days lapse
                                     option(value="2") 2 days lapse
@@ -200,7 +197,7 @@ script(type="text/ng-template" id="subscriptionCreateModal.html")
                             .col-md-3
                                 label *Decline Rules for ACH:
                             .col-md-4
-                                select.form-control(required="" id="subscriptionACHAttempt" tooltip="Select the number of attempts once a ACH transaction has been declined. (Required) " tooltip-placement="top")
+                                select.form-control(required="" ng-model="subscriptionACHAttempt" id="subscriptionACHAttempt" tooltip="Select the number of attempts once a ACH transaction has been declined. (Required) " tooltip-placement="top")
                                     option(value="") Select attempts (ACH)
                                     option(value="1") Attempt 1 time
                                     option(value="2") Attempt 2 times
@@ -208,7 +205,7 @@ script(type="text/ng-template" id="subscriptionCreateModal.html")
                                     option(value="4") Attempt 4 times
                                     option(value="5") Attempt 5 times
                             .col-md-4
-                                select.form-control(required="" id="subscriptionACHAttemptLapse" tooltip="Select the number of days between each attempt. (Required) " tooltip-placement="top")
+                                select.form-control(required="" ng-model="subscriptionACHAttemptLapse" id="subscriptionACHAttemptLapse" tooltip="Select the number of days between each attempt. (Required) " tooltip-placement="top")
                                     option(value="") Select lapse time for attempts
                                     option(value="1") 1 day lapse
                                     option(value="2") 2 days lapse

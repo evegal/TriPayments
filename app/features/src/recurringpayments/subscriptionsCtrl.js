@@ -257,6 +257,14 @@ var subscriptionCreateModalInstance = function($scope,$modalInstance,$log,$http,
               $modalInstance.close();
           },2000);
 
+        }).error(function(data, status) {
+                    
+            //SOMETHING ERRONEOUS WITH THE API
+            $scope.errorMsg = 'There is an error with the API please contact your customer support. Error Code: ' + status;
+            $('.errorMsg').slideDown(500);
+            $timeout(function() {
+                $('.errorMsg').slideUp(500);
+            },3000);    
         });   
 
       } else {
@@ -378,7 +386,7 @@ var subscriptionEditInstanceCtrl = function($scope,$modalInstance,$http,$timeout
       $scope.subscription = data;
       
       $scope.subscriptionFormName = $scope.subscription.DisplayName;
-      $scope.subscriptionFormRecurringType = $scope.subscription.PlanType.Id;
+      $scope.subscriptionFormRecurringType = $scope.subscription.PlanType.Id; // calendar or days of cycle 
       $scope.subscriptionFormAmount = $scope.subscription.Amount;
       $scope.subscriptionFormCalDate = $scope.subscription.CalendarDayOrInterval;
 
@@ -457,7 +465,7 @@ var subscriptionEditInstanceCtrl = function($scope,$modalInstance,$http,$timeout
         url:baseUrl + 'recurring/subscriptions/' + subscriptionId,
         data:Query
       }).success(function(status,data) {
-        
+
         // GET NEW PROCESSING FOR CHANGED CURRENCY SUBSCRIPTION
         if ($scope.paymentChangeVal) {
           $http.get(baseUrl + 'recurring/subscriptions/' + subscriptionId + '/available-processors').success(function(data) {
@@ -465,8 +473,22 @@ var subscriptionEditInstanceCtrl = function($scope,$modalInstance,$http,$timeout
           });
         }
 
-        //PROCEED TO FOLLOWING TAB
-        WizardHandler.wizard().next();
+        $scope.successMsg = 'Subscription configuration has been updated.';
+        $('.successMsg').slideDown(500);
+        $timeout(function() {
+            $('.successMsg').slideUp(500);
+            //PROCEED TO FOLLOWING TAB
+            WizardHandler.wizard().next();
+        },2000);
+        
+      }).error(function(data, status) {
+                    
+          //SOMETHING ERRONEOUS WITH THE API
+          $scope.errorMsg = 'There is an error with the API please contact your customer support. Error Code: ' + status;
+          $('.errorMsg').slideDown(500);
+          $timeout(function() {
+              $('.errorMsg').slideUp(500);
+          },3000);    
       });
 
     } else if (!theForm.$dirty) {
@@ -525,42 +547,61 @@ var subscriptionEditInstanceCtrl = function($scope,$modalInstance,$http,$timeout
 
   $scope.subscriptionEditDeclineRules = function(theForm){
 
-    var dropdownSelected = true;
+    var declineNotificationEmail = document.getElementById('subscriptionDeclineEmail').value,
+        re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-    $('select[name=declineRuleSelect]:checked').each(function() {
-          $scope.paymentTypes.push($(this).val());
-      });
-
-
-    console.log('inside edit decline rules');
-    console.log(theForm.$dirty);
-
-    if(theForm.$dirty && ){ 
-
-      var declineNotificationEmail =  getElementById('subscriptionEditDeclineEmail').value;
+    if(theForm.$dirty){ 
 
       var Query = {
-        "CreditCardRetryLimit":+document.getElementById('subscriptionCCAttempt').value,
-        "AchRetryLimit":+document.getElementById('subscriptionACHAttempt').value,
-        "DaysBetweenCardRetryAttempts":+document.getElementById('subscriptionCCAttemptLapse').value,
-        "DaysBetweenAchRetryAttempts":+document.getElementById('subscriptionACHAttemptLapse').value,
-        "DeclineNotificationRecipients":declineNotificationEmail,
+          "CreditCardRetryLimit":+document.getElementById('subscriptionCCAttempt').value,
+          "AchRetryLimit":+document.getElementById('subscriptionACHAttempt').value,
+          "DaysBetweenCardRetryAttempts":+document.getElementById('subscriptionCCAttemptLapse').value,
+          "DaysBetweenAchRetryAttempts":+document.getElementById('subscriptionACHAttemptLapse').value,
+          "DeclineNotificationRecipients":declineNotificationEmail,
       };
 
-      console.log(Query);
+        $http({
+          method:'POST',
+          url:baseUrl + 'recurring/subscriptions/' + subscriptionId + '/decline-rules',
+          data:Query
+        }).success(function(status,data) {
+
+          $scope.successMsg = 'Subscription has been setup successfully.';
+          $('.successMsg').slideDown(500);
+          $timeout(function() {
+              $('.successMsg').slideUp(500);
+              $modalInstance.close();
+          },2000);
+
+        });   
 
     } else {
 
-    }
+        $scope.errorMsg = 'Please ensure to select all the required fields (*).';
+        $('.errorMsg').slideDown(500);
+        $timeout(function() {
+            $('.errorMsg').slideUp(500);
+        },1000);
 
-
-
-    console.log(theForm);
+      }
 
   };
 
 
 }; // Edit Instance END
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
