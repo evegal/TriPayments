@@ -62,16 +62,12 @@ app.controller('subscriptionsCtrl', function($timeout,$filter,$rootScope,$scope,
     */
 
     shownMerchants[index].open = !shownMerchants[index].open;
-
   };
 
   $scope.checkWindow = function(info) {
      //console.log(index);
      console.log(info[0]);
-     
   };
-
-
 
 }); // subscriptionsCtrl
 
@@ -92,8 +88,9 @@ var subscriptionCreateModalInstance = function($scope,$modalInstance,$log,$http,
     $scope.cancel = function() {
         $modalInstance.close();
     }
-    $scope.subscriptionFormRecurringType =1;
-    $scope.SubscriptionPlanId = '';
+
+    $scope.subscriptionFormRecurringType = 1;  // JUST CHARGE FOR NOW
+    $scope.SubscriptionPlanId = '';            
     $scope.subscriptionProcessors = [];
     $scope.selectProcessingID = '';
 
@@ -112,6 +109,7 @@ var subscriptionCreateModalInstance = function($scope,$modalInstance,$log,$http,
             $scope.currencyTypes.push($(this).val());
         })
 
+        //FORM VALIDATION FOR REQUIRED FIELDS AND SELECTION OF PAYMENT TYPE AND CURRENCY
         if(theForm.$valid && $scope.paymentTypes.length > 0 && $scope.currencyTypes.length > 0) {
             var Query = {
                 "DisplayName":document.getElementById('subscriptionFormName').value,
@@ -145,7 +143,10 @@ var subscriptionCreateModalInstance = function($scope,$modalInstance,$log,$http,
 
                     //PROCEED TO FOLLOWING TAB
                     WizardHandler.wizard().next();
+
                 }).error(function(data, status) {
+                    
+                    //SOMETHING ERRONEOUS WITH THE API
                     $scope.errorMsg = 'There is an error with the API please contact your customer support. Error Code: ' + status;
                     $('.errorMsg').slideDown(500);
                     $timeout(function() {
@@ -160,53 +161,51 @@ var subscriptionCreateModalInstance = function($scope,$modalInstance,$log,$http,
                 url:baseUrl + 'recurring/subscriptions/' + $scope.SubscriptionPlanId,
                 data:Query
               }).success(function(status,data) {
+                
                 // GET SUBSCRIPTION AND PUSH DATA TO SUBSCRIPTION SERVICE
                 //work on this its pulling duplicates with different values
-
                 $http.get(baseUrl + 'recurring/subscriptions/'+ $scope.SubscriptionPlanId).success(function(data) {
                   Notify.sendMsg('NewSubscription', data);
                 });
 
                 //PROCEED TO FOLLOWING TAB
                 WizardHandler.wizard().next();
+              }).error(function(data, status) {
+                    
+                  //SOMETHING ERRONEOUS WITH THE API
+                  $scope.errorMsg = 'There is an error with the API please contact your customer support. Error Code: ' + status;
+                  $('.errorMsg').slideDown(500);
+                  $timeout(function() {
+                      $('.errorMsg').slideUp(500);
+                  },3000);    
               });
                 
             }
 
         } else {
-            $scope.errorMsg = 'Please ensure that the required fields (*) are entered.';
-            $('.errorMsg').slideDown(500);
-            $timeout(function() {
-                $('.errorMsg').slideUp(500);
-            },3000);
 
-            //TEMPORARY
-            WizardHandler.wizard().next();
+          //SOMETHING ERRONEOUS WITH THE FORM
+          $scope.errorMsg = 'Please ensure that the required fields (*) are entered.';
+          $('.errorMsg').slideDown(500);
+          $timeout(function() {
+              $('.errorMsg').slideUp(500);
+          },3000);
+
         }
 
     }
 
-    //GET THE ID OF THE PROCESSING TYPE FOR GROUP OR MID
+    //GET THE ID OF THE PROCESSING TYPE
     $scope.selectProcessingType = function(item) {
       $scope.selectProcessingID = item;
     }
 
     //POST THE PROCESSING TYPE AND PROCESSING ID FOR GROUP OR MID
-    $scope.subscriptionSelectProcessing = function(theForm) {
-
-      var subProcesingType = document.getElementById('subscriptionSelProcessingType').value,
-          Query = {};
+    $scope.subscriptionSelectProcessing = function(theForm) {     
 
       if(theForm.$valid){
-        if(subProcesingType == 1) {
-          var Query = {
-            "ProcessWithMidGroupId":$scope.selectProcessingID,
-          };
-        } else {
-          var Query = {
-            "ProcessWithMidId":$scope.selectProcessingID,
-          };
-        }
+        
+        var Query = {"ProcessWithMidId":$scope.selectProcessingID};
 
         $http({
           method:'POST',
@@ -219,12 +218,13 @@ var subscriptionCreateModalInstance = function($scope,$modalInstance,$log,$http,
         WizardHandler.wizard().next();
 
       } else {
+
         $scope.errorMsg = 'Please ensure to select all the required fields (*).';
         $('.errorMsg').slideDown(500);
         $timeout(function() {
             $('.errorMsg').slideUp(500);
         },3000);
-        WizardHandler.wizard().next();
+
       }
 
     } // END subscriptionSelectProcessing
@@ -258,12 +258,15 @@ var subscriptionCreateModalInstance = function($scope,$modalInstance,$log,$http,
           },2000);
 
         });   
+
       } else {
+
         $scope.errorMsg = 'Please ensure to select all the required fields (*).';
         $('.errorMsg').slideDown(500);
         $timeout(function() {
             $('.errorMsg').slideUp(500);
-        },2000);
+        },1000);
+
       }
 
     } // END subscriptionDeclineRules
@@ -333,17 +336,17 @@ var subscriptionDeleteInstanceCtrl = function($scope,$rootScope,$modalInstance,$
 app.controller('subscriptionEditModalCtrl', function($scope,$http,$modal,$log) {
 
     $scope.open = function(subscriptionId) {
-     var modalInstance = $modal.open({
-      templateUrl:'subscriptionEditContent.html',
-      controller:subscriptionEditInstanceCtrl,
-      size:'lg',
-      resolve: {
-        subscriptionId:function() {
-           return subscriptionId;
+       var modalInstance = $modal.open({
+        templateUrl:'subscriptionEditContent.html',
+        controller:subscriptionEditInstanceCtrl,
+        size:'lg',
+        resolve: {
+          subscriptionId:function() {
+             return subscriptionId;
+          }
         }
-      }
-     });
-  };
+       });
+    };
 });
 
 var subscriptionEditInstanceCtrl = function($scope,$modalInstance,$http,$timeout,subscriptionId,baseUrl,Notify,WizardHandler) {
@@ -392,13 +395,10 @@ var subscriptionEditInstanceCtrl = function($scope,$modalInstance,$http,$timeout
       // PROCESSING FOR SUBSCRIPTION
       $http.get(baseUrl + 'recurring/subscriptions/' + subscriptionId + '/available-processors').success(function(data) {
         $scope.subscriptionProcessors = data;
-        
-        if($scope.subscription.MidGroup == '') {
-          $scope.subscriptionSelProcessingType = 2;
-        } else {
-          $scope.subscriptionSelProcessingType = 1;
-        }
       });
+
+      //BIND PREVIOUS SELECTED PROCESSING MID
+      $scope.subscriptionSelProcessingMid = $scope.subscription.MidId;
 
       // DECLINE RULES FOR SUBSCRIPTION
       // USING GETELEMENTBYID DUE TO MODAL
@@ -407,12 +407,6 @@ var subscriptionEditInstanceCtrl = function($scope,$modalInstance,$http,$timeout
       document.getElementById('subscriptionACHAttempt').value = $scope.subscription.AchMaxRetries;
       document.getElementById('subscriptionACHAttemptLapse').value = $scope.subscription.DaysBetweenAchRetries;
       document.getElementById('subscriptionDeclinedEmail').value = $scope.subscription.DeclineNotificationRecipients;
-
-
-    //GET THE ID OF THE PROCESSING TYPE FOR GROUP OR MID
-    $scope.selectProcessingType = function(item) {
-      $scope.selectProcessingID = item;
-    }
 
   });
 
@@ -433,8 +427,8 @@ var subscriptionEditInstanceCtrl = function($scope,$modalInstance,$http,$timeout
     if(theForm.$dirty && theForm.$valid && $scope.paymentTypes.length > 0 && $scope.currencyTypes.length > 0 ) {
       var Query = {};
 
-      if ($scope.currencyChangeVal || $scope.paymentChangeVal) {
-        console.log('changed occured');
+      if ($scope.paymentChangeVal) {
+        console.log('Currency changed');
         var Query = {
           "DisplayName":document.getElementById('subscriptionFormName').value,
           "PlanTypeId":document.getElementById('subscriptionFormRecurringType').value,
@@ -444,18 +438,17 @@ var subscriptionEditInstanceCtrl = function($scope,$modalInstance,$http,$timeout
           "CurrencyIds":$scope.currencyTypes,
           "MidId":'',
           "Mid":'',
-          "MidGroupId":'',
-          "MidGroup":'',
         };
+
+        $scope.subscriptionSelProcessingMid = '';
+
       } else {
-        console.log('no change');
+        console.log('No currency change');
         var Query = {
           "DisplayName":document.getElementById('subscriptionFormName').value,
           "PlanTypeId":document.getElementById('subscriptionFormRecurringType').value,
           "DateOrDays":document.getElementById('subscriptionFormDateVal').value,
           "Amount":+document.getElementById('subscriptionFormAmount').value,
-          "CardTypeIds":$scope.paymentTypes,
-          "CurrencyIds":$scope.currencyTypes,
         };
       }
 
@@ -464,7 +457,14 @@ var subscriptionEditInstanceCtrl = function($scope,$modalInstance,$http,$timeout
         url:baseUrl + 'recurring/subscriptions/' + subscriptionId,
         data:Query
       }).success(function(status,data) {
-        console.log('put success');
+        
+        // GET NEW PROCESSING FOR CHANGED CURRENCY SUBSCRIPTION
+        if ($scope.paymentChangeVal) {
+          $http.get(baseUrl + 'recurring/subscriptions/' + subscriptionId + '/available-processors').success(function(data) {
+            $scope.subscriptionProcessors = data;
+          });
+        }
+
         //PROCEED TO FOLLOWING TAB
         WizardHandler.wizard().next();
       });
@@ -482,18 +482,79 @@ var subscriptionEditInstanceCtrl = function($scope,$modalInstance,$http,$timeout
     } 
     
   };
+
+
+  //GET THE ID OF THE PROCESSING TYPE FOR GROUP OR MID
+  $scope.selectProcessingType = function(item) {
+    $scope.subscriptionSelProcessingMid = item;
+    $scope.selectProcessingID = item;
+    console.log('this is the processing id :' + $scope.selectProcessingID);
+  }
+
   $scope.subscriptionEditProcessing = function(theForm){
-    console.log($scope.subscription.MidGroupId);
-    console.log($scope.subscription.MidId);
 
-    $scope.subscription.MidGroupId = '';
-    $scope.subscription.MidId = '';
+      if(theForm.$dirty){
+        
+        var Query = {"ProcessWithMidId":$scope.selectProcessingID};
 
-    
-    //WizardHandler.wizard().next();
+        $http({
+          method:'POST',
+          url: baseUrl + 'recurring/subscriptions/'+ subscriptionId +'/processor ',
+          data:Query
+        }).success(function(status) {
+          console.log(status);
+        });
+
+        WizardHandler.wizard().next();
+
+      } else if(!theForm.$dirty) {
+
+        WizardHandler.wizard().next();
+
+      } else {
+        
+        $scope.errorMsg = 'Please ensure to select all the required fields (*).';
+        $('.errorMsg').slideDown(500);
+        $timeout(function() {
+            $('.errorMsg').slideUp(500);
+        },3000);
+
+      }
+
   };
 
   $scope.subscriptionEditDeclineRules = function(theForm){
+
+    var dropdownSelected = true;
+
+    $('select[name=declineRuleSelect]:checked').each(function() {
+          $scope.paymentTypes.push($(this).val());
+      });
+
+
+    console.log('inside edit decline rules');
+    console.log(theForm.$dirty);
+
+    if(theForm.$dirty && ){ 
+
+      var declineNotificationEmail =  getElementById('subscriptionEditDeclineEmail').value;
+
+      var Query = {
+        "CreditCardRetryLimit":+document.getElementById('subscriptionCCAttempt').value,
+        "AchRetryLimit":+document.getElementById('subscriptionACHAttempt').value,
+        "DaysBetweenCardRetryAttempts":+document.getElementById('subscriptionCCAttemptLapse').value,
+        "DaysBetweenAchRetryAttempts":+document.getElementById('subscriptionACHAttemptLapse').value,
+        "DeclineNotificationRecipients":declineNotificationEmail,
+      };
+
+      console.log(Query);
+
+    } else {
+
+    }
+
+
+
     console.log(theForm);
 
   };

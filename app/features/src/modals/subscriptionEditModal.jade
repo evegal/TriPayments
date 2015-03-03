@@ -143,23 +143,9 @@ script(type="text/ng-template" id="subscriptionEditContent.html")
                     form.midCreateModal.stepOne(name="subscriptionEditProcessingForm" novalidate)
                         .row
                             .col-md-4
-                                label *Processing Type:
-                            .col-md-6
-                                select.form-control(ng-model="subscriptionSelProcessingType" id="subscriptionSelProcessingType" tooltip="Please select which MID Group or MID that will process the recurring transactions for this plan. (Required)" tooltip-placement="top")
-                                    option(value="") Select 
-                                    option(value="1") MID Group
-                                    option(value="2") MID
-                        .row(ng-if="subscriptionSelProcessingType == 1")
-                            .col-md-4
-                                label *Select MID Group:
-                            .col-md-6
-                                select.form-control(required="" id="subscriptionMidGroup" ng-model="subscriptionSelProcessingMidGroup" ng-change="selectProcessingType(currentProcessor)" ng-options="obj.Id as obj.DisplayName for obj in subscriptionProcessors.AvailableMidGroups track by subscription.MidGroupId")
-                                    option(value="") Select 
-                        .row(ng-if="subscriptionSelProcessingType == 2")
-                            .col-md-4
                                 label *Select MID:
                             .col-md-6
-                                select.form-control(required="" id="subscriptionMid" ng-model="subscriptionSelProcessingMid" ng-change="selectProcessingType(currentProcessor)" ng-options="obj.Id as obj.DisplayName for obj in subscriptionProcessors.AvailableMids track by subscription.MidId")
+                                select.form-control(required="" id="subscriptionMid" ng-model="subscriptionSelProcessingMid" ng-change="selectProcessingType(subscriptionSelProcessingMid)" ng-options="obj.Id as obj.DisplayName for obj in subscriptionProcessors.AvailableMids")
                                     option(value="") Select 
 
                     .row
@@ -179,7 +165,7 @@ script(type="text/ng-template" id="subscriptionEditContent.html")
 
 
                 wz-step.stepTwo(title="3. Decline Rules")
-                    form.midCreateModal.stepOne(name="subscriptionDeclineForm" novalidate)
+                    form.midCreateModal.stepOne(name="subscriptionEditDeclineForm" novalidate)
                         .row
                             .col-md-3
                                 label *Decline Rules for Credit Cards:
@@ -246,7 +232,7 @@ script(type="text/ng-template" id="subscriptionEditContent.html")
                             .col-md-3
                                 label *Declined Email Notification:
                             .col-md-8
-                                input.form-control(required="" ng-model="subscriptionDeclinedEmail" id="subscriptionDeclinedEmail" type="text"  placeholder="Enter Email. (Required)"  tooltip="Enter email to receive notification of failed transactions. (Required)" tooltip-placement="top")
+                                input.form-control(required="" ng-model="subscriptionEditDeclineEmail" id="subscriptionEditDeclineEmail" type="text"  placeholder="Enter Email. (Required)"  tooltip="Enter email to receive notification of failed transactions. (Required)" tooltip-placement="top")
 
 
                         .row
@@ -256,7 +242,7 @@ script(type="text/ng-template" id="subscriptionEditContent.html")
                                     span Previous
 
                             .col-md-6.text-right
-                                a.row_btn.emerald_btn(href="" type="submit" ng-click="subscriptionDeclineRules(subscriptionDeclineForm)")
+                                a.row_btn.emerald_btn(href="" type="submit" ng-click="subscriptionEditDeclineRules(subscriptionEditDeclineForm)")
                                     span Finish
                                     i.fa.fa-arrow-right
 

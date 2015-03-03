@@ -143,20 +143,6 @@ script(type="text/ng-template" id="subscriptionCreateModal.html")
                     form.midCreateModal.stepOne(name="subscriptionSelProcessingForm" novalidate)
                         .row
                             .col-md-4
-                                label *Processing Type:
-                            .col-md-6
-                                select.form-control(ng-model="subscriptionSelProcessingType" id="subscriptionSelProcessingType" tooltip="Please select which MID Group or MID that will process the recurring transactions for this plan. (Required)" tooltip-placement="top")
-                                    option(value="") Select 
-                                    option(value="1") MID Group
-                                    option(value="2") MID
-                        .row(ng-if="subscriptionSelProcessingType == 1")
-                            .col-md-4
-                                label *Select MID Group:
-                            .col-md-6
-                                select.form-control(required="" ng-model="currentProcessor" ng-change="selectProcessingType(currentProcessor)" ng-options="obj.Id as obj.DisplayName for obj in subscriptionProcessors.AvailableMidGroups")
-                                    option(value="") Select 
-                        .row(ng-if="subscriptionSelProcessingType == 2")
-                            .col-md-4
                                 label *Select MID:
                             .col-md-6
                                 select.form-control(required="" ng-model="currentProcessor" ng-change="selectProcessingType(currentProcessor)" ng-options="obj.Id as obj.DisplayName for obj in subscriptionProcessors.AvailableMids")
