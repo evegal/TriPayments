@@ -39,11 +39,12 @@ include ../modals/subscriptionEditModal.jade
                    input.form-control(st-search="" type="search" placeholder="Filter through all MID groups")
                  tr
                    th.st-header(st-sort="DisplayName" width="20%") Name
-                   th.st-header(st-sort="PlanType.Id" width="10%") Recurring Type
+                   th.st-header(st-sort="PlanType.Id" width="20%") Recurring Type
                    th.st-header(st-sort="CalendarDayOrInterval" width="5%") Day
-                   th.st-header(st-sort="Amount" width="5%") Amount
-                   th.st-header(st-sort="NextBillingDate" width="10%") Next Invoice Date
-                   th.st-header-nosort(width="30%") Actions 
+                   th.st-header(st-sort="Amount" width="10%") Amount
+                   th.st-header(st-sort="NextBillingDate" width="15%") Next Invoice Date
+                   th.st-header(st-sort="Mid" width="10%") Processing MID
+                   th.st-header-nosort(width="20%") Actions 
               
              tbody(ng-repeat="subscription in shownSubscriptions")
 
@@ -55,22 +56,23 @@ include ../modals/subscriptionEditModal.jade
                  td {{subscription.CalendarDayOrInterval}}
                  td {{subscription.Amount | currency}}
                  td {{subscription.NextBillingDate | date:'MM/dd/yyyy'}}
+                 td {{subscription.Mid | uppercase }}
                  td
-                    a.row_btn.emerald_btn.margin-right(href="" ng-click="openMID(merchant); loadMIDS(merchant.Id,merchant); checkWindow(shownMerchants)" ng-controller="addMIDSmodalCtrl")
+                    a.row_btn.emerald_btn.margin-right(href="" ng-click="openMID(merchant); loadMIDS(merchant.Id,merchant); checkWindow(shownMerchants)" ng-controller="addMIDSmodalCtrl"  tooltip="Add Subscribers" tooltip-placement="top")
                       i.fa.fa-plus
-                      span Add Subscribers
-                    a.row_btn.wet_asphalt_btn.margin-right(href="" ng-click="loadMIDS(merchant.Id,merchant); gotoMID($index,shownMerchants)")
+                      span Add
+                    a.row_btn.wet_asphalt_btn.margin-right(href="" ng-click="loadMIDS(merchant.Id,merchant); gotoMID($index,shownMerchants)"  tooltip="View Subscribers" tooltip-placement="top")
                       i.fa.fa-eye
-                      span View Subscribers
-                    a.row_btn.turquoise_btn.margin-right(ng-click="open(subscription.SubscriptionId)" ng-controller="subscriptionEditModalCtrl") 
+                      span View
+                    a.row_btn.turquoise_btn.margin-right(ng-click="open(subscription.SubscriptionId)" ng-controller="subscriptionEditModalCtrl" tooltip="Edit Subscription" tooltip-placement="top")
                       i.fa.fa-edit
-                      span Edit Subscription
-                    a.row_btn.alazarin_btn(ng-click="open($index,subscription.SubscriptionId,subscription.DisplayName)" ng-controller="subscriptionDeleteModalCtrl")
+                      span Edit
+                    a.row_btn.alazarin_btn(ng-click="open($index,subscription.SubscriptionId,subscription.DisplayName)" ng-controller="subscriptionDeleteModalCtrl" tooltip="Delete Subscription" tooltip-placement="top")
                       i.fa.fa-trash
-                      span Delete Subscription
+                      span Delete
                  td.hidden_td
                     tr
-                      td.pushToggle(colspan="6")
+                      td.pushToggle(colspan="7")
                         accordion-group(heading="" ng-click="loadMIDS(merchant.Id,merchant)" is-open="merchant.open")
                           table.table.table-striped
                             thead

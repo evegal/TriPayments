@@ -156,6 +156,7 @@ var subscriptionCreateModalInstance = function($scope,$modalInstance,$log,$http,
             
             //NOT A NEW SUBSCRIPTION
             } else {
+
               $http({
                 method:'PUT',
                 url:baseUrl + 'recurring/subscriptions/' + $scope.SubscriptionPlanId,
@@ -195,7 +196,7 @@ var subscriptionCreateModalInstance = function($scope,$modalInstance,$log,$http,
 
     }
 
-    //GET THE ID OF THE PROCESSING TYPE
+    //GET THE ID OF THE MID FOR PROCESSING
     $scope.selectProcessingType = function(item) {
       $scope.selectProcessingID = item;
     }
@@ -212,10 +213,18 @@ var subscriptionCreateModalInstance = function($scope,$modalInstance,$log,$http,
           url: baseUrl + 'recurring/subscriptions/'+$scope.SubscriptionPlanId+'/processor ',
           data:Query
         }).success(function(status) {
-          console.log(status);
-        });
 
-        WizardHandler.wizard().next();
+          WizardHandler.wizard().next();
+
+        }).error(function(data, status) {
+                    
+            //SOMETHING ERRONEOUS WITH THE API
+            $scope.errorMsg = 'There is an error with the API please contact your customer support. Error Code: ' + status;
+            $('.errorMsg').slideDown(500);
+            $timeout(function() {
+                $('.errorMsg').slideUp(500);
+            },3000);    
+        });
 
       } else {
 
@@ -304,7 +313,6 @@ app.controller('subscriptionDeleteModalCtrl', function($scope,$modal,$log) {
 
 var subscriptionDeleteInstanceCtrl = function($scope,$rootScope,$modalInstance,$log,index,subscriptionId,subscriptionName,$http,$timeout,Notify,baseUrl) {
 
-    $scope.subscriptionId = subscriptionId;
     $scope.subscriptionName = subscriptionName;
 
     $scope.cancel = function() {
@@ -317,7 +325,7 @@ var subscriptionDeleteInstanceCtrl = function($scope,$rootScope,$modalInstance,$
     //DELETE METHOD 
       $http({
         method:'DELETE',
-        url: baseUrl + 'recurring/subscriptions/' + $scope.subscriptionId
+        url: baseUrl + 'recurring/subscriptions/' + subscriptionId
       }).success(function(status,data) {
 
         //REMOVE SUBSCRIPTION FROM VIEW
@@ -409,13 +417,20 @@ var subscriptionEditInstanceCtrl = function($scope,$modalInstance,$http,$timeout
       $scope.subscriptionSelProcessingMid = $scope.subscription.MidId;
 
       // DECLINE RULES FOR SUBSCRIPTION
-      // USING GETELEMENTBYID DUE TO MODAL
-      document.getElementById('subscriptionCCAttempt').value = $scope.subscription.CreditCardMaxRetries;
-      document.getElementById('subscriptionCCAttemptLapse').value = $scope.subscription.DaysBetweenCardRetries;
-      document.getElementById('subscriptionACHAttempt').value = $scope.subscription.AchMaxRetries;
-      document.getElementById('subscriptionACHAttemptLapse').value = $scope.subscription.DaysBetweenAchRetries;
-      document.getElementById('subscriptionDeclinedEmail').value = $scope.subscription.DeclineNotificationRecipients;
+      $scope.subscriptionEditCCAttempt = $scope.subscription.CreditCardMaxRetries;
+      $scope.subscriptionEditCCAttemptLapse = $scope.subscription.DaysBetweenCardRetries;
+      $scope.subscriptionEditACHAttempt = $scope.subscription.AchMaxRetries;
+      $scope.subscriptionEditACHAttemptLapse = $scope.subscription.DaysBetweenAchRetries;
+      $scope.subscriptionEditDeclinedEmail = $scope.subscription.DeclineNotificationRecipients;
 
+  }).error(function(data, status) {
+                    
+      //SOMETHING ERRONEOUS WITH THE API
+      $scope.errorMsg = 'There is an error with the API please contact your customer support. Error Code: ' + status;
+      $('.errorMsg').slideDown(500);
+      $timeout(function() {
+          $('.errorMsg').slideUp(500);
+      },4000);    
   });
 
   $scope.subscriptionEditConfig = function(theForm) {
@@ -433,10 +448,12 @@ var subscriptionEditInstanceCtrl = function($scope,$modalInstance,$http,$timeout
       })
 
     if(theForm.$dirty && theForm.$valid && $scope.paymentTypes.length > 0 && $scope.currencyTypes.length > 0 ) {
+
       var Query = {};
 
+      // IF STATEMENT IN CASE A PAYMENT METHOD HAS BEEN CHANGED
+      // IT WILL IMPACT THE MID SELECTION
       if ($scope.paymentChangeVal) {
-        console.log('Currency changed');
         var Query = {
           "DisplayName":document.getElementById('subscriptionFormName').value,
           "PlanTypeId":document.getElementById('subscriptionFormRecurringType').value,
@@ -447,11 +464,11 @@ var subscriptionEditInstanceCtrl = function($scope,$modalInstance,$http,$timeout
           "MidId":'',
           "Mid":'',
         };
-
+        //CLEAR OUT CURRENT MID SELECTION
         $scope.subscriptionSelProcessingMid = '';
 
       } else {
-        console.log('No currency change');
+
         var Query = {
           "DisplayName":document.getElementById('subscriptionFormName').value,
           "PlanTypeId":document.getElementById('subscriptionFormRecurringType').value,
@@ -505,36 +522,41 @@ var subscriptionEditInstanceCtrl = function($scope,$modalInstance,$http,$timeout
     
   };
 
-
   //GET THE ID OF THE PROCESSING TYPE FOR GROUP OR MID
   $scope.selectProcessingType = function(item) {
-    $scope.subscriptionSelProcessingMid = item;
-    $scope.selectProcessingID = item;
-    console.log('this is the processing id :' + $scope.selectProcessingID);
+    $scope.subscriptionSelProcessingMid = item; // default dropdown
   }
 
   $scope.subscriptionEditProcessing = function(theForm){
 
-      if(theForm.$dirty){
+      if(theForm.$valid && theForm.$dirty){
         
-        var Query = {"ProcessWithMidId":$scope.selectProcessingID};
+        var Query = {"ProcessWithMidId":$scope.subscriptionSelProcessingMid};
 
         $http({
           method:'POST',
           url: baseUrl + 'recurring/subscriptions/'+ subscriptionId +'/processor ',
           data:Query
         }).success(function(status) {
-          console.log(status);
+      
+          WizardHandler.wizard().next();
+      
+        }).error(function(data, status) {
+                    
+            //SOMETHING ERRONEOUS WITH THE API
+            $scope.errorMsg = 'There is an error with the API please contact your customer support. Error Code: ' + status;
+            $('.errorMsg').slideDown(500);
+            $timeout(function() {
+                $('.errorMsg').slideUp(500);
+            },4000);    
         });
 
-        WizardHandler.wizard().next();
-
-      } else if(!theForm.$dirty) {
+      } else if (!theForm.$dirty){
 
         WizardHandler.wizard().next();
-
+      
       } else {
-        
+
         $scope.errorMsg = 'Please ensure to select all the required fields (*).';
         $('.errorMsg').slideDown(500);
         $timeout(function() {
@@ -546,36 +568,40 @@ var subscriptionEditInstanceCtrl = function($scope,$modalInstance,$http,$timeout
   };
 
   $scope.subscriptionEditDeclineRules = function(theForm){
-
-    var declineNotificationEmail = document.getElementById('subscriptionDeclineEmail').value,
-        re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
-    if(theForm.$dirty){ 
-
-      var Query = {
-          "CreditCardRetryLimit":+document.getElementById('subscriptionCCAttempt').value,
-          "AchRetryLimit":+document.getElementById('subscriptionACHAttempt').value,
-          "DaysBetweenCardRetryAttempts":+document.getElementById('subscriptionCCAttemptLapse').value,
-          "DaysBetweenAchRetryAttempts":+document.getElementById('subscriptionACHAttemptLapse').value,
-          "DeclineNotificationRecipients":declineNotificationEmail,
-      };
+    
+      if(theForm.$dirty && theForm.$valid){
+        var Query = {
+            "CreditCardRetryLimit":+document.getElementById('subscriptionEditCCAttempt').value,
+            "AchRetryLimit":+document.getElementById('subscriptionEditACHAttempt').value,
+            "DaysBetweenCardRetryAttempts":+document.getElementById('subscriptionEditCCAttemptLapse').value,
+            "DaysBetweenAchRetryAttempts":+document.getElementById('subscriptionEditACHAttemptLapse').value,
+            "DeclineNotificationRecipients":document.getElementById('subscriptionEditDeclinedEmail').value,
+        };
 
         $http({
-          method:'POST',
-          url:baseUrl + 'recurring/subscriptions/' + subscriptionId + '/decline-rules',
+          method:'PUT',
+          url:baseUrl + 'recurring/subscriptions/' + subscriptionId,
           data:Query
         }).success(function(status,data) {
 
           $scope.successMsg = 'Subscription has been setup successfully.';
           $('.successMsg').slideDown(500);
           $timeout(function() {
-              $('.successMsg').slideUp(500);
+              $('.errorMsg').slideUp(500);
               $modalInstance.close();
           },2000);
 
+        }).error(function(data, status) {
+                    
+            //SOMETHING ERRONEOUS WITH THE API
+            $scope.errorMsg = 'There is an error with the API please contact your customer support. Error Code: ' + status;
+            $('.errorMsg').slideDown(500);
+            $timeout(function() {
+                $('.errorMsg').slideUp(500);
+            },3000);    
         });   
 
-    } else {
+      } else {
 
         $scope.errorMsg = 'Please ensure to select all the required fields (*).';
         $('.errorMsg').slideDown(500);
