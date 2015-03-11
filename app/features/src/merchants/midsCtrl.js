@@ -505,6 +505,8 @@ app.controller('midCreateModal', function($scope,$modal,$log) {
 
 var midCreateModalInstance = function($scope,$modalInstance,$log,$http,$rootScope,WizardHandler,$timeout,Notify,baseUrl) {
 
+    console.log('mid create');
+
     $http.get(baseUrl + 'gateways/processors').success(function(data) {
         $scope.processors = data;
     });
@@ -516,6 +518,9 @@ var midCreateModalInstance = function($scope,$modalInstance,$log,$http,$rootScop
     // GET CURRENT USER GATEWAYS
     $http.get(baseUrl + 'gateways/current').success(function(data) {
         $scope.curGates = data;
+
+        console.log(data);
+
 
         angular.forEach(data, function(value,key) {
             $scope.currentGateways.push(value);

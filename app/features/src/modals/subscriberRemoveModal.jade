@@ -1,0 +1,23 @@
+script(type="text/ng-template" id="subscriberRemoveContent.html")
+    .modal-header
+        h3.modal-title
+            span.subtle Delete Subscriber: {{subscriberLast}}
+            span 
+        button.close(type="button" ng-click="cancel()") x
+
+    .modal-body
+        p.text-center Are you sure you want to delete subscriber : {{subscriberLast}}
+        h2.text-center 
+
+        .row.errorMsg
+            p {{errorMsg}}
+        .row.successMsg
+            p {{successMsg}}
+
+    .modal-footer
+        a.row_btn.action_btn(href="" ng-click="removeSubscriber()") 
+                i.fa.fa-trash
+                span Delete
+        a.row_btn.cancel_btn(href="" ng-click="cancel()")
+                i.fa.fa-sign-out
+                span Exit

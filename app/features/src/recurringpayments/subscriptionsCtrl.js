@@ -262,7 +262,7 @@ var subscriptionCreateModalInstance = function($scope,$modalInstance,$log,$http,
           $scope.successMsg = 'Subscription has been setup successfully.';
           $('.successMsg').slideDown(500);
           $timeout(function() {
-              $('.errorMsg').slideUp(500);
+              $('.successMsg').slideUp(500);
               $modalInstance.close();
           },2000);
 

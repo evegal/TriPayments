@@ -1,8 +1,5 @@
-include ../modals/midCreateModal.jade
-include ../modals/midEditModal.jade
-include ../modals/deleteMidModal.jade
-include ../modals/enableMidModal.jade
-include ../modals/removeMidModal.jade
+include ../modals/subscriberCreateOrEditModal.jade
+include ../modals/subscriberRemoveModal.jade
 
 .row
     h1 Recurring Payments - Subscribers
@@ -12,103 +9,46 @@ include ../modals/removeMidModal.jade
             .col-md-6
               h2.panel-title
                 i.fa.fa-icon
-                | Subscribers
+                | Subscribers : {{subscribersAmount}}
             .col-md-6
-                a.def_btn.wet_asphalt_btn.float-right(href="" ng-csv='midsCSV' filename="midsExport.csv" ng-if="dataLen != 0" tooltip="Export results to excel")
+                a.def_btn.wet_asphalt_btn.float-right(href="" ng-csv='subscriberCSV' filename="midsExport.csv" ng-if="subscribersLen != 0" tooltip="Export results to excel")
                     i.fa.fa-file-excel-o 
                     span Excel Export
-                a.def_btn.emerald_btn.float-right.margin-right(href="" ng-click="open()" ng-controller="midCreateModal" tooltip="Create MID")
+                a.def_btn.emerald_btn.float-right.margin-right(href="" ng-click="open()" ng-controller="subscriberCreateModal" tooltip="Create Subscriber")
                     i.fa.fa-plus
-                    span Create MID
+                    span Create Subscriber
     .panel-body
-        h3.noResults(ng-if="dataLen == 0") {{'There are currently no MIDs setup for this account.'}}
-        table.table.table-striped.ng-table-responsive.midsTable(st-table="shownMids" st-safe-src="mids" ng-if="dataLen != 0")
+        h3.noResults(ng-if="subscribersLen == 0") {{'There are currently no subscribers setup for this account.'}}
+        table.table.table-striped.ng-table-responsive.midsTable(st-table="shownSubscribers" st-safe-src="subscribersBulk" ng-if="subscribersLen != 0")
             thead
                 tr
                     th(colspan="10")
-                        input.form-control(st-search="" type="search" placeholder="Filter through all MID results" tooltip="Filter through all MID results")
+                        input.form-control(st-search="" type="search" placeholder="Filter through all subscribers" tooltip="Filter through all subscriber results")
                 tr
-                    th.st-header(st-sort="DisplayName" st-sort-default style="width:15%") 
-                        span(tooltip="Sort Display Names") Display Name
-                    th.st-header(st-sort="Gateway" style="width:10%") 
-                        span(tooltip="Sort Gateways") Gateway
-                    th.st-header(st-sort="MonthlyCap" style="width:10%")
-                        span(tooltip="Sort Monthly Caps") Monthly Cap
-                    th.st-header(st-sort="CapUtilizationPercentage" style="width:10%") 
-                        span(tooltip="Sort Monthly Cap Status") Monthly Cap Status
-                    th.st-header(st-sort="Active" style="width:5%")
-                        span(tooltip="Sort Status") Status
-                    th.st-header(st-sort="PaymentTypes" style="width:15%")
-                        span(tooltip="Sort Payment Types") Payment Types
-                    th.st-header-nosort(style="width:10%")
-                        span() MID Group Profile
-                    th.st-header-nosort(style="width:10%")
-                        span() Rollover Profile
+                    th.st-header(st-sort="FirstName" st-sort-default style="width:15%") 
+                        span(tooltip="Sort Display FirstName") First Name
+                    th.st-header(st-sort="LastName" style="width:10%") 
+                        span(tooltip="Sort LastName") Last Name
+                    th.st-header(st-sort="City" style="width:10%")
+                        span(tooltip="Sort Monthly City") City
+                    th.st-header(st-sort="Country" style="width:10%") 
+                        span(tooltip="Sort Country") Country
+                    th.st-header(st-sort="Email" style="width:5%")
+                        span(tooltip="Sort Email") Email
                     th.st-header-nosort(style="width:15%")
                         span() Actions
             tbody
-                tr
-                    td
-                        span(tooltip="Filter By Display Name")
-                            input.form-control(st-search="'DisplayName'" type="search" placeholder="Display Name")
-                    td
-                        span(tooltip="Filter By Gateway")
-                            input.form-control(st-search="'Gateway'" type="search" placeholder="Gateway")
-                    td
-                        span(tooltip="Filter By Monthly Cap")
-                            input.form-control(st-search="'MonthlyCap'" type="search" placeholder="MonthlyCap")
-                    td
-                        span(tooltip="Filter By Cap Utilization %")
-                            input.form-control(st-search="'CapUtilizationPercentage'" type="search" placeholder="Cap Utilization %")
-                    td
-                        span(tooltip="Filter By Status")
-                            input.form-control(st-search="'Active'" type="search" placeholder="Status")
-                    td
-                        span(tooltip="Filter By Payment Types")
-                            input.form-control(st-search="'PaymentTypes'" type="search" placeholder="Payment Types")
-                    td
-                    td
-                    td
-
-                tr(ng-repeat="mid in shownMids")
-                    td {{mid.DisplayName}}
-                    td {{mid.Gateway}}
-                    td {{mid.MonthlyCap | currency}}
-                    td
-                        progressbar(value="mid.CapUtilizationPercentage") 
-                            span {{mid.CapUtilizationPercentage}} %
+                tr(ng-repeat="subscriber in shownSubscribers")
+                    td {{subscriber.FirstName}}
+                    td {{subscriber.LastName}}
+                    td {{subscriber.City}}
+                    td {{subscriber.Country}}
+                    td {{subscriber.Email}}
                     td 
-                        tri-status(status="{{mid.Active}}" ng-class="(mid.Active) ? 'success' : 'failed' ")
-                    td.paymentTypes {{findPayType(mid)}} 
-                        span(ng-bind-html="payments") {{payments}}
-
-                    td
-                        tri-group                               
-                    td
-                        a.groupAnchor(href="" ng-if="showRolloverParents(mid) == 0" tooltip="There are currently no MIDs rolling over to {{mid.DisplayName | uppercase}}") 
-                            i.fa.fa-info-circle
-                            span  No Rollover to MID
-
-                        a.groupAnchor(href="" ng-if="showRolloverParents(mid)>0") 
-                            i.fa.fa-info-circle
-                            span  {{showRolloverParents(mid)}} Rollover MID(s)
-                            div.floater
-                                ul(ng-repeat="roll in rollGroups track by $index")
-                                    li {{roll.Name | uppercase}}
-                    td 
-                        a.row_btn.edit_mid_btn(ng-click="openIt(mid)" ng-controller="midEditModalCtrl" tooltip="Edit {{mid.DisplayName | uppercase}}")
+                        a.row_btn.edit_mid_btn(ng-click="openIt(subscriber.SubscriberId)" ng-controller="subscriberEditModalCtrl" tooltip="Edit {{subscriber.LastName | uppercase}}")
                             i.fa.fa-edit
                             span Edit
-                        a.row_btn.disable_mid_btn(ng-click="openMID($index,mid)" ng-controller="DeleteMidCtrl" ng-show="{{mid.Active}}" tooltip="Disable {{mid.DisplayName | uppercase}}") 
-                            i.fa.fa-toggle-off
-                            span Disable
-                        a.row_btn.emerald_btn(ng-click="open($index,mid)" ng-controller="EnableMidCtrl" ng-show="{{!mid.Active}} && {{mid.Verified == true}}" tooltip="Enable {{mid.DisplayName | uppercase}}")
-                            i.fa.fa-toggle-on
-                            span Enable
-                        a.row_btn.disabled_mid_btn(ng-show="{{mid.Verified == false}}" tooltip="{{mid.DisplayName | uppercase}} has not been verified.  Please edit and verify this MID before enabling." ng-click="openIt(mid)" ng-controller="midEditModalCtrl")
-                            i.fa.fa-toggle-on
-                            span Enable                            
-                        a.row_btn.delete_mid_btn(ng-click="open($index,mid)" ng-controller="removeMidModal" tooltip="Delete {{mid.DisplayName | uppercase}}")
+                        a.row_btn.delete_mid_btn(ng-click="open($index,subscriber.SubscriberId,subscriber.LastName)" ng-controller="removeSubscriberModalCtrl" tooltip="Delete {{subscriber.LastName | uppercase}}")
                             i.fa.fa-trash
                             span Delete
             tfoot

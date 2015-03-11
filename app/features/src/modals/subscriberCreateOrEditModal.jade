@@ -1,0 +1,139 @@
+script(type="text/ng-template" id="subscriberCreateOrEditContent.html")
+    .midCreateEditModal.midCreateModal
+        .modal-header
+            h3 Create New Subscriber
+            button.close(type="button" ng-click="cancel()") X
+        .modal-body
+            wizard(on-finish="finishedWizard()")
+                wz-step(title="1. Subscriber Info")
+                    form.midCreateModal.stepOne(name="subscribersInfoCreateForm" novalidate)
+                        .row
+                            .col-md-4
+                                label *First Name:
+                            .col-md-6
+                                input.form-control(required="" ng-model="subscriberFirstName" id="subscriberFirstName" type="text" placeholder="Enter first name (Required)." tooltip="Enter subscribers first name. (Required) " tooltip-placement="top")
+
+                        .row
+                            .col-md-4
+                                label *Last Name:
+                            .col-md-6
+                                input.form-control(required="" ng-model="subscriberLastName" id="subscriberLastName" type="text" placeholder="Enter last name (Required)." tooltip="Enter subscribers last name. (Required) " tooltip-placement="top")
+
+                        .row
+                            .col-md-4
+                                label *Country:
+                            .col-md-6
+                                select.form-control(required="" ng-model="currentCountry" id="currentCountry" ng-change="selectCountryType(currentCountry)" ng-options="obj.Id as obj.Country for obj in countries")
+
+                        .row
+                            .col-md-4
+                                label *Address:
+                            .col-md-3
+                                input.form-control(required="" ng-model="subscriberAddress" id="subscriberAddress" type="text" placeholder="Enter address (Required)." tooltip="Enter address. (Required) " tooltip-placement="top")
+                            .col-md-3
+                                input.form-control(ng-model="subscriberAddressApt" id="subscriberAddressApt" type="text" placeholder="Enter Apt/Suite #" tooltip="Enter Apt/Suite #" tooltip-placement="top")
+
+                        .row
+                            .col-md-4
+                                label *City/{{stateOrProvince}}/{{zipOrPostal}}:
+                            .col-md-2
+                                input.form-control(required="" ng-model="subscriberCity" id="subscriberCity" type="text" placeholder="Enter city" tooltip="Enter city" tooltip-placement="top")
+                            .col-md-2
+                                input.form-control(required="" ng-model="subscriberStateProv" id="subscriberStateProv" type="text" placeholder="Enter {{stateOrProvince | lowercase}}" tooltip="Enter {{stateOrProvince | lowercase}}" tooltip-placement="top")
+                            .col-md-2
+                                input.form-control(required="" ng-model="subscriberZipPostal" id="subscriberZipPostal" type="text" placeholder="Enter {{zipOrPostal | lowercase}}" tooltip="Enter {{zipOrPostal | lowercase}}" tooltip-placement="top")
+                        .row
+                            .col-md-4
+                                label *Contact Info:
+                            .col-md-3
+                                input.form-control(required="" ng-model="subscriberEmail" id="subscriberEmail" type="email" placeholder="Enter email" tooltip="Enter email" tooltip-placement="top")
+                            .col-md-3
+                                input.form-control(required="" ng-model="subscriberPhone" id="subscriberPhone" type="tel" placeholder="Enter phone" tooltip="Enter phone" tooltip-placement="top")
+
+                        .row
+                            .col-md-6.text-left
+                                a.row_btn.emerald_btn(href="" type="submit" wz-previous="")
+                                    i.fa.fa-arrow-left
+                                    span Previous
+
+                            .col-md-6.text-right
+                                a.row_btn.emerald_btn(href="" type="submit" ng-click="subscriberInfoCreate(subscribersInfoCreateForm)")
+                                    span Finish
+                                    i.fa.fa-arrow-right
+
+                        .row.errorMsg
+                            p {{errorMsg}}
+
+                        .row.successMsg
+                            p {{successMsg}}
+
+        
+                wz-step(title="2. Payment Info")
+                   form.form.midCreateModal.stepOne(name="subscribersPaymentCreateForm" novalidate)
+                        .row
+                            .col-md-4
+                                label *Credit Card:
+                            .col-md-6
+                                input.form-control(required="" ng-model="subscriberPayCC" id="subscriberPayCC" type="number" placeholder="Enter credit card number (Required)." tooltip="Enter credit card no dashes. (Required) " tooltip-placement="top")
+
+                        .row
+                            .col-md-4
+                                label *Expiration:
+                            .col-md-3
+                                select.form-control(required="" ng-model="subscriberPayCcMm" id="subscriberPayCcMm" tooltip="Select the month of expiration" tooltip-placement="top")
+                                    option(value="" selected) Month
+                                    option(value="1") 1 - Jan
+                                    option(value="2") 2 - Feb
+                                    option(value="3") 3 - Mar
+                                    option(value="4") 4 - Apr
+                                    option(value="5") 5 - May
+                                    option(value="6") 6 - Jun
+                                    option(value="7") 7 - Jul
+                                    option(value="8") 8 - Aug
+                                    option(value="9") 9 - Sep
+                                    option(value="10") 10 - Oct
+                                    option(value="11") 11 - Nov
+                                    option(value="12") 12 - Dec
+                            .col-md-3
+                                select.form-control(required="" ng-model="subscriberPayCcYy" id="subscriberPayCcYy" type="text" tooltip="Select the year of expiration" tooltip-placement="top")
+                                    option(value="" selected) Year
+                                    option(value="2015") 2015
+                                    option(value="2016") 2016
+                                    option(value="2017") 2017
+                                    option(value="2018") 2018
+                                    option(value="2019") 2019
+                                    option(value="2020") 2020
+                                    option(value="2021") 2021
+                                    option(value="2022") 2022
+                                    option(value="2023") 2023
+                                    option(value="2024") 2024
+                                    option(value="2025") 2025
+                        .row
+                            .col-md-4
+                                label *CVV:
+                            .col-md-3
+                                input.form-control(required="" ng-model="subscriberPayCvv" id="subscriberPayCvv" tooltip="Select the month of expiration" tooltip-placement="top")
+
+                    .row
+                        .col-md-6.text-left
+                            a.row_btn.emerald_btn(href="" type="submit" wz-previous="")
+                                i.fa.fa-arrow-left
+                                span Previous
+
+                        .col-md-6.text-right
+                            a.row_btn.emerald_btn(href="" type="submit" ng-click="subscriberPayCreate(subscribersPaymentCreateForm)")
+                                span Finish
+                                i.fa.fa-arrow-right
+
+                    .row.errorMsg
+                        p {{errorMsg}}
+
+                    .row.successMsg
+                        p {{successMsg}}
+
+        .modal-footer.action_group
+            a.row_btn.cancel_btn(href="" ng-click="cancel()")
+                i.fa.fa-sign-out
+                span Exit
+
+
