@@ -56,10 +56,15 @@ script(type="text/ng-template" id="subscriberCreateOrEditContent.html")
                                     i.fa.fa-arrow-left
                                     span Previous
 
-                            .col-md-6.text-right
+                            .col-md-6.text-right(ng-if="!editFlag")
                                 a.row_btn.emerald_btn(href="" type="submit" ng-click="subscriberInfoCreate(subscribersInfoCreateForm)")
-                                    span Finish
+                                    span Next
                                     i.fa.fa-arrow-right
+
+                            .col-md-6.text-right(ng-if="editFlag")
+                                a.row_btn.emerald_btn(href="" type="submit" ng-click="subscriberEditPersInfo(subscribersInfoCreateForm)")
+                                    span Next
+                                    i.fa.fa-arrow-right                                        
 
                         .row.errorMsg
                             p {{errorMsg}}

@@ -27,7 +27,7 @@ var subscriberCreateModalInstance = function($scope,$modalInstance,$log,$http,$r
     $scope.stateOrProvince = "State";
     $scope.zipOrPostal = "Zip";
 
-    //TRACK CHANGE IN COUNTRY DROPDWON
+    //TRACK CHANGE IN COUNTRY DROPDOWN
     $scope.selectCountryType = function(countryId) {
         if (countryId == 'US') {
             $scope.currentCountry = countryId;
@@ -66,9 +66,9 @@ var subscriberCreateModalInstance = function($scope,$modalInstance,$log,$http,$r
                 "LastName":document.getElementById('subscriberLastName').value,
                 "Country":$scope.currentCountry,
                 "Address1":document.getElementById('subscriberAddress').value,
-                "Address2 ":document.getElementById('subscriberAddressApt').value,
+                "Address2":document.getElementById('subscriberAddressApt').value,
                 "City":document.getElementById('subscriberCity').value,
-                "State ":document.getElementById('subscriberStateProv').value,
+                "State":document.getElementById('subscriberStateProv').value,
                 "PostalCode":document.getElementById('subscriberZipPostal').value,
                 "Email":document.getElementById('subscriberEmail').value,
                 "Phone":document.getElementById('subscriberPhone').value,                
@@ -214,6 +214,9 @@ var subscriberEditInstanceCtrl = function($scope,$modalInstance,$log,$http,$root
         $modalInstance.close();
     }
 
+    //FLAG TO KNOW IF ITS AN EDIT OR CREATE
+    $scope.editFlag = subscriberId;
+
     //COUNTRY CODES FOR SUBSCRIBER
     $scope.countries = $rootScope.countries;
 
@@ -231,19 +234,15 @@ var subscriberEditInstanceCtrl = function($scope,$modalInstance,$log,$http,$root
         $scope.subscriberEmail = data.Email;
         $scope.subscriberPhone = data.Phone;
 
+        //INITIALIZE BINDING FOR LABELS
+        if (data.Country == 'US') {
+            $scope.stateOrProvince = "State";
+            $scope.zipOrPostal = "Zip";
+        } else {
+            $scope.stateOrProvince = "Province";
+            $scope.zipOrPostal = "Postal";
+        }
 
-    /*
-      $scope.subscription = data;      
-      $scope.subscriptionFormName = $scope.subscription.DisplayName;
-      $scope.subscriptionFormRecurringType = $scope.subscription.PlanType.Id; // calendar or days of cycle 
-      $scope.subscriptionFormAmount = $scope.subscription.Amount;
-      $scope.subscriptionFormCalDate = $scope.subscription.CalendarDayOrInterval;
-      $scope.subscriptionEditCCAttempt = $scope.subscription.CreditCardMaxRetries;
-      $scope.subscriptionEditCCAttemptLapse = $scope.subscription.DaysBetweenCardRetries;
-      $scope.subscriptionEditACHAttempt = $scope.subscription.AchMaxRetries;
-      $scope.subscriptionEditACHAttemptLapse = $scope.subscription.DaysBetweenAchRetries;
-      $scope.subscriptionEditDeclinedEmail = $scope.subscription.DeclineNotificationRecipients;
-    */
 
     }).error(function(data, status) {
                     
@@ -252,9 +251,86 @@ var subscriberEditInstanceCtrl = function($scope,$modalInstance,$log,$http,$root
       $('.errorMsg').slideDown(500);
       $timeout(function() {
           $('.errorMsg').slideUp(500);
-      },4000);    
+      },4000);
+
     });
 
+    //TRACK CHANGE IN COUNTRY DROPDOWN
+    $scope.selectCountryType = function(countryId) {
+        if (countryId == 'US') {
+            $scope.currentCountry = countryId;
+            $scope.stateOrProvince = "State";
+            $scope.zipOrPostal = "Zip";
+        } else {
+            $scope.currentCountry = countryId;
+            $scope.stateOrProvince = "Province";
+            $scope.zipOrPostal = "Postal";
+        }
+    }
+
+    $scope.subscriberEditPersInfo = function(theForm){
+        console.log(theForm.$dirty);
+        if(theForm.$dirty && theForm.$valid ) {
+            var Query = {
+                "FirstName":document.getElementById('subscriberFirstName').value,
+                "LastName":document.getElementById('subscriberLastName').value,
+                "Country":$scope.currentCountry,
+                "Address1":document.getElementById('subscriberAddress').value,
+                "Address2":document.getElementById('subscriberAddressApt').value,
+                "City":document.getElementById('subscriberCity').value,
+                "State":document.getElementById('subscriberStateProv').value,
+                "PostalCode":document.getElementById('subscriberZipPostal').value,
+                "Email":document.getElementById('subscriberEmail').value,
+                "Phone":document.getElementById('subscriberPhone').value,
+            }
+
+            
+            $http({
+              method:'PUT',
+              url:baseUrl + 'recurring/subscribers/' + subscriberId,
+              data:Query
+            }).success(function(status,data) {
+
+              $scope.successMsg = 'Subscriber has been updated.';
+              $('.successMsg').slideDown(500);
+              $timeout(function() {
+                  $('.successMsg').slideUp(500);
+                  //PROCEED TO FOLLOWING TAB
+                  WizardHandler.wizard().next();
+              },2000);
+                
+            }).error(function(data, status) {
+                          
+                //SOMETHING ERRONEOUS WITH THE API
+                $scope.errorMsg = 'There is an error with the API please contact your customer support. Error Code: ' + status;
+                $('.errorMsg').slideDown(500);
+                $timeout(function() {
+                    $('.errorMsg').slideUp(500);
+                },3000);    
+            });
+
+
+
+
+
+
+        } else if (!theForm.$dirty) {
+
+            console.log('nothing changed');
+            WizardHandler.wizard().next();
+
+        } else {
+
+            //SOMETHING WAS NOT FILLED OUT PROPERLY
+            $scope.errorMsg = 'Please ensure to fill out the required fields.';
+            $('.errorMsg').slideDown(500);
+            $timeout(function() {
+                $('.errorMsg').slideUp(500);
+            },3000);
+
+        }
+
+    }
 
 
 
