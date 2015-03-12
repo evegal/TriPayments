@@ -73,8 +73,8 @@ var subscriberCreateModalInstance = function($scope,$modalInstance,$log,$http,$r
                 "Email":document.getElementById('subscriberEmail').value,
                 "Phone":document.getElementById('subscriberPhone').value,                
                 "CardNumber":document.getElementById('subscriberPayCC').value,
-                "ExpMonth":document.getElementById('subscriberPayCcMm').value,
-                "ExpYear":document.getElementById('subscriberPayCcYy').value,
+                "ExpMonth":+document.getElementById('subscriberPayCcMm').value,
+                "ExpYear":+document.getElementById('subscriberPayCcYy').value,
                 "Cvv":document.getElementById('subscriberPayCvv').value,
             };
             
@@ -233,6 +233,10 @@ var subscriberEditInstanceCtrl = function($scope,$modalInstance,$log,$http,$root
         $scope.subscriberZipPostal = data.PostalCode;
         $scope.subscriberEmail = data.Email;
         $scope.subscriberPhone = data.Phone;
+        $scope.subscriberPayCC = data.CcLast4;
+        $scope.subscriberPayCcMm = data.ExpMonth;
+        $scope.subscriberPayCcYy = data.ExpYear;
+        $scope.subscriberPayCvv  = '***';
 
         //INITIALIZE BINDING FOR LABELS
         if (data.Country == 'US') {
