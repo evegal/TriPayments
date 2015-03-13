@@ -17,6 +17,10 @@ app.controller('subscriberCreateModal', function($scope,$modal,$log) {
 
 var subscriberCreateModalInstance = function($scope,$modalInstance,$log,$http,$rootScope,WizardHandler,$timeout,Notify,baseUrl) {
 
+    //FLAG FOR TO KNOW ITS AN EDIT
+    $scope.editFlag = false;
+    console.log($scope.editFlag);
+
     //COUNTRY CODES FOR SUBSCRIBER
     $scope.countries = $rootScope.countries;
     
@@ -60,6 +64,7 @@ var subscriberCreateModalInstance = function($scope,$modalInstance,$log,$http,$r
 
     //CREATE SUBSCRIBER PERSONAL INFO
     $scope.subscriberPayCreate = function(theForm){
+        console.log('subscriberPayCreate');
         if(theForm.$valid){
             var Query = {
                 "FirstName":document.getElementById('subscriberFirstName').value,
@@ -214,15 +219,15 @@ var subscriberEditInstanceCtrl = function($scope,$modalInstance,$log,$http,$root
         $modalInstance.close();
     }
 
-    //FLAG TO KNOW IF ITS AN EDIT OR CREATE
-    $scope.editFlag = subscriberId;
+    //FLAG FOR TO KNOW ITS AN EDIT
+    $scope.editFlag = true;
+    console.log($scope.editFlag);
 
     //COUNTRY CODES FOR SUBSCRIBER
     $scope.countries = $rootScope.countries;
 
     // GET LATEST FOR THIS SUBSCRIPTION
     $http.get( baseUrl + 'recurring/subscribers/' + subscriberId ).success(function(data) {
-        console.log(data);
         $scope.subscriberFirstName = data.FirstName;
         $scope.subscriberLastName = data.LastName;
         $scope.currentCountry = data.Country;
@@ -233,7 +238,7 @@ var subscriberEditInstanceCtrl = function($scope,$modalInstance,$log,$http,$root
         $scope.subscriberZipPostal = data.PostalCode;
         $scope.subscriberEmail = data.Email;
         $scope.subscriberPhone = data.Phone;
-        $scope.subscriberPayCC = data.CcLast4;
+        $scope.subscriberPayCC = data.CcFirst6 +' - '+ data.CcLast4;
         $scope.subscriberPayCcMm = data.ExpMonth;
         $scope.subscriberPayCcYy = data.ExpYear;
         $scope.subscriberPayCvv  = '***';
@@ -273,7 +278,6 @@ var subscriberEditInstanceCtrl = function($scope,$modalInstance,$log,$http,$root
     }
 
     $scope.subscriberEditPersInfo = function(theForm){
-        console.log(theForm.$dirty);
         if(theForm.$dirty && theForm.$valid ) {
             var Query = {
                 "FirstName":document.getElementById('subscriberFirstName').value,
@@ -287,7 +291,6 @@ var subscriberEditInstanceCtrl = function($scope,$modalInstance,$log,$http,$root
                 "Email":document.getElementById('subscriberEmail').value,
                 "Phone":document.getElementById('subscriberPhone').value,
             }
-
             
             $http({
               method:'PUT',
@@ -314,13 +317,8 @@ var subscriberEditInstanceCtrl = function($scope,$modalInstance,$log,$http,$root
             });
 
 
-
-
-
-
         } else if (!theForm.$dirty) {
 
-            console.log('nothing changed');
             WizardHandler.wizard().next();
 
         } else {
@@ -336,6 +334,11 @@ var subscriberEditInstanceCtrl = function($scope,$modalInstance,$log,$http,$root
 
     }
 
+    $scope.subscriberEditCardInfo = function(theForm){
+        console.log('subscriberEditCardInfo');
+
+
+    }
 
 
         

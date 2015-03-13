@@ -1,7 +1,7 @@
 script(type="text/ng-template" id="subscriberCreateOrEditContent.html")
     .midCreateEditModal.midCreateModal
         .modal-header
-            h3 Create New Subscriber
+            h3 Create Or Edit
             button.close(type="button" ng-click="cancel()") X
         .modal-body
             wizard(on-finish="finishedWizard()")
@@ -58,12 +58,12 @@ script(type="text/ng-template" id="subscriberCreateOrEditContent.html")
 
                             .col-md-6.text-right(ng-if="!editFlag")
                                 a.row_btn.emerald_btn(href="" type="submit" ng-click="subscriberInfoCreate(subscribersInfoCreateForm)")
-                                    span Next
+                                    span Create
                                     i.fa.fa-arrow-right
 
                             .col-md-6.text-right(ng-if="editFlag")
                                 a.row_btn.emerald_btn(href="" type="submit" ng-click="subscriberEditPersInfo(subscribersInfoCreateForm)")
-                                    span Next
+                                    span Edit
                                     i.fa.fa-arrow-right                                        
 
                         .row.errorMsg
@@ -77,9 +77,9 @@ script(type="text/ng-template" id="subscriberCreateOrEditContent.html")
                    form.form.midCreateModal.stepOne(name="subscribersPaymentCreateForm" novalidate)
                         .row
                             .col-md-4
-                                label *Credit Card:
+                                label *Credit Card: {{editFlag}}
                             .col-md-6
-                                input.form-control(required="" ng-model="subscriberPayCC" id="subscriberPayCC" type="number" placeholder="Enter credit card number (Required)." tooltip="Enter credit card no dashes. (Required) " tooltip-placement="top")
+                                input.form-control(required="" ng-model="subscriberPayCC" id="subscriberPayCC" type="text" placeholder="Enter credit card number (Required)." tooltip="Enter credit card no dashes. (Required) " tooltip-placement="top")
 
                         .row
                             .col-md-4
@@ -125,10 +125,16 @@ script(type="text/ng-template" id="subscriberCreateOrEditContent.html")
                                 i.fa.fa-arrow-left
                                 span Previous
 
-                        .col-md-6.text-right
+                        .col-md-6.text-right(ng-if="editFlag == false")
                             a.row_btn.emerald_btn(href="" type="submit" ng-click="subscriberPayCreate(subscribersPaymentCreateForm)")
-                                span Finish
+                                span subscriberPayCreate
                                 i.fa.fa-arrow-right
+
+                        .col-md-6.text-right(ng-if="editFlag == true")
+                            a.row_btn.emerald_btn(href="" type="submit" ng-click="subscriberEditCardInfo(subscribersPaymentCreateForm)")
+                                span subscriberEditCardInfo
+                                i.fa.fa-arrow-right  
+
 
                     .row.errorMsg
                         p {{errorMsg}}
