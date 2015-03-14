@@ -11,6 +11,7 @@ app.controller('subscriptionsCtrl', function($timeout,$filter,$rootScope,$scope,
 
     // close all open nested tables
     
+
     // LOAD MIDS FOR SPECIFIC GROUP
     var url = baseUrl + '/midgroups/' + id + '/mids';
     $http.get(url).success(function(data) {
@@ -26,6 +27,7 @@ app.controller('subscriptionsCtrl', function($timeout,$filter,$rootScope,$scope,
 
       });
 
+
       Notify.getMsg('UpdatedMID', function(event,data) {
 
         $http.get(url).success(function(data) {
@@ -37,6 +39,9 @@ app.controller('subscriptionsCtrl', function($timeout,$filter,$rootScope,$scope,
       $scope.isMidLoaded = true;
       //console.log(data);
     });
+
+
+
   };
 
   $scope.gotoMID = function(index,shownMerchants) {
@@ -375,14 +380,13 @@ var subscriptionEditInstanceCtrl = function($scope,$modalInstance,$http,$timeout
   $scope.currencyChange = false;
   $scope.paymentChange = false;
 
-  $scope.currencyChange = function () {
-    $scope.currencyChangeVal = true;
-    console.log('currency change');
-  };  
 
   $scope.paymentChange = function () {
     $scope.paymentChangeVal = true;
-    console.log('payment change');
+  }; 
+
+  $scope.currencyChange = function () {
+    $scope.currencyChangeVal = true;
   };  
 
   $scope.cancel = function() {
@@ -391,22 +395,25 @@ var subscriptionEditInstanceCtrl = function($scope,$modalInstance,$http,$timeout
 
   // GET LATEST FOR THIS SUBSCRIPTION
   $http.get( baseUrl + 'recurring/subscriptions/' + subscriptionId ).success(function(data) {
-      $scope.subscription = data;
       
-      $scope.subscriptionFormName = $scope.subscription.DisplayName;
-      $scope.subscriptionFormRecurringType = $scope.subscription.PlanType.Id; // calendar or days of cycle 
-      $scope.subscriptionFormAmount = $scope.subscription.Amount;
-      $scope.subscriptionFormCalDate = $scope.subscription.CalendarDayOrInterval;
+      $scope.subscriptionFormName = data.DisplayName;
+      $scope.subscriptionFormRecurringType = data.PlanType.Id; // calendar or days of cycle 
+      $scope.subscriptionFormAmount = data.Amount;
+      $scope.subscriptionFormCalDate = data.CalendarDayOrInterval;
+      $scope.paymentTypes = data.AllowedCardTypes;
+      $scope.currencyTypes = data.AllowedCurrencies;
 
-      // PAYMENT CHECKBOXES
-      angular.forEach($scope.subscription.AllowedCardTypes, function(value,key) {
+      // PAYMENT CHECKBOXES BINDING TO TRUE
+      angular.forEach(data.AllowedCardTypes, function(value,key) {
         $scope[ value.Name ] = true;
       });
 
-      // CURRENCY CHECKBOXES
-      angular.forEach($scope.subscription.AllowedCurrencies, function(value,key) {
+      // CURRENCY CHECKBOXES BINDING TO TRUE
+      angular.forEach(data.AllowedCurrencies, function(value,key) {
           $scope[ value.Name ] = true;
       });
+
+      
 
       // PROCESSING FOR SUBSCRIPTION
       $http.get(baseUrl + 'recurring/subscriptions/' + subscriptionId + '/available-processors').success(function(data) {
@@ -414,14 +421,14 @@ var subscriptionEditInstanceCtrl = function($scope,$modalInstance,$http,$timeout
       });
 
       //BIND PREVIOUS SELECTED PROCESSING MID
-      $scope.subscriptionSelProcessingMid = $scope.subscription.MidId;
+      $scope.subscriptionSelProcessingMid = data.MidId;
 
       // DECLINE RULES FOR SUBSCRIPTION
-      $scope.subscriptionEditCCAttempt = $scope.subscription.CreditCardMaxRetries;
-      $scope.subscriptionEditCCAttemptLapse = $scope.subscription.DaysBetweenCardRetries;
-      $scope.subscriptionEditACHAttempt = $scope.subscription.AchMaxRetries;
-      $scope.subscriptionEditACHAttemptLapse = $scope.subscription.DaysBetweenAchRetries;
-      $scope.subscriptionEditDeclinedEmail = $scope.subscription.DeclineNotificationRecipients;
+      $scope.subscriptionEditCCAttempt = data.CreditCardMaxRetries;
+      $scope.subscriptionEditCCAttemptLapse = data.DaysBetweenCardRetries;
+      $scope.subscriptionEditACHAttempt = data.AchMaxRetries;
+      $scope.subscriptionEditACHAttemptLapse = data.DaysBetweenAchRetries;
+      $scope.subscriptionEditDeclinedEmail = data.DeclineNotificationRecipients;
 
   }).error(function(data, status) {
                     
@@ -435,46 +442,45 @@ var subscriptionEditInstanceCtrl = function($scope,$modalInstance,$http,$timeout
 
   $scope.subscriptionEditConfig = function(theForm) {
 
-      // BIND CREDIT CARD CHECKBOXES
-      $scope.paymentTypes = [];
-      $('input[name=cardCheckbox]:checked').each(function() {
-          $scope.paymentTypes.push($(this).val());
-      });
-
-      // BIND CURRENCY CHECKBOXES
-      $scope.currencyTypes = [];
-      $('input[name=curTypeCheckbox]:checked').each(function() {
-          $scope.currencyTypes.push($(this).val());
-      })
-
     if(theForm.$dirty && theForm.$valid && $scope.paymentTypes.length > 0 && $scope.currencyTypes.length > 0 ) {
 
-      var Query = {};
+
+      // BIND CREDIT CARD CHECKBOXES
+      if ($scope.paymentChangeVal) {
+        $scope.paymentTypes = [];
+        $('input[name=cardCheckbox]:checked').each(function() {
+            $scope.paymentTypes.push($(this).val());
+        });
+      } 
+
+      // BIND CURRENCY CHECKBOXES
+      if($scope.currencyChangeVal){
+        $scope.currencyTypes = [];
+        $('input[name=curTypeCheckbox]:checked').each(function() {
+            $scope.currencyTypes.push($(this).val());
+        });
+      } 
+     
+      var Query = {
+        "DisplayName":document.getElementById('subscriptionFormName').value,
+        "PlanTypeId":document.getElementById('subscriptionFormRecurringType').value,
+        "DateOrDays":document.getElementById('subscriptionFormDateVal').value,
+        "Amount":+document.getElementById('subscriptionFormAmount').value,
+      };
 
       // IF STATEMENT IN CASE A PAYMENT METHOD HAS BEEN CHANGED
       // IT WILL IMPACT THE MID SELECTION
       if ($scope.paymentChangeVal) {
-        var Query = {
-          "DisplayName":document.getElementById('subscriptionFormName').value,
-          "PlanTypeId":document.getElementById('subscriptionFormRecurringType').value,
-          "DateOrDays":document.getElementById('subscriptionFormDateVal').value,
-          "Amount":+document.getElementById('subscriptionFormAmount').value,
-          "CardTypeIds":$scope.paymentTypes,
-          "CurrencyIds":$scope.currencyTypes,
-          "MidId":'',
-          "Mid":'',
-        };
-        //CLEAR OUT CURRENT MID SELECTION
+        //CLEAR OUT CURRENT MID SELECTION VIEW AND ENDPOINT
+        //BIND NEW PAYMENT AND CARD TYPES
         $scope.subscriptionSelProcessingMid = '';
+        Query.MidId = '';
+        Query.Mid = '';
+        Query.CardTypeIds = $scope.paymentTypes;
+      }
 
-      } else {
-
-        var Query = {
-          "DisplayName":document.getElementById('subscriptionFormName').value,
-          "PlanTypeId":document.getElementById('subscriptionFormRecurringType').value,
-          "DateOrDays":document.getElementById('subscriptionFormDateVal').value,
-          "Amount":+document.getElementById('subscriptionFormAmount').value,
-        };
+      if($scope.currencyChangeVal){
+        Query.CurrencyIds = $scope.currencyTypes;
       }
 
       $http({
@@ -584,7 +590,7 @@ var subscriptionEditInstanceCtrl = function($scope,$modalInstance,$http,$timeout
           data:Query
         }).success(function(status,data) {
 
-          $scope.successMsg = 'Subscription has been setup successfully.';
+          $scope.successMsg = 'Subscription rules have been successfuly updated.';
           $('.successMsg').slideDown(500);
           $timeout(function() {
               $('.errorMsg').slideUp(500);
@@ -600,6 +606,10 @@ var subscriptionEditInstanceCtrl = function($scope,$modalInstance,$http,$timeout
                 $('.errorMsg').slideUp(500);
             },3000);    
         });   
+
+      } else if (!theForm.$dirty && theForm.$valid) {
+
+        $modalInstance.close();
 
       } else {
 

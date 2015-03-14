@@ -4,7 +4,8 @@ app.controller('subscribersCtrl', function($scope,$http,Notify) {
 
 });
 
-//  MID CREATION MODAL
+
+//  SUBSCRIBER CREATE MODAL
 app.controller('subscriberCreateModal', function($scope,$modal,$log) {
     $scope.open = function() {
         var modalInstance = $modal.open({
@@ -19,7 +20,6 @@ var subscriberCreateModalInstance = function($scope,$modalInstance,$log,$http,$r
 
     //FLAG FOR TO KNOW ITS AN EDIT
     $scope.editFlag = false;
-    console.log($scope.editFlag);
 
     //COUNTRY CODES FOR SUBSCRIBER
     $scope.countries = $rootScope.countries;
@@ -219,9 +219,8 @@ var subscriberEditInstanceCtrl = function($scope,$modalInstance,$log,$http,$root
         $modalInstance.close();
     }
 
-    //FLAG FOR TO KNOW ITS AN EDIT
+    //FLAG FOR VIEW TO KNOW ITS AN EDIT TOGGLES THE BTN
     $scope.editFlag = true;
-    console.log($scope.editFlag);
 
     //COUNTRY CODES FOR SUBSCRIBER
     $scope.countries = $rootScope.countries;
@@ -334,14 +333,78 @@ var subscriberEditInstanceCtrl = function($scope,$modalInstance,$log,$http,$root
 
     }
 
+    $('#subscriberPayCvv').click(function() {
+        alert('This input is disabled');
+    });
+
     $scope.subscriberEditCardInfo = function(theForm){
-        console.log('subscriberEditCardInfo');
+        
+        var Query = {};
+
+        if(theForm.$dirty && theForm.$valid ) {           
+
+            Query = {
+                "ExpMonth":document.getElementById('subscriberPayCcMm').value,
+                "ExpYear":document.getElementById('subscriberPayCcYy').value,
+                }
+
+            if (document.getElementById('subscriberPayCC').value != $scope.subscriberPayCC){
+                Query.CardNumber = document.getElementById('subscriberPayCC').value;
+            }
+            
+            if (document.getElementById('subscriberPayCvv').value != $scope.subscriberPayCvv){
+                Query.Cvv = document.getElementById('subscriberPayCvv').value;
+            }
+
+            $http({
+              method:'PUT',
+              url:baseUrl + 'recurring/subscribers/' + subscriberId,
+              data:Query
+            }).success(function(status,data) {
+
+              $scope.successMsg = 'Subscriber has been updated.';
+              $('.successMsg').slideDown(500);
+              $timeout(function() {
+                  $('.successMsg').slideUp(500);
+                  //PROCEED TO FOLLOWING TAB
+                  $modalInstance.close();
+              },2000);
+                
+            }).error(function(data, status) {
+                          
+                //SOMETHING ERRONEOUS WITH THE API
+                $scope.errorMsg = 'There is an error with the API please contact your customer support. Error Code: ' + status;
+                $('.errorMsg').slideDown(500);
+                $timeout(function() {
+                    $('.errorMsg').slideUp(500);
+                },3000);    
+            });
+
+
+        } else if (theForm.$dirty && !theForm.$valid ) {
+            
+            //SOMETHING WAS NOT FILLED OUT PROPERLY
+            $scope.errorMsg = 'Please ensure to fill out the required fields.';
+            $('.errorMsg').slideDown(500);
+            $timeout(function() {
+                $('.errorMsg').slideUp(500);
+            },3000);
+
+        } else {
+            $modalInstance.close();
+        }
+
+        console.log(Query);
 
 
     }
 
 
+                // GET SUBSCRIBERS AND PUSH DATA TO SUBSCRIPTION SERVICE
+                $http.get(baseUrl + 'recurring/subscriptions/'+207+'/subscribers').success(function(data) {
+                  console.log('available processor');
+                  console.log(data);
+                }); 
         
-
 
 }
