@@ -1,7 +1,7 @@
 script(type="text/ng-template" id="subscriberCreateOrEditContent.html")
     .midCreateEditModal.midCreateModal
         .modal-header
-            h3 Create Or Edit
+            h3 {{createOrEditMsg}}
             button.close(type="button" ng-click="cancel()") X
         .modal-body
             wizard(on-finish="finishedWizard()")
@@ -58,12 +58,12 @@ script(type="text/ng-template" id="subscriberCreateOrEditContent.html")
 
                             .col-md-6.text-right(ng-if="!editFlag")
                                 a.row_btn.emerald_btn(href="" type="submit" ng-click="subscriberInfoCreate(subscribersInfoCreateForm)")
-                                    span Create
+                                    span Next
                                     i.fa.fa-arrow-right
 
                             .col-md-6.text-right(ng-if="editFlag")
                                 a.row_btn.emerald_btn(href="" type="submit" ng-click="subscriberEditPersInfo(subscribersInfoCreateForm)")
-                                    span Edit
+                                    span Next
                                     i.fa.fa-arrow-right                                        
 
                         .row.errorMsg
@@ -127,12 +127,12 @@ script(type="text/ng-template" id="subscriberCreateOrEditContent.html")
 
                         .col-md-6.text-right(ng-if="editFlag == false")
                             a.row_btn.emerald_btn(href="" type="submit" ng-click="subscriberPayCreate(subscribersPaymentCreateForm)")
-                                span subscriberPayCreate
+                                span Finish
                                 i.fa.fa-arrow-right
 
                         .col-md-6.text-right(ng-if="editFlag == true")
                             a.row_btn.emerald_btn(href="" type="submit" ng-click="subscriberEditCardInfo(subscribersPaymentCreateForm)")
-                                span subscriberEditCardInfo
+                                span Finish
                                 i.fa.fa-arrow-right  
 
 

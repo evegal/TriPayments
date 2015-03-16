@@ -1,19 +1,14 @@
-//include ../modals/mock.html
-//include ../modals/midsEditModal.html
-//include ../modals/addMIDSmodal.html
-//include ../modals/midsConfirmModal.html
-//include ../modals/merchantRemoveModal.html
-//include ../modals/merchantCreateModal.jade
-//include ../modals/merchantEditModal.jade
-
 //MODALS FOR SUBSCRIPTIONS
 include ../modals/subscriptionCreateModal.jade
 include ../modals/subscriptionDeleteModal.jade
 include ../modals/subscriptionEditModal.jade
+include ../modals/subscriptionAddSubscribers.html
+include ../modals/subscriberCreateOrEditModal.jade
 
+include ../modals/subscriberRemoveConfirmModal.html
 
 .row
-  h1 Recurring Payments - Subscriptions 
+  h1  Recurring Payments - Subscriptions
 .merchant_view
   .panel.panel-default
     .panel-heading
@@ -30,13 +25,13 @@ include ../modals/subscriptionEditModal.jade
                   i.fa.fa-plus
                   span Create Subscription
     .panel-body
-      h3.noResults(ng-if="subscriptionsAmount == 0") {{'There are currently no subscriptions confingured for this account.'}} 
+      h3.noResults(ng-if="subscriptionsAmount == 0") {{'There are currently no subscriptions confingured for this account.'}}
       accordion(ng-if="subscriptionsAmount != 0")
         table.table.ng-table-responsive.table-striped(st-table="shownSubscriptions" st-safe-src="subscriptionsBulk")
              thead
                tr
                  th(colspan="7")
-                   input.form-control(st-search="" type="search" placeholder="Filter through all MID groups")
+                   input.form-control(st-search="" type="search" placeholder="Filter through all subscriptions")
                  tr
                    th.st-header(st-sort="DisplayName" width="20%") Name
                    th.st-header(st-sort="PlanType.Id" width="20%") Recurring Type
@@ -47,24 +42,22 @@ include ../modals/subscriptionEditModal.jade
                    th.st-header-nosort(width="20%") Actions 
               
              tbody(ng-repeat="subscription in shownSubscriptions")
-
-
-               tr(id="base{{$index}}")
-                 td {{subscription.DisplayName}}
-                 td(ng-if="subscription.PlanType.Id == 1") Calendar Date
-                 td(ng-if="subscription.PlanType.Id == 2") Cycle Days
-                 td {{subscription.CalendarDayOrInterval}}
-                 td {{subscription.Amount | currency}}
-                 td {{subscription.NextBillingDate | date:'MM/dd/yyyy'}}
-                 td {{subscription.Mid | uppercase }}
-                 td
-                    a.row_btn.emerald_btn.margin-right(href="" ng-click="openMID(merchant); loadMIDS(merchant.Id,merchant); checkWindow(shownMerchants)" ng-controller="addMIDSmodalCtrl"  tooltip="Add Subscribers" tooltip-placement="top")
+              tr(id="base{{$index}}")
+                td {{subscription.DisplayName}}
+                td(ng-if="subscription.PlanType.Id == 1") Calendar Date
+                td(ng-if="subscription.PlanType.Id == 2") Cycle Days
+                td {{subscription.CalendarDayOrInterval}}
+                td {{subscription.Amount | currency}}
+                td {{subscription.NextBillingDate | date:'MM/dd/yyyy'}}
+                td {{subscription.Mid | uppercase }}
+                td
+                    a.row_btn.emerald_btn.margin-right(href="" ng-click="openMID(subscription); loadSubscribers(subscription.SubscriptionId,subscription); checkWindow(shownSubscriptions)" ng-controller="addSubscriberModalCtrl"  tooltip="Add Subscribers" tooltip-placement="top")
                       i.fa.fa-plus
                       span Add
-                    a.row_btn.wet_asphalt_btn.margin-right(href="" ng-click="loadMIDS(merchant.Id,merchant); gotoMID($index,shownMerchants)"  tooltip="View Subscribers" tooltip-placement="top")
+                    a.row_btn.wet_asphalt_btn.margin-right(href="" ng-click="loadSubscribers(subscription.SubscriptionId,subscription); gotoSubscription($index,shownSubscriptions)" tooltip="View Subscribers" tooltip-placement="top")
                       i.fa.fa-eye
                       span View
-                    a.row_btn.turquoise_btn.margin-right(ng-click="open(subscription.SubscriptionId)" ng-controller="subscriptionEditModalCtrl" tooltip="Edit Subscription" tooltip-placement="top")
+                    a.row_btn.turquoise_btn.margin-right(ng-click="open(subscription.SubscriptionId,$index)" ng-controller="subscriptionEditModalCtrl" tooltip="Edit Subscription" tooltip-placement="top")
                       i.fa.fa-edit
                       span Edit
                     a.row_btn.alazarin_btn(ng-click="open($index,subscription.SubscriptionId,subscription.DisplayName)" ng-controller="subscriptionDeleteModalCtrl" tooltip="Delete Subscription" tooltip-placement="top")
@@ -73,24 +66,35 @@ include ../modals/subscriptionEditModal.jade
                  td.hidden_td
                     tr
                       td.pushToggle(colspan="7")
-                        accordion-group(heading="" ng-click="loadMIDS(merchant.Id,merchant)" is-open="merchant.open")
-                          table.table.table-striped
+                        accordion-group(heading="" ng-click="loadSubscribers(subscription.SubscriptionId,subscription)" is-open="subscription.open")
+                          .row.text-center(ng-if="assignedSubscribers.length == 0") There are currently no subscribers assigned to this subscription
+
+
+                          table.table.table-striped(ng-if="assignedSubscribers.length > 0")
                             thead
                               tr
-                                th MID Name
-                                th Rollover MID
-                                th Monthly Cap
+                                th Subscriber Name
+                                th City
+                                th State
+                                th Country
+                                th Email
+                                th Card Type
+                                th Card Last 4
                                 th Actions
 
                             tbody
-                              tr(ng-repeat="mid in mids")
-                                td {{mid.DisplayName}}
-                                td {{mid.RolloverMidName}}
-                                td {{mid.MonthlyCap}}
+                              tr(ng-repeat="subscriber in assignedSubscribers")
+                                td {{subscriber.FirstName}}, {{subscriber.LastName}}
+                                td {{subscriber.City}}
+                                td {{subscriber.State}}
+                                td {{subscriber.Country}}
+                                td {{subscriber.Email}}
+                                td {{subscriber.CardType}}
+                                td {{subscriber.CcLast4}}
                                 td 
-                                    a.row_btn.turquoise_btn.margin-right(ng-click="openIt(mid)" ng-controller="midsModalCtrl") 
+                                    //a.row_btn.turquoise_btn.margin-right(ng-click="openIt(subscriber.SubscriberId)" ng-controller="subscriberEditModalCtrl" tooltip="Edit {{subscriber.LastName | uppercase}}") 
                                       i.fa.fa-edit
                                       span Edit
-                                    a.row_btn.alazarin_btn.margin-right(ng-click="openMID($index,mid)" ng-controller="midsConfirmModalCtrl") 
+                                    a.row_btn.alazarin_btn.margin-right(ng-click="openMID($index,subscriber)" ng-controller="subscriberConfirmModalCtrl" tooltip="Edit Remove {{subscriber.FirstName}}, {{subscriber.LastName}} from {{subscription.DisplayName}}")
                                       i.fa.fa-trash
-                                      span Remove
+                                      span Remove Subsriber

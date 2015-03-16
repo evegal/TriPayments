@@ -1,0 +1,47 @@
+<script type="text/ng-template" id="addSubscribersContent.html">
+<div class="modal-header">
+    <h3 class="modal-title"><span class="subtle">Add Subscribers To:</span> {{subscriptionName}}</h3>
+    <button type="button" class="close" ng-click="cancel()">x</button>
+</div>
+<div class="modal-body">
+    
+    <form name="addMIDform" ng-submit="ok()" novalidate>
+
+        <div class="row">
+            
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th style="width:50%">Subscriber Name</th>
+                        <th style="width:25%">Subscriber Country</th>
+                        <th style="width:25%">Actions</th>
+                    </tr>
+                 </thead>
+                 <tbody>
+                    <tr ng-repeat="subscriber in availableSubscribers">
+                        <td>{{subscriber.FirstName}}, {{subscriber.LastName}}</td>
+                        <td>{{subscriber.Country}}</td>
+                        <td class="action_group">
+                            <a class="row_btn emerald_btn" href="" ng-click="addSubscriber($index,subscriber)"><i class="fa fa-plus"></i><span>Add Subscriber</span></a>
+                        <td>
+                    </tr>
+
+                 </tbody>
+            </table>
+            
+           
+        </div>
+
+    </form>
+
+</div>
+
+<div class="userCreateSuccess">
+        <p>Success</p>
+</div>
+
+<div class="modal-footer action_group">
+    <a href="" class="row_btn peter_river_btn" ng-click="cancel()"><i class="fa fa-sign-out"></i><span>Exit</span></a>
+</div>
+
+</script>

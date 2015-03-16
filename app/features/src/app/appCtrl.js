@@ -100,6 +100,11 @@ app.controller("appCtrl", function($rootScope,$scope,$state,$timeout,$http,baseU
         $("#wrapper").toggleClass("toggled");      
   });
   
+
+
+///////////////////////
+// SUBSCRIPTION SECTION
+///////////////////////
 // LOAD SUBSCRIBERS
   $http.get(baseUrl + 'recurring/subscribers').success(function(data) {
     $scope.subscribersBulk = data;
@@ -110,24 +115,26 @@ app.controller("appCtrl", function($rootScope,$scope,$state,$timeout,$http,baseU
 
   });
 
-  // NOTIFY ADD SUBCRIPTION
-  Notify.getMsg('NewSubscriber', function(event,data) {
-    $scope.subscribersBulk.push(data);
-    $scope.subscribersAmount += 1;
+    // NOTIFY ADD SUBSCRIBER
+    Notify.getMsg('NewSubscriber', function(event,data) {
+      $scope.subscribersBulk.push(data);
+      $scope.subscribersAmount += 1;
+    });
+
+    // NOTIFY DELETE SUBSCRIBER
+    Notify.getMsg('RemoveSubscriber', function(event,data) {
+      $scope.subscribersBulk.splice(data,1);
+      $scope.subscribersAmount -= 1;
+    });
+
+
+  // NOTIFY EDIT SUBSCRIBER
+  Notify.getMsg('SubscriberUpdated', function(event,data) {
+    $http.get(baseUrl + 'recurring/subscribers').success(function(data) {
+      $scope.subscribersBulk = data;
+    });
   });
-
-  // NOTIFY DELETE SUBSCRIPTION
-  Notify.getMsg('RemoveSubscription', function(event,data) {
-    $scope.subscribersBulk.splice(data,1);
-    $scope.subscribersAmount -= 1;
-  });
-
-  
-
-  ///////////////////////
-  // SUBSCRIPTION SECTION
-  ///////////////////////
-
+ 
   // LOAD SUBSCRIPTIONS
   $rootScope.subscriptionModalGroups = [];
 
@@ -156,9 +163,15 @@ app.controller("appCtrl", function($rootScope,$scope,$state,$timeout,$http,baseU
   // NOTIFY DELETE SUBSCRIPTION
   Notify.getMsg('RemoveSubscription', function(event,data) {
     $scope.subscriptionsBulk.splice(data,1);
-        $scope.subscriptionsAmount -= 1;
+    $scope.subscriptionsAmount -= 1;
   });
 
+  // NOTIFY EDIT SUBSCRIPTION
+  Notify.getMsg('SubscriptionUpdated', function(event,data) {
+    $http.get(baseUrl + 'recurring/subscriptions').success(function(data) {
+      $scope.subscriptionsBulk = data;
+    });
+  });
 
 
 

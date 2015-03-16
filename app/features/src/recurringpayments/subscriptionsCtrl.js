@@ -1,24 +1,33 @@
+/** *************************************** **
+  
+  TABLE OF CONTENTS
+  ---------------------------
+   01. subscriptionsCtrl
+   02. subscriptionsCreateModalCtrl
+   03. subscriptionDeleteModalCtrl
+   04. addSubscriberModalCtrl
+  
+ **  *************************************** **/
+
 app.controller('subscriptionsCtrl', function($timeout,$filter,$rootScope,$scope,$http,$state,baseUrl,Notify,$location) {
 
   $scope.shownSubscriptions = $scope.subscriptionsBulk;
   
   // LOAD MIDS INTO NESTED TABLE
-  $scope.loadMIDS = function(id,merchant,item) {
-    
-    // set current group id to add MIDS
-    $rootScope.currentGroupId = id;
-    $rootScope.currentGroupName = merchant.Name;
+  $scope.loadSubscribers = function(id,merchant,item) {
+   
+    // SET CURRENT SUBSCRIPTION ID TO ADD SUBSCRIBERS
+    $rootScope.currentSubscriptionId = id;
+    $rootScope.currentSubscriptionName = merchant.Name;
 
-    // close all open nested tables
-    
 
+  
     // LOAD MIDS FOR SPECIFIC GROUP
-    var url = baseUrl + '/midgroups/' + id + '/mids';
+    var url = baseUrl + 'recurring/subscriptions/' + id + '/subscribers';
     $http.get(url).success(function(data) {
-      $scope.mids = data;
-      $rootScope.mids = data;
-
-    
+      $scope.assignedSubscribers = data;
+      $rootScope.assignedSubscribers = data;
+  
       Notify.getMsg('RemovedMID', function(event,data) {
 
         $http.get(url).success(function(data) {
@@ -26,7 +35,6 @@ app.controller('subscriptionsCtrl', function($timeout,$filter,$rootScope,$scope,
         });
 
       });
-
 
       Notify.getMsg('UpdatedMID', function(event,data) {
 
@@ -39,39 +47,16 @@ app.controller('subscriptionsCtrl', function($timeout,$filter,$rootScope,$scope,
       $scope.isMidLoaded = true;
       //console.log(data);
     });
-
-
-
   };
 
-  $scope.gotoMID = function(index,shownMerchants) {
+  $scope.gotoSubscription = function(index,shownSubscriptions) {
 
-    /*
-      $timeout(function() {
-        if($scope.isMidLoaded) {
+    shownSubscriptions[index].open = !shownSubscriptions[index].open;
 
-           shownMerchants[index].open = !shownMerchants[index].open;
-
-           // set the location.hash to the id of
-          // the element you wish to scroll to.
-          // each row has a class of base and then the items $index
-          
-            $location.hash('base' + index);
-            //$anchorScroll();
-          
-           
-        } else {
-          
-        }
-      },1000);
-    */
-
-    shownMerchants[index].open = !shownMerchants[index].open;
   };
 
   $scope.checkWindow = function(info) {
-     //console.log(index);
-     console.log(info[0]);
+     console.log(info[0]);   
   };
 
 }); // subscriptionsCtrl
@@ -136,10 +121,6 @@ var subscriptionCreateModalInstance = function($scope,$modalInstance,$log,$http,
                     // ASSIGN ID FOR THE NEW SUBSCRIPTION
                     $scope.SubscriptionPlanId = data.SubscriptionPlanId;
 
-                    // GET SUBSCRIPTION AND PUSH DATA TO SUBSCRIPTION SERVICE
-                    $http.get(baseUrl + 'recurring/subscriptions/'+ $scope.SubscriptionPlanId).success(function(data) {
-                      Notify.sendMsg('NewSubscription', data);
-                    });
                    
                     //GET PROCESSING TYPES
                     $http.get(baseUrl + 'recurring/subscriptions/' + $scope.SubscriptionPlanId + '/available-processors').success(function(data) {
@@ -218,6 +199,12 @@ var subscriptionCreateModalInstance = function($scope,$modalInstance,$log,$http,
           url: baseUrl + 'recurring/subscriptions/'+$scope.SubscriptionPlanId+'/processor ',
           data:Query
         }).success(function(status) {
+
+          // GET SUBSCRIPTION AND DISPLAY IN VIEW
+          $http.get(baseUrl + 'recurring/subscriptions/'+ $scope.SubscriptionPlanId).success(function(data) {
+            Notify.sendMsg('NewSubscription', data);
+          });
+
 
           WizardHandler.wizard().next();
 
@@ -356,7 +343,7 @@ var subscriptionDeleteInstanceCtrl = function($scope,$rootScope,$modalInstance,$
 // SUBSCRIPTIONS EDIT
 app.controller('subscriptionEditModalCtrl', function($scope,$http,$modal,$log) {
 
-    $scope.open = function(subscriptionId) {
+    $scope.open = function(subscriptionId,index) {
        var modalInstance = $modal.open({
         templateUrl:'subscriptionEditContent.html',
         controller:subscriptionEditInstanceCtrl,
@@ -364,14 +351,17 @@ app.controller('subscriptionEditModalCtrl', function($scope,$http,$modal,$log) {
         resolve: {
           subscriptionId:function() {
              return subscriptionId;
-          }
+          },
+          index:function() {
+             return index;
+          },
         }
        });
     };
 });
 
-var subscriptionEditInstanceCtrl = function($scope,$modalInstance,$http,$timeout,subscriptionId,baseUrl,Notify,WizardHandler) {
-
+var subscriptionEditInstanceCtrl = function($scope,$modalInstance,$http,$timeout,subscriptionId,index,baseUrl,Notify,WizardHandler) {
+ 
   $scope.subscription = {};
   $scope.subscriptionProcessors = {};
 
@@ -411,9 +401,7 @@ var subscriptionEditInstanceCtrl = function($scope,$modalInstance,$http,$timeout
       // CURRENCY CHECKBOXES BINDING TO TRUE
       angular.forEach(data.AllowedCurrencies, function(value,key) {
           $scope[ value.Name ] = true;
-      });
-
-      
+      });     
 
       // PROCESSING FOR SUBSCRIPTION
       $http.get(baseUrl + 'recurring/subscriptions/' + subscriptionId + '/available-processors').success(function(data) {
@@ -443,7 +431,6 @@ var subscriptionEditInstanceCtrl = function($scope,$modalInstance,$http,$timeout
   $scope.subscriptionEditConfig = function(theForm) {
 
     if(theForm.$dirty && theForm.$valid && $scope.paymentTypes.length > 0 && $scope.currencyTypes.length > 0 ) {
-
 
       // BIND CREDIT CARD CHECKBOXES
       if ($scope.paymentChangeVal) {
@@ -488,6 +475,8 @@ var subscriptionEditInstanceCtrl = function($scope,$modalInstance,$http,$timeout
         url:baseUrl + 'recurring/subscriptions/' + subscriptionId,
         data:Query
       }).success(function(status,data) {
+        //UPDATE VIEW
+        Notify.sendMsg('SubscriptionUpdated',data);
 
         // GET NEW PROCESSING FOR CHANGED CURRENCY SUBSCRIPTION
         if ($scope.paymentChangeVal) {
@@ -545,6 +534,8 @@ var subscriptionEditInstanceCtrl = function($scope,$modalInstance,$http,$timeout
           data:Query
         }).success(function(status) {
       
+          //UPDATE VIEW
+          Notify.sendMsg('SubscriptionUpdated');
           WizardHandler.wizard().next();
       
         }).error(function(data, status) {
@@ -622,23 +613,130 @@ var subscriptionEditInstanceCtrl = function($scope,$modalInstance,$http,$timeout
       }
 
   };
+}; // END EDIT INSTANCE 
+
+// ADD SUBSCRIBERS TO SUBSCRIPTION
+app.controller('addSubscriberModalCtrl', function($scope,$modal,$log) {
+    $scope.openMID = function(subscription) {
+           var modalInstance = $modal.open({
+              templateUrl:'addSubscribersContent.html',
+              controller:addSubscribersInstanceCtrl,
+              size:'lg',
+              resolve: {
+                subscription:function() {
+                  return subscription;
+                }
+              }
+           });
+        };
+});
+
+var addSubscribersInstanceCtrl = function($scope,$modalInstance,$log,$timeout,$rootScope,subscription,$http,baseUrl) {
+
+  $scope.cancel = function() {
+    $modalInstance.close();
+  };
+
+  $scope.subscriptionName = subscription.DisplayName;
 
 
-}; // Edit Instance END
+  // LOAD AVAILABLE SUBSCRIBERS
+  $http.get( baseUrl + 'recurring/subscriptions/' + subscription.SubscriptionId + '/available-subscribers').success(function(data) {
+    $scope.availableSubscribers = data;
+  });
+
+  $scope.addSubscriber = function(index,subscriber) {
+
+    console.log(subscriber);
+    var Query = {
+        "SubscriberId":subscriber.SubscriberId
+    };
+
+  $http({
+      method:'POST',
+      url:baseUrl + 'recurring/subscriptions/' + subscription.SubscriptionId + '/subscribers',
+      data:Query
+    }).success(function(data) {
+
+      $('.userCreateSuccess').slideDown(300);
+
+      // Update UI
+      $scope.availableSubscribers.splice(index,1);
+
+      // Update Parent UI
+      //$rootScope.mids.push(mid);
+
+      $timeout(function() {
+        $('.userCreateSuccess').slideUp(300);
+      },500);
+    });
+
+  };
+};  // END SUBSCRIBERS TO SUBSCRIPTIONS
 
 
+// CONFIRM MID REMOVE MODAL
+app.controller('subscriberConfirmModalCtrl', function($scope,$modal,$log) {
+
+    $scope.openMID = function(index,mid) {
+     var modalInstance = $modal.open({
+      templateUrl:'subscriberConfirmModalContent.html',
+      controller:subscriberConfirmModalInstanceCtrl,
+      size:'lg',
+      resolve: {
+        mid: function() {
+          return mid;
+        },
+        index: function() {
+          return index;
+        }
+      } 
+     });
+    };
+
+});
 
 
+var subscriberConfirmModalInstanceCtrl = function($scope,$modalInstance,mid,baseUrl,$rootScope,$http,$timeout,index,Notify) {
 
+  console.log(mid);
+  console.log(index);
 
+  $scope.mid = mid;
+  $scope.index = index;
 
+  $scope.cancel = function() {
+       $modalInstance.close();
+  };
 
+  // REMOVE MID
+  $scope.removeMID = function(index,mid) {
+   
+  // Remove MID from Group
+  
+  var Url = baseUrl + 'midgroups/' + $rootScope.currentGroupId + '/mids/' + mid.Id;
+  $http({
+    method:'DELETE',
+    url:Url
+  }).success(function(data,status) {
 
+    // NOTIFY UI
+    Notify.sendMsg('RemovedMID',data);
 
+    console.log(status);
 
+    $('.userCreateSuccess').slideDown(300);
 
+    $timeout(function() {
+      $modalInstance.close();
+    },1500);
 
+    //$rootScope.mids.splice($scope.index,1);
+    
+  });
+  
+   
 
+  };
 
-
-
+};

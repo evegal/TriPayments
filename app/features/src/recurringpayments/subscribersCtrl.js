@@ -18,6 +18,8 @@ app.controller('subscriberCreateModal', function($scope,$modal,$log) {
 
 var subscriberCreateModalInstance = function($scope,$modalInstance,$log,$http,$rootScope,WizardHandler,$timeout,Notify,baseUrl) {
 
+    $scope.createOrEditMsg = 'Create new subscriber';
+
     //FLAG FOR TO KNOW ITS AN EDIT
     $scope.editFlag = false;
 
@@ -172,7 +174,7 @@ var removeSubscriberCtrlInstance = function($scope,$modalInstance,$log,index,sub
         }).success(function(data,status) {
 
             //UPDATE VIEW
-            Notify.sendMsg('RemoveSubscription', index);
+            Notify.sendMsg('RemoveSubscriber', index);
 
             //SUCCESS MSG PRESENTED AND CLOSE MODAL
             $scope.successMsg = 'Subscriber has been deleted successfully.';
@@ -218,6 +220,8 @@ var subscriberEditInstanceCtrl = function($scope,$modalInstance,$log,$http,$root
     $scope.cancel = function() {
         $modalInstance.close();
     }
+
+    $scope.createOrEditMsg = 'Edit subscriber';
 
     //FLAG FOR VIEW TO KNOW ITS AN EDIT TOGGLES THE BTN
     $scope.editFlag = true;
@@ -297,13 +301,16 @@ var subscriberEditInstanceCtrl = function($scope,$modalInstance,$log,$http,$root
               data:Query
             }).success(function(status,data) {
 
-              $scope.successMsg = 'Subscriber has been updated.';
-              $('.successMsg').slideDown(500);
-              $timeout(function() {
+                //UPDATE THE VIEW
+                Notify.sendMsg('SubscriberUpdated',data);
+
+                $scope.successMsg = 'Subscriber has been updated.';
+                $('.successMsg').slideDown(500);
+                $timeout(function() {
                   $('.successMsg').slideUp(500);
                   //PROCEED TO FOLLOWING TAB
                   WizardHandler.wizard().next();
-              },2000);
+                },2000);
                 
             }).error(function(data, status) {
                           
