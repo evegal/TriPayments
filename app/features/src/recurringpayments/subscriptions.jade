@@ -2,10 +2,8 @@
 include ../modals/subscriptionCreateModal.jade
 include ../modals/subscriptionDeleteModal.jade
 include ../modals/subscriptionEditModal.jade
-include ../modals/subscriptionAddSubscribers.html
-include ../modals/subscriberCreateOrEditModal.jade
-
-include ../modals/subscriberRemoveConfirmModal.html
+include ../modals/subscriptionAddSubscribers.jade 
+include ../modals/subscriberRemoveConfirmModal.jade
 
 .row
   h1  Recurring Payments - Subscriptions
@@ -95,6 +93,6 @@ include ../modals/subscriberRemoveConfirmModal.html
                                     //a.row_btn.turquoise_btn.margin-right(ng-click="openIt(subscriber.SubscriberId)" ng-controller="subscriberEditModalCtrl" tooltip="Edit {{subscriber.LastName | uppercase}}") 
                                       i.fa.fa-edit
                                       span Edit
-                                    a.row_btn.alazarin_btn.margin-right(ng-click="openMID($index,subscriber)" ng-controller="subscriberConfirmModalCtrl" tooltip="Edit Remove {{subscriber.FirstName}}, {{subscriber.LastName}} from {{subscription.DisplayName}}")
+                                    a.row_btn.alazarin_btn.margin-right(ng-click="openMID($index,subscriber)" ng-controller="subscriberRemoveConfirmModalCtrl" tooltip="Edit Remove {{subscriber.FirstName}}, {{subscriber.LastName}} from {{subscription.DisplayName}}")
                                       i.fa.fa-trash
                                       span Remove Subsriber

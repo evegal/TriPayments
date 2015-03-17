@@ -1,0 +1,21 @@
+script(type='text/ng-template', id='subscriberConfirmModalContent.html')
+	.modal-header
+		h3.modal-title
+		span.subtle Remove Subscriber: 
+		| {{subscriber.LastName}}, {{subscriber.FirstName}}
+		button.close(type='button', ng-click='cancel()') x
+
+	.modal-body
+		p.text-center Are you sure you want to remove?
+		h2.text-center {{subscriber.LastName}}, {{subscriber.FirstName}}
+
+	.row.userCreateSuccess
+		p Subscriber has been removed.
+
+	.modal-footer.action_group
+		a.row_btn.action_btn(href='', ng-click='removeSubscriberSubscription($index,subscriber)')
+			i.fa.fa-trash
+			span Confirm
+		a.row_btn.cancel_btn(href='', ng-click='cancel()')
+			i.fa.fa-sign-out
+			span Exit

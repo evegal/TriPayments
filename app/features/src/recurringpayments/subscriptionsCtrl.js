@@ -5,7 +5,9 @@
    01. subscriptionsCtrl
    02. subscriptionsCreateModalCtrl
    03. subscriptionDeleteModalCtrl
+   04. subscriptionEditModalCtrl
    04. addSubscriberModalCtrl
+   04. subscriberRemoveConfirmModalCtrl
   
  **  *************************************** **/
 
@@ -14,16 +16,14 @@ app.controller('subscriptionsCtrl', function($timeout,$filter,$rootScope,$scope,
   $scope.shownSubscriptions = $scope.subscriptionsBulk;
   
   // LOAD MIDS INTO NESTED TABLE
-  $scope.loadSubscribers = function(id,merchant,item) {
+  $scope.loadSubscribers = function(subscriptionId,subscription,item) {
    
     // SET CURRENT SUBSCRIPTION ID TO ADD SUBSCRIBERS
-    $rootScope.currentSubscriptionId = id;
-    $rootScope.currentSubscriptionName = merchant.Name;
+    $rootScope.currentSubscriptionId = subscriptionId;
+    $rootScope.currentSubscriptionName = subscription.DisplayName;
 
-
-  
     // LOAD MIDS FOR SPECIFIC GROUP
-    var url = baseUrl + 'recurring/subscriptions/' + id + '/subscribers';
+    var url = baseUrl + 'recurring/subscriptions/' + subscriptionId + '/subscribers';
     $http.get(url).success(function(data) {
       $scope.assignedSubscribers = data;
       $rootScope.assignedSubscribers = data;
@@ -31,7 +31,7 @@ app.controller('subscriptionsCtrl', function($timeout,$filter,$rootScope,$scope,
       Notify.getMsg('RemovedMID', function(event,data) {
 
         $http.get(url).success(function(data) {
-          $scope.mids = data;
+          $scope.assignedSubscribers = data;
         });
 
       });
@@ -39,7 +39,7 @@ app.controller('subscriptionsCtrl', function($timeout,$filter,$rootScope,$scope,
       Notify.getMsg('UpdatedMID', function(event,data) {
 
         $http.get(url).success(function(data) {
-          $scope.mids = data;
+          $scope.assignedSubscribers = data;
         });        
 
       });
@@ -58,7 +58,6 @@ app.controller('subscriptionsCtrl', function($timeout,$filter,$rootScope,$scope,
   $scope.checkWindow = function(info) {
      console.log(info[0]);   
   };
-
 }); // subscriptionsCtrl
 
 
@@ -365,6 +364,7 @@ var subscriptionEditInstanceCtrl = function($scope,$modalInstance,$http,$timeout
   $scope.subscription = {};
   $scope.subscriptionProcessors = {};
 
+
   // PROCESSING METHOD IS SELECTED BASED ON PAYMENT TYPE AND CURRENCY
   // INCASE OF CHANGE THE USER MUST RESELECT THE PROCESSING METHOD
   $scope.currencyChange = false;
@@ -639,7 +639,6 @@ var addSubscribersInstanceCtrl = function($scope,$modalInstance,$log,$timeout,$r
 
   $scope.subscriptionName = subscription.DisplayName;
 
-
   // LOAD AVAILABLE SUBSCRIBERS
   $http.get( baseUrl + 'recurring/subscriptions/' + subscription.SubscriptionId + '/available-subscribers').success(function(data) {
     $scope.availableSubscribers = data;
@@ -652,40 +651,41 @@ var addSubscribersInstanceCtrl = function($scope,$modalInstance,$log,$timeout,$r
         "SubscriberId":subscriber.SubscriberId
     };
 
-  $http({
-      method:'POST',
-      url:baseUrl + 'recurring/subscriptions/' + subscription.SubscriptionId + '/subscribers',
-      data:Query
-    }).success(function(data) {
+    $http({
+        method:'POST',
+        url:baseUrl + 'recurring/subscriptions/' + subscription.SubscriptionId + '/subscribers',
+        data:Query
+      }).success(function(data) {
 
-      $('.userCreateSuccess').slideDown(300);
+        $('.userCreateSuccess').slideDown(300);
 
-      // Update UI
-      $scope.availableSubscribers.splice(index,1);
 
-      // Update Parent UI
-      //$rootScope.mids.push(mid);
+        // REMOVE SELECTED SUBSCRIBER FROM MODAL
+        $scope.availableSubscribers.splice(index,1);
 
-      $timeout(function() {
-        $('.userCreateSuccess').slideUp(300);
-      },500);
-    });
+        // Update Parent UI
+        $rootScope.assignedSubscribers.push(subscriber);
+
+
+        $timeout(function() {
+          $('.userCreateSuccess').slideUp(300);
+        },500);
+      });
 
   };
-};  // END SUBSCRIBERS TO SUBSCRIPTIONS
+};  // END ADD SUBSCRIBERS TO SUBSCRIPTIONS
 
+// CONFIRM SUBSCRIBER REMOVE FROM SUBSCRIPTION MODAL
+app.controller('subscriberRemoveConfirmModalCtrl', function($scope,$modal,$log) {
 
-// CONFIRM MID REMOVE MODAL
-app.controller('subscriberConfirmModalCtrl', function($scope,$modal,$log) {
-
-    $scope.openMID = function(index,mid) {
+    $scope.openMID = function(index,subscriber) {
      var modalInstance = $modal.open({
       templateUrl:'subscriberConfirmModalContent.html',
-      controller:subscriberConfirmModalInstanceCtrl,
+      controller:subscriberRemoveConfirmModalInstanceCtrl,
       size:'lg',
       resolve: {
-        mid: function() {
-          return mid;
+        subscriber: function() {
+          return subscriber;
         },
         index: function() {
           return index;
@@ -693,50 +693,46 @@ app.controller('subscriberConfirmModalCtrl', function($scope,$modal,$log) {
       } 
      });
     };
-
 });
 
+var subscriberRemoveConfirmModalInstanceCtrl = function($scope,$modalInstance,subscriber,baseUrl,$rootScope,$http,$timeout,index,Notify) {
 
-var subscriberConfirmModalInstanceCtrl = function($scope,$modalInstance,mid,baseUrl,$rootScope,$http,$timeout,index,Notify) {
-
-  console.log(mid);
-  console.log(index);
-
-  $scope.mid = mid;
-  $scope.index = index;
+  $scope.subscriber = subscriber;
 
   $scope.cancel = function() {
        $modalInstance.close();
   };
 
-  // REMOVE MID
-  $scope.removeMID = function(index,mid) {
+  // REMOVE SUBSCRIBER FROM SUBSCRIPTION
+  $scope.removeSubscriberSubscription = function(index,subscriber) {
    
-  // Remove MID from Group
-  
-  var Url = baseUrl + 'midgroups/' + $rootScope.currentGroupId + '/mids/' + mid.Id;
-  $http({
-    method:'DELETE',
-    url:Url
-  }).success(function(data,status) {
+    //DELETE METHOD 
+      $http({
+        method:'DELETE',
+        url: baseUrl + 'recurring/subscriptions/' + $rootScope.currentSubscriptionId + '/subscribers/' + subscriber.SubscriberId 
+      }).success(function(status,data) {
 
-    // NOTIFY UI
-    Notify.sendMsg('RemovedMID',data);
+        console.log(status);
+        console.log(data);
 
-    console.log(status);
+        // NOTIFY UI
+        Notify.sendMsg('RemovedMID',data);
+        
 
-    $('.userCreateSuccess').slideDown(300);
+        //DISPLAY SUCCESS
+        $('.userCreateSuccess').show();
+        $timeout(function() {
+          $modalInstance.close();
+        },500);
 
-    $timeout(function() {
-      $modalInstance.close();
-    },1500);
-
-    //$rootScope.mids.splice($scope.index,1);
-    
-  });
-  
+      }).error(function(data, status) {
+        $scope.errorMsg = 'There is an error with the API please contact your customer support. Error Code: ' + status ;
+        $('.errorMsg').slideDown(500);
+        $timeout(function() {
+            $('.errorMsg').slideUp(500);
+        },3000);    
+      });  
    
 
   };
-
-};
+}; // END CONFIRM SUBSCRIBER REMOVE FROM SUBSCRIPTION MODAL

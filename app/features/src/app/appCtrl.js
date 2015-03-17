@@ -105,6 +105,7 @@ app.controller("appCtrl", function($rootScope,$scope,$state,$timeout,$http,baseU
 ///////////////////////
 // SUBSCRIPTION SECTION
 ///////////////////////
+
 // LOAD SUBSCRIBERS
   $http.get(baseUrl + 'recurring/subscribers').success(function(data) {
     $scope.subscribersBulk = data;
@@ -127,15 +128,15 @@ app.controller("appCtrl", function($rootScope,$scope,$state,$timeout,$http,baseU
       $scope.subscribersAmount -= 1;
     });
 
-
-  // NOTIFY EDIT SUBSCRIBER
-  Notify.getMsg('SubscriberUpdated', function(event,data) {
-    $http.get(baseUrl + 'recurring/subscribers').success(function(data) {
-      $scope.subscribersBulk = data;
+    // NOTIFY EDIT SUBSCRIBER
+    Notify.getMsg('SubscriberUpdated', function(event,data) {
+      $http.get(baseUrl + 'recurring/subscribers').success(function(data) {
+        $scope.subscribersBulk = data;
+      });
     });
-  });
  
-  // LOAD SUBSCRIPTIONS
+
+// LOAD SUBSCRIPTIONS
   $rootScope.subscriptionModalGroups = [];
 
     $http.get(baseUrl + 'recurring/subscriptions').success(function(data) {
@@ -154,7 +155,7 @@ app.controller("appCtrl", function($rootScope,$scope,$state,$timeout,$http,baseU
     });
 
 
-  // NOTIFY ADD SUBCRIPTION
+  // NOTIFY ADD SUBSCRIPTION
   Notify.getMsg('NewSubscription', function(event,data) {
     $scope.subscriptionsBulk.push(data);
     $scope.subscriptionsAmount += 1;
@@ -174,8 +175,7 @@ app.controller("appCtrl", function($rootScope,$scope,$state,$timeout,$http,baseU
   });
 
 
-
-  // LOAD MIDGROUPS
+// LOAD MIDGROUPS
   $rootScope.modalGroups = [];
 
     $http.get(baseUrl + 'midgroups').success(function(data) {

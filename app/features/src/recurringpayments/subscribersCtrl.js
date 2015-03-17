@@ -120,7 +120,7 @@ var subscriberCreateModalInstance = function($scope,$modalInstance,$log,$http,$r
         } else {
 
             //FORM ISNT FILLED OUT PROPERLY
-            $VALID.errorMsg = 'Please ensure to complete all the required fields (*).';
+            $errorMsg = 'Please ensure to complete all the required fields (*).';
             $('.errorMsg').slideDown(500);
             $timeout(function() {
                 $('.errorMsg').slideUp(500);

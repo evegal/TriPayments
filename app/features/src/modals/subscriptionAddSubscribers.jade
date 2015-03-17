@@ -1,0 +1,41 @@
+script(type='text/ng-template', id='addSubscribersContent.html')
+	.modal-header
+		h3.modal-title
+			span.subtle Add Subscribers To TEST:
+			|  {{subscriptionName}}
+		button.close(type='button', ng-click='cancel()') x
+	.modal-body
+		form(name='addSubscriberToSubscriptionform', ng-submit='ok()', novalidate='')
+			.row.text-center(ng-if="availableSubscribers.length == 0") There are currently no available subscribers to assign to this subscription.
+			.row(ng-if="availableSubscribers.length > 0")
+				table.table
+					thead
+						tr
+							th Subscriber Name
+							th City
+							th State
+							th Country
+							th Email
+							th Card type
+							th Card last 4
+							th Actions
+					tbody
+						tr(ng-repeat='subscriber in availableSubscribers')
+							td {{subscriber.LastName}}, {{subscriber.FirstName}}
+							td {{subscriber.City}}
+							td {{subscriber.State}}
+							td {{subscriber.Country}}
+							td {{subscriber.Email}}
+							td {{subscriber.CardType}}
+							td {{subscriber.CcLast4}}
+							td.action_group
+								a.row_btn.emerald_btn(href='', ng-click='addSubscriber($index,subscriber)')
+									i.fa.fa-plus
+									span Add Subscriber
+							
+			.row.userCreateSuccess
+				p Success
+	.modal-footer.action_group
+		a.row_btn.cancel_btn(href="" ng-click="cancel()")
+			i.fa.fa-sign-out
+			span Exit
