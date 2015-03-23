@@ -49,7 +49,7 @@ include ../modals/subscriberRemoveConfirmModal.jade
                 td {{subscription.NextBillingDate | date:'MM/dd/yyyy'}}
                 td {{subscription.Mid | uppercase }}
                 td
-                    a.row_btn.emerald_btn.margin-right(href="" ng-click="openMID(subscription); loadSubscribers(subscription.SubscriptionId,subscription); checkWindow(shownSubscriptions)" ng-controller="addSubscriberModalCtrl"  tooltip="Add Subscribers" tooltip-placement="top")
+                    a.row_btn.emerald_btn.margin-right(href="" ng-click="openMID(subscription); loadSubscribers(subscription.SubscriptionId,subscription); checkWindow(shownSubscriptions)" ng-controller="subscriptionAddSubscriberModalCtrl"  tooltip="Add Subscribers" tooltip-placement="top")
                       i.fa.fa-plus
                       span Add
                     a.row_btn.wet_asphalt_btn.margin-right(href="" ng-click="loadSubscribers(subscription.SubscriptionId,subscription); gotoSubscription($index,shownSubscriptions)" tooltip="View Subscribers" tooltip-placement="top")

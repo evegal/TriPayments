@@ -6,12 +6,54 @@
    02. subscriptionsCreateModalCtrl
    03. subscriptionDeleteModalCtrl
    04. subscriptionEditModalCtrl
-   04. addSubscriberModalCtrl
-   04. subscriberRemoveConfirmModalCtrl
+   05. subscriptionAddSubscriberModalCtrl
+   06. subscriberRemoveConfirmModalCtrl
   
  **  *************************************** **/
 
 app.controller('subscriptionsCtrl', function($timeout,$filter,$rootScope,$scope,$http,$state,baseUrl,Notify,$location) {
+
+  // LOAD SUBSCRIPTIONS
+  $rootScope.subscriptionModalGroups = [];
+
+    $http.get(baseUrl + 'recurring/subscriptions').success(function(data) {
+      $scope.subscriptionsBulk = data;
+      $scope.subscriptionsAmount = data.length;
+
+      // CSV Export
+      $scope.subscriptionsCSV = data;
+      // copy the references
+      //$scope.shownMerchants = [].concat($scope.groupsBulk);
+
+      angular.forEach(data, function(value,key) {
+         $rootScope.subscriptionModalGroups.push(value);
+      }); 
+
+    });
+
+
+  // NOTIFY ADD SUBSCRIPTION
+  Notify.getMsg('NewSubscription', function(event,data) {
+    $scope.subscriptionsBulk.push(data);
+    $scope.subscriptionsAmount += 1;
+  });
+
+  // NOTIFY DELETE SUBSCRIPTION
+  Notify.getMsg('RemoveSubscription', function(event,data) {
+    $scope.subscriptionsBulk.splice(data,1);
+    $scope.subscriptionsAmount -= 1;
+  });
+
+  // NOTIFY EDIT SUBSCRIPTION
+  Notify.getMsg('SubscriptionUpdated', function(event,data) {
+    $http.get(baseUrl + 'recurring/subscriptions').success(function(data) {
+      $scope.subscriptionsBulk = data;
+    });
+  });
+
+
+ 
+
 
   $scope.shownSubscriptions = $scope.subscriptionsBulk;
   
@@ -616,11 +658,11 @@ var subscriptionEditInstanceCtrl = function($scope,$modalInstance,$http,$timeout
 }; // END EDIT INSTANCE 
 
 // ADD SUBSCRIBERS TO SUBSCRIPTION
-app.controller('addSubscriberModalCtrl', function($scope,$modal,$log) {
+app.controller('subscriptionAddSubscriberModalCtrl', function($scope,$modal,$log) {
     $scope.openMID = function(subscription) {
            var modalInstance = $modal.open({
               templateUrl:'addSubscribersContent.html',
-              controller:addSubscribersInstanceCtrl,
+              controller:subscriptionAddSubscribersInstanceCtrl,
               size:'lg',
               resolve: {
                 subscription:function() {
@@ -631,7 +673,7 @@ app.controller('addSubscriberModalCtrl', function($scope,$modal,$log) {
         };
 });
 
-var addSubscribersInstanceCtrl = function($scope,$modalInstance,$log,$timeout,$rootScope,subscription,$http,baseUrl) {
+var subscriptionAddSubscribersInstanceCtrl = function($scope,$modalInstance,$log,$timeout,$rootScope,subscription,$http,baseUrl) {
 
   $scope.cancel = function() {
     $modalInstance.close();

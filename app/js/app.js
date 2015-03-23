@@ -25,7 +25,7 @@ if(parts.length == 4){
         apiServiceBaseUri: 'https://auth.tripayments.com/',
         clientId: parts[0]
     });
-    app.constant('baseUrl', "https://api.tripayments.com/");
+    app.constant('baseUrl', "https://portalapi.tripayments.com/");
     app.value('appLogo', parts[0]);
 
 } else {

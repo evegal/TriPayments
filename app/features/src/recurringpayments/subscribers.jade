@@ -48,7 +48,7 @@ include ../modals/subscriberRemoveModal.jade
                         a.row_btn.edit_mid_btn(ng-click="openIt(subscriber.SubscriberId)" ng-controller="subscriberEditModalCtrl" tooltip="Edit {{subscriber.LastName | uppercase}}")
                             i.fa.fa-edit
                             span Edit
-                        a.row_btn.delete_mid_btn(ng-click="open($index,subscriber.SubscriberId,subscriber.LastName)" ng-controller="removeSubscriberModalCtrl" tooltip="Delete {{subscriber.LastName | uppercase}}")
+                        a.row_btn.delete_mid_btn(ng-click="open($index,subscriber.SubscriberId,subscriber.LastName)" ng-controller="subscriberRemoveModalCtrl" tooltip="Delete {{subscriber.LastName | uppercase}}")
                             i.fa.fa-trash
                             span Delete
             tfoot

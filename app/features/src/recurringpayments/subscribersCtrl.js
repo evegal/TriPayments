@@ -1,7 +1,47 @@
-app.controller('subscribersCtrl', function($scope,$http,Notify) {
+/** *************************************** **
+  
+  TABLE OF CONTENTS
+  ---------------------------
+   01. subscribersCtrl
+   02. subscriberCreateModal
+   03. subscriberRemoveModalCtrl
+   04. subscriberEditModalCtrl
+  
+ **  *************************************** **/
+
+app.controller('subscribersCtrl', function($scope,$http,Notify,baseUrl) {
+
+  // LOAD SUBSCRIBERS
+  $http.get(baseUrl + 'recurring/subscribers').success(function(data) {
+    $scope.subscribersBulk = data;
+    $scope.subscribersAmount = data.length;
+
+    // CSV Export
+    $scope.subscriberCSV = data;
+
+  });
+
+    // NOTIFY ADD SUBSCRIBER
+    Notify.getMsg('NewSubscriber', function(event,data) {
+      $scope.subscribersBulk.push(data);
+      $scope.subscribersAmount += 1;
+    });
+
+    // NOTIFY DELETE SUBSCRIBER
+    Notify.getMsg('RemoveSubscriber', function(event,data) {
+      $scope.subscribersBulk.splice(data,1);
+      $scope.subscribersAmount -= 1;
+    });
+
+    // NOTIFY EDIT SUBSCRIBER
+    Notify.getMsg('SubscriberUpdated', function(event,data) {
+      $http.get(baseUrl + 'recurring/subscribers').success(function(data) {
+        $scope.subscribersBulk = data;
+      });
+    });
+
 
     $scope.shownSubscribers = $scope.subscribersBulk;
-
 });
 
 
@@ -131,14 +171,14 @@ var subscriberCreateModalInstance = function($scope,$modalInstance,$log,$http,$r
 }  // END MODAL INSTANCE
 
 //  SUBSCRIBER DELETE MODAL -- (REMOVE NOT DELETE STILL WILL BE IN DB)
-app.controller('removeSubscriberModalCtrl', function($scope,$modal,$log) {
+app.controller('subscriberRemoveModalCtrl', function($scope,$modal,$log) {
     $scope.open = function(index,subscriberId,lname) {
 
         var indexId = index;
 
         var modalInstance = $modal.open({
             templateUrl:'subscriberRemoveContent.html',
-            controller:removeSubscriberCtrlInstance,
+            controller:subscriberRemoveCtrlInstance,
             size:'lg',
             resolve: {
                 index:function() {
@@ -155,7 +195,7 @@ app.controller('removeSubscriberModalCtrl', function($scope,$modal,$log) {
     }
 });
 
-var removeSubscriberCtrlInstance = function($scope,$modalInstance,$log,index,subscriberId,lname,$http,baseUrl,Notify,$timeout) {
+var subscriberRemoveCtrlInstance = function($scope,$modalInstance,$log,index,subscriberId,lname,$http,baseUrl,Notify,$timeout) {
     //  CALLED REMOVE BECAUSE THE SUBSCRIBER WILL NEVER BE DELETED 
     //  WE WILL RETAIN THE USERS INFORMATION IN THE DB
 
