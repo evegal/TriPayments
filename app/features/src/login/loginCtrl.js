@@ -1,7 +1,16 @@
+/** *************************************** **
+  
+  TABLE OF CONTENTS
+  ---------------------------
+   01. loginCtrl
+  
+ **  *************************************** **/
+
 // LOGIN CTRL 
 app.controller('loginCtrl', ['$scope', '$location', 'authService', 'appLogo', function ($scope, $location, authService, appLogo) {
 
     $scope.logoName = appLogo;
+    $scope.date = new Date();
 
     $scope.loginData = {
         userName: "",
@@ -18,7 +27,5 @@ app.controller('loginCtrl', ['$scope', '$location', 'authService', 'appLogo', fu
              $scope.message = err.error_description;
          });
     };
-
-
 
 }]); // END LOGIN CTRL
