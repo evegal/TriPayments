@@ -8,69 +8,68 @@ include ../modals/refund_modal.html
     .panel.panel-default.snap-panel-options
         .panel-heading
             .row
-                .col-md-2
+                .col-md-6
                     h2.panel-title
                         span(tooltip="Results from the Transaction Snapshot will provide a high level view of transactions per merchant account." tooltip-placement="top")
                             i.fa.fa-info-circle
                             |  Transaction Snapshot:
         .panel-body
-            .row
-                form.form.searcher.snap-shot(name="snapForm" ng-submit="snapFormSubmit()")
-                        .row
-                            .col-md-4
-                                label Start Date:
-                                .row
-                                    .col-md-8
-                                        include partials/calendarSnap1.jade
-                                    .col-md-2
-                                        select.form-control(ng-options="item as item for item in Hours" ng-model="fromHours")
-                                            option(value="") Hour
-                                        
-                                    .col-md-2
-                                        select.form-control(ng-options="item as item for item in Mins" ng-model="fromMins")
-                                            option(value="") Min
-                                           
-                                        
-                            .col-md-4
-                                label End Date:
-                                .row
-                                    .col-md-8
-                                        include partials/calendarSnap2.jade
-                                    .col-md-2
-                                        select.form-control(ng-options="item as item for item in Hours" ng-model="toHours")
-                                            option(value="") Hour
-                                        
-                                    .col-md-2
-                                        select.form-control(ng-options="item as item for item in Mins" ng-model="toMins")
-                                            option(value="") Min
-                                        
-                            .col-md-4
-                                label Preset Date Range:
-                                select.form-control(ng-model="snapForm.fromDate")
-                                    option(value="") Select a date range
-                                    option(value="{{Yesterday}}") Yesterday
-                                    option(value="{{past3Days}}") Past 3 Days
-                                    option(value="{{past7Days}}") Past 7 Days
-                                    option(value="{{past90Days}}") Past 90 Days
-                                    option(value="{{past180Days}}") Past 180 Days
-                                    option(value="{{past360Days}}") Past 365 Days
-                           
-                        .row
-                            .col-md-4
-                                label Gateway
-                                select.form-control(ng-model="snapForm.gateway" ng-options="obj.Id as obj.DisplayName for obj in gateways")
-                                    option(value="") Select a gateway
+            form.form.searcher.snap-shot(name="snapForm" ng-submit="snapFormSubmit()")
+                    .row
+                        .col-md-12.col-lg-4
+                            label Start Date:
+                            .row
+                                .col-md-8
+                                    include partials/calendarSnap1.jade
+                                .col-md-2
+                                    select.form-control(ng-options="item as item for item in Hours" ng-model="fromHours")
+                                        option(value="") Hour
                                     
-                        .row
-                            .col-md-12
-                                button.generate_results(type="submit")
-                                    i.fa.fa-search
-                                    span Snapshot Search
+                                .col-md-2
+                                    select.form-control(ng-options="item as item for item in Mins" ng-model="fromMins")
+                                        option(value="") Min
+                                       
+                                    
+                        .col-md-12.col-lg-4
+                            label End Date:
+                            .row
+                                .col-md-8
+                                    include partials/calendarSnap2.jade
+                                .col-md-2
+                                    select.form-control(ng-options="item as item for item in Hours" ng-model="toHours")
+                                        option(value="") Hour
+                                    
+                                .col-md-2
+                                    select.form-control(ng-options="item as item for item in Mins" ng-model="toMins")
+                                        option(value="") Min
+                                    
+                        .col-md-6.col-lg-4
+                            label Preset Date Range:
+                            select.form-control(ng-model="snapForm.fromDate")
+                                option(value="") Select a date range
+                                option(value="{{Yesterday}}") Yesterday
+                                option(value="{{past3Days}}") Past 3 Days
+                                option(value="{{past7Days}}") Past 7 Days
+                                option(value="{{past90Days}}") Past 90 Days
+                                option(value="{{past180Days}}") Past 180 Days
+                                option(value="{{past360Days}}") Past 365 Days
+                       
+                    .row
+                        .col-md-4
+                            label Gateway
+                            select.form-control(ng-model="snapForm.gateway" ng-options="obj.Id as obj.DisplayName for obj in gateways")
+                                option(value="") Select a gateway
+                                
+                    .row
+                        .col-md-12
+                            button.generate_results(type="submit")
+                                i.fa.fa-search
+                                span Snapshot Search
 
     .panel.panel-default.panel-options
         .panel-heading
             .row
-                .col-md-2
+                .col-md-6
                     h2.panel-title
                         span(tooltip="Results from the Transaction Search will provide a detail level of transactions that meet your search criteria." tooltip-placement="top")
                             i.fa.fa-info-circle
@@ -108,15 +107,14 @@ include ../modals/refund_modal.html
 
 
 
-                        .col-md-4
+                        .col-md-12.col-lg-4
                             label End Date:
                             .row
                                 .col-md-8
                                     include partials/calendarSingle2.jade
                                 .col-md-2
                                     select.form-control(ng-options="item as item for item in Hours" ng-model="singleToHours")
-                                        option(value="") Hour
-                                        
+                                        option(value="") Hour 
                                 .col-md-2
                                     select.form-control(ng-options="item as item for item in Mins" ng-model="singleToMins")
                                         option(value="") Min

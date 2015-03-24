@@ -1,41 +1,50 @@
+/** *************************************** **
+  
+  TABLE OF CONTENTS
+  ---------------------------
+   01. searchCtrl
+   02. firstdateCtrl
+   03. secdateCtrl
+   04. snapstartDateCtrl
+   05. snapendDateCtrl
+   06. transfromDateCtrl
+   07. transendDateCtrl
+   08. transModalCtrl
+   09. refundModalCtrl
+   08. voidModalCtrl
+  
+ **  *************************************** **/
+//searchCtrl
 app.controller('searchCtrl', function($rootScope,$scope,$http,$filter,baseUrl,$state,$moment,Notify) {
 
-  
-  /////////////////
-  // SINGLE SEARCH 
-  /////////////////
-
-
-  // Set Default for Search Type 
+  // SET DEFAULT SEARCH TIME = SINGLE SEARCH
   $scope.searchType = 'single';
   $('.single_format').addClass('activeFormat');
   
-  // Toggle to single search format
+  // TOGGLE TO SINGLE SEARCH FORMAT
   $scope.singleFormat = function() {
     $scope.searchType = 'single';
-    // SWAP ACTIVE CLASS
     $('.single_format').addClass('activeFormat');
     $('.group_format').removeClass('activeFormat');
   };
 
-  // Toggle to group search format
+  // TOGGLE TO GROUP SEARCH FORMAT
   $scope.groupFormat = function() {
     $scope.searchType = 'group';
-    // SWAP ACTIVE CLASS
     $('.group_format').addClass('activeFormat');
     $('.single_format').removeClass('activeFormat');
   };
 
-  // cache form for query and to clear input fields
+  // CACHE FORM QUERY PARAMETERS AND TO CLEAR FIELDS
   $scope.search_form = {};
-  // Handle Form Submit
+
   $scope.submit = function() {
 
-    //set todays date if dates not defined
+    //SET TO TODAYS DATE IF DATES ARENT SPECIFIED - BUSINESS REQUEST
     if ($scope.search_form.fromDate == undefined){$scope.search_form.fromDate = new Date();}
     if ($scope.search_form.toDate == undefined){$scope.search_form.toDate = new Date();}
 
-    // Date formating
+    // DATE FORMATING
     var datefilter = $filter('date'),
         formatDate = datefilter($scope.search_form.fromDate,'MM/dd/yy'),
         formatDate2 = datefilter($scope.search_form.toDate, 'MM/dd/yy'),
@@ -55,7 +64,6 @@ app.controller('searchCtrl', function($rootScope,$scope,$http,$filter,baseUrl,$s
       $scope.fromDATE = formatDate + ' ' + fromHr + ':'+ fromMin;
     }
 
-
   // TIME SETTINGS TO DATE
     if(toHr === undefined && toMin === undefined){
       $scope.toDATE = formatDate2 + ' 23:59';
@@ -67,7 +75,7 @@ app.controller('searchCtrl', function($rootScope,$scope,$http,$filter,baseUrl,$s
       $scope.toDATE = formatDate2 + ' ' + toHr + ':'+ toMin;
     }
     
-    // Create Query Object for POST request to Endpoint
+    // CREATE QUERY JSON OBJECT FOR REQUEST
     var formQuery =  {
             "FirstName": $scope.search_form.fname,
             "LastName": $scope.search_form.lname,
@@ -83,10 +91,7 @@ app.controller('searchCtrl', function($rootScope,$scope,$http,$filter,baseUrl,$s
             "MidGroupId":$scope.search_form.midmenu
     };
 
-    console.log(formQuery);
-
-    // SEND POST REQUEST
-    
+    // SEND POST REQUEST   
     $http({
       method:'POST',
       url:baseUrl + 'transactions',
@@ -156,19 +161,9 @@ app.controller('searchCtrl', function($rootScope,$scope,$http,$filter,baseUrl,$s
             
           } // END else
 
-
-          // RESULTS FEEDBACK
-          //$scope.resultAmount   = data.length;
-          //$scope.searchlname    = $scope.search_form.lname;
-          //$scope.searchfname    = $scope.search_form.fname;
-          //$scope.searchEmail    = $scope.search_form.email;
-          //$scope.searchTransID  = $scope.search_form.transID;
-          
-         
           $('.panel-options').slideUp(300);
           $('.snap-panel-options').slideUp(300);
           $('table thead').show(300);
-          //$('form.searcher').slideUp(300);
           $('.search_feedback').slideDown(300);
           $('.container_search_parameters').show();
 
@@ -180,18 +175,14 @@ app.controller('searchCtrl', function($rootScope,$scope,$http,$filter,baseUrl,$s
   }; // END SUBMIT
 
 
-  //////////////////////////
   // MODIFY SEARCH TOGGLE
-  //////////////////////////
   $scope.modform = function() {
-    //$('form.searcher').slideToggle(300);
     $('.panel-options').slideToggle(300);
     $('.container_search_parameters').slideToggle(300);
   }
 
-  //////////////////////////
+
   // ADVANCED SEARCH TOGGLE
-  //////////////////////////
   $scope.toggleSearch = function() {
   
     var txt = $('.advanced_fields').is(':visible') ? 'Advanced Search' : 'Hide Advanced Search';
@@ -199,9 +190,8 @@ app.controller('searchCtrl', function($rootScope,$scope,$http,$filter,baseUrl,$s
                $('.advanced_fields').slideToggle();
     }
 
-    //////////////////////////
+
     // SELECT MENUS
-    //////////////////////////
     $scope.statusItems = [
         {value:"0", text:"Success"},
         {value:"1", text:"Declined"},
@@ -216,20 +206,10 @@ app.controller('searchCtrl', function($rootScope,$scope,$http,$filter,baseUrl,$s
         {value:"6", text:"Capture"}
     ];
 
-
-//-----------------------------------------//
-//-----------------------------------------//
-
-
-var test = "3"
-
-  /////////////////
   // GROUP SEARCH 
-  /////////////////
   $scope.oneAtATime = false;
 
-  // Create Dropdown Hours
-  
+  // CREATE DROPDOWN HOURS  
   function createHours() {
     $scope.Hours = [];
     // loop to create 00-23 range
@@ -241,7 +221,7 @@ var test = "3"
   }
   createHours();
 
-  // Create Minutes in 5min Intervals
+  // CREATE MINUTES IN 5MIN INTERVALS
   function createMins() {
     $scope.Mins = [];
     for(var i=0;i<=59;i++) {
@@ -252,12 +232,7 @@ var test = "3"
   }
   createMins();
   
-
-
-  /////////////
   // MOMENT JS
-  /////////////
-
   $scope.Yesterday = $moment().subtract(1, 'days').format('L');
   $scope.past3Days = $moment().subtract(3, 'days').format('L');
   $scope.past7Days = $moment().subtract(7, 'days').format('L');
@@ -265,9 +240,7 @@ var test = "3"
   $scope.past180Days = $moment().subtract(180, 'days').format('L');
   $scope.past360Days = $moment().subtract(365, 'days').format('L');
 
-  /////////////////////////
   // SNAP-SHOT FORM SUBMIT
-  /////////////////////////
   $scope.snapForm = {};
 
   $scope.snapFormSubmit = function() {
@@ -316,9 +289,6 @@ var test = "3"
       "GatewayId":$scope.snapForm.gateway
     };
 
-
-    console.log(snapQuery);
-
     // SEND POST REQUEST
     $http({
       method:'POST',
@@ -329,11 +299,7 @@ var test = "3"
       // BIND DATA TO SCOPE
       $scope.snapData = data;
       $scope.snapLen = data.length;
-
-      // Link the Local-Data with Smart Table's Copy
-      //$scope.snapData = $scope.shownSnapData; 
-
-      
+     
       $('.panel-options').slideUp(300);
       $('.snapForm_results').slideDown(300);
       $('.snap-panel-options').slideUp(300);
@@ -351,10 +317,7 @@ var test = "3"
 
 
 
-  /////////////////////
   // TRANS FORM SUBMIT
-  /////////////////////
-
   // cache form to clear input fields
   $scope.transForm = {};
 
@@ -387,8 +350,6 @@ var test = "3"
       $scope.TODATE = formatDate2;
     }
 
-
-
     // QUERY OBJECT
     transQuery = {
       "FromDate":$scope.FROMDATE,
@@ -402,9 +363,6 @@ var test = "3"
       "ReferenceNumber":$scope.transForm.refNumber,
       "FirstName":$scope.transForm.fname
     }
-
-    console.log(transQuery);
-
 
     // QUERY POST REQUEST
     $http({
@@ -467,7 +425,7 @@ var test = "3"
          return ui;
       };
 
-      console.log(data);
+
       // BIND DATA
       $scope.transData = data;
       $scope.dataLen = data.length;
@@ -492,20 +450,13 @@ var test = "3"
 
   };  // END SUBMIT
   
-
-
-  ///////////////
   // NEW SEARCH
-  ///////////////
   $scope.new_search = function() {
     $state.go($state.$current, null, { reload: true });     
   };
 
-  /////////////////
   // MODIFY SEARCH
-  /////////////////
   $scope.modify_search = function() {
-    //$('.form_wrapper').slideToggle(300);
     $('.panel-options').slideToggle(300);
     $('.searcher').show(300);
   };
@@ -515,18 +466,11 @@ var test = "3"
   };
 
   
-  $scope.doToggle = function(item) {
-
-    //shownData[index].open = !shownData[index].open;
-    
-
-  };
-  
 }); // END SEARCH CTRL
 
-///////////////////////////////////////
+
 // DATE PICKER CONTROLS - SINGLE SEARCH
-///////////////////////////////////////
+// START DATE CTRL
 app.controller('firstdateCtrl', function ($scope) {
 
   $scope.today = function() {
@@ -607,12 +551,7 @@ app.controller('secdateCtrl', function ($scope) {
   $scope.format = $scope.formats[3];
 });
 
-
-
-///////////////////////////////////////
 // DATE PICKER CONTROLS - GROUP SEARCH
-///////////////////////////////////////
-
 app.controller('snapstartDateCtrl', function($scope){
 
   // GET TODAY DATE
@@ -645,9 +584,7 @@ app.controller('snapstartDateCtrl', function($scope){
   $scope.initDate = new Date('2013-15-20');
   $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
   $scope.format = $scope.formats[3];
-
 });
-
 
 app.controller('snapendDateCtrl', function($scope){
 
@@ -681,7 +618,6 @@ app.controller('snapendDateCtrl', function($scope){
   $scope.initDate = new Date('2013-15-20');
   $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
   $scope.format = $scope.formats[3];
-
 });
 
 app.controller('transfromDateCtrl', function($scope) {
@@ -716,7 +652,6 @@ app.controller('transfromDateCtrl', function($scope) {
   $scope.initDate = new Date('2013-15-20');
   $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
   $scope.format = $scope.formats[3];
-
 });
 
 app.controller('transendDateCtrl', function($scope) {
@@ -767,7 +702,6 @@ app.controller('transModalCtrl', function($scope,$modal,$log) {
         }
      });
   }
-
 }); // transModalCtrl
 
 
@@ -794,7 +728,6 @@ app.controller('refundModalCtrl', function($scope,$modal,$log) {
         }
      });
   }
-
 }); // refundModalCtrl
 
 var refundModalInstanceCtrl = function($scope,$modalInstance,trans,$http,$timeout,Notify,baseUrl) {
@@ -899,8 +832,7 @@ var refundModalInstanceCtrl = function($scope,$modalInstance,trans,$http,$timeou
     }
 
     } // processRefund
-}
-
+};
 
 // VOID CONFIRMATION MODAL
 app.controller('voidModalCtrl', function($scope,$modal,$log) {
@@ -918,12 +850,10 @@ app.controller('voidModalCtrl', function($scope,$modal,$log) {
     });
 
   } // function open
-
 }); // end voidModalCtrl
 
 var voidModalInstanceCtrl = function($scope,$modalInstance,trans,$http,$timeout,baseUrl) {
-    $scope.trans = trans;
-  console.log(trans);
+  $scope.trans = trans;
   
   $scope.cancelVoid = function() {
     $modalInstance.close();
@@ -972,7 +902,3 @@ var voidModalInstanceCtrl = function($scope,$modalInstance,trans,$http,$timeout,
   } // process void 
 };
 
-// TabsDemoCtrl
-app.controller('TabsDemoCtrl', function($scope) {
-  
-});
