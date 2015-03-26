@@ -1,8 +1,21 @@
+/** *************************************** **
+  
+  TABLE OF CONTENTS
+  ---------------------------
+   01. resetCtrl
+   02. resetEmailCtrl
+   03. resetPasswordCtrl
+   04. resetSuccessCtrl
+  
+ **  *************************************** **/
+
+
 // RESET PASSWORD
 app.controller('resetCtrl', function($scope,$http,$rootScope,$location,$timeout,baseUrl,appLogo) {
     
     $scope.logoName = appLogo;
     $scope.resetForm = {};
+    $scope.date = new Date();
 
     $scope.submit = function() {
 
@@ -23,9 +36,7 @@ app.controller('resetCtrl', function($scope,$http,$rootScope,$location,$timeout,
                 } else {
                     $location.path('/reset_email');
                 }
-
-                //$location.path('/reset_email');
-                          
+                         
 
             }).error(function(data) {
                 //$scope.message = 'Email Not Found';
@@ -44,36 +55,21 @@ app.controller('resetCtrl', function($scope,$http,$rootScope,$location,$timeout,
 
 
     }; // END submit
+});  // END resetCtrl
 
-});
-/////////////////
 // RESET EMAIL
-/////////////////
 app.controller('resetEmailCtrl', function($scope,$rootScope,appLogo) {
 
     $scope.logoName = appLogo;
     $scope.subEmail = $rootScope.resetEmail;
+    $scope.date = new Date();
+}); //END resetEmailCtrl
 
-});
-///////////////////
 // RESET PASSWORD
-///////////////////
 app.controller('resetPasswordCtrl', function($scope,$location,$http,$timeout,baseUrl,appLogo) {
     $scope.logoName = appLogo;
-    /*
-    var userObject = $location.search();
-    var bucket = [];
-    
-    for(var i in userObject) {
-        bucket.push(userObject[i]);
+    $scope.date = new Date();
 
-    }
-    
-    // SETUP NEW CLEAN OBJ
-    var cleanObject = {
-
-    };
-    */
     $scope.tempObj = $location.search();
     $scope.userEmail = $scope.tempObj.email;
     $scope.userToken = $scope.tempObj.token;
@@ -85,18 +81,13 @@ app.controller('resetPasswordCtrl', function($scope,$location,$http,$timeout,bas
 
         if($scope.passwordForm.$valid) {
 
-            console.log('all good');
-            
             var passQuery =  {
                 "EmailAddress":$scope.userEmail,
                 "NewPassword":$scope.user.newPass,
                 "ResetToken":$scope.userToken
             };
-
-            console.log(passQuery);
-            
+           
             if($scope.user.newPass === $scope.user.confirmPass) {
-                console.log('passwords match');
                 // SEND POST
                 $http({
                     method:'POST',
@@ -104,40 +95,47 @@ app.controller('resetPasswordCtrl', function($scope,$location,$http,$timeout,bas
                     data:passQuery
                 }).success(function(data,status) {
                     console.log('password updated');
-                    console.log(status);
-
                     $location.path('/reset_success');
+                }).error(function(data, status) {
+                        
+                    //SOMETHING ERRONEOUS WITH THE API
+                    $scope.errorMsg = 'Passwords must be at least 8 characters, minimum of one digit, minimum of one uppercase.';
+                    $('.user_help').slideDown(500);
+                    $timeout(function() {
+                        $('.user_help').slideUp(500);
+                    },3000);    
                 });
 
             } else {
-                console.log('they dont match');
-
-                $('.user_help_pass').slideDown(300);
-
+    
+                //PASSWORD FIELDS NOT COMPLETED
+                $scope.errorMsg = 'Passwords do not match. Please Try again';
+                $('.user_help').slideDown(500);
                 $timeout(function() {
-                    $('.user_help_pass').slideUp(300);
-                },1000);
+                    $('.user_help').slideUp(500);
+                },3000);            
+
+                $scope.user.newPass = '';
+                $scope.user.confirmPass = '';
             }
 
         } else {
-            console.log('all bad');
-            $('.user_help').slideDown(300);
 
+            //PASSWORD FIELDS NOT COMPLETED
+            $scope.errorMsg = 'Please ensure to complete all fields (*).';
+            $('.user_help').slideDown(500);
             $timeout(function() {
-                $('.user_help').slideUp(300);
-            },1000);
+                $('.user_help').slideUp(500);
+            },3000);
+
         }
 
-        
-        
+
     }; // END submit
-
-
 }); // END resetPasswordCtrl
 
-//////////////////////////
+
 // RESET PASSWORD SUCCESS
-//////////////////////////
 app.controller('resetSuccessCtrl', function($scope,$location,appLogo) {
 
     $scope.logoName = appLogo; 
@@ -146,4 +144,4 @@ app.controller('resetSuccessCtrl', function($scope,$location,appLogo) {
         $location.path('/login');
     };
 
-});
+}); // END resetSuccessCtrl
