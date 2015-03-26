@@ -257,6 +257,7 @@ a[class$='groupsgroups'], a[class$='subscriberssubscribers'] {
     border-bottom:1px solid #ccc;
     z-index:5;
     @include transition(all 0.5s ease);
+    min-width: 1300px;
     .row {
         margin-right:0;
     }
@@ -287,6 +288,7 @@ a[class$='groupsgroups'], a[class$='subscriberssubscribers'] {
     background:#f7f7f7;
     margin:0 auto;
     padding: 0 10px;
+    min-width:1300px;
     h1 {
         font-size:30px;
         padding:20px 0;
@@ -497,7 +499,7 @@ a[class$='groupsgroups'], a[class$='subscriberssubscribers'] {
 
 .floater {
   background:#333;
-  color:#fff;
+  color:#fff !important;
   display:none;
   position:absolute;
   padding:10px 0px 10px 40px;

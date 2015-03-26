@@ -4,20 +4,20 @@ table.table.table-striped.ng-table-responsive.primary_search_table(st-table="sho
                         th(colspan="13")
                           input.form-control(st-search="" type="search" placeholder="Filter through all search results...")
                     tr
-                        th.st-header(st-sort="TransactionId" width="6%") Trans ID
-                        th.st-header(st-sort="RequestDateOnly" width="5%") Date
-                        th.st-header(st-sort="Type" width="5%") Type
-                        th.st-header(st-sort="Amount" width="5%") Amount
-                        th.st-header(st-sort="ResponseDescription" width="5%") Status
-                        th.st-header(st-sort="Gateway" width="5%") Gateway
-                        th.st-header(st-sort="MidDisplayName" width="10%") MID Name
-                        th.st-header(st-sort="PaymentTypeName" width="6%") CC Type
-                        th.st-header(st-sort="CcLastFour" width="5%") #CC
-                        th.st-header(st-sort="FirstName" width="7%") First Name
-                        th.st-header(st-sort="LastName" width="7%") Last Name
-                        th.st-header(ng-show="Udf1Show" st-sort="Udf1" width="10%") UDF1
-                        th.st-header(ng-show="EmailShow" st-sort="Email" width="10%") Email
-                        th.st-header-nosort(width="14%") Actions
+                        th.st-header(st-sort="TransactionId" width="6%" style="min-width:55px;") ID
+                        th.st-header(st-sort="RequestDateOnly" width="5%" style="min-width:75px;") Date
+                        th.st-header(st-sort="Type" width="5%" style="min-width:75px;") Type
+                        th.st-header(st-sort="Amount" width="5%" style="min-width:70px;") Amt
+                        th.st-header(st-sort="ResponseDescription" width="5%" style="min-width:85px;") Status
+                        th.st-header(st-sort="Gateway" width="5%" style="min-width:90px;") Gateway
+                        th.st-header(st-sort="MidDisplayName" width="10%" style="min-width:70px;") MID
+                        th.st-header(st-sort="PaymentTypeName" width="6%" style="min-width:75px;") Card
+                        th.st-header(st-sort="CcLastFour" width="5%" style="min-width:75px;") #CC
+                        th.st-header(st-sort="FirstName" width="7%" style="min-width:110px;") First Name
+                        th.st-header(st-sort="LastName" width="7%" style="min-width:110px;") Last Name
+                        th.st-header(ng-show="Udf1Show" st-sort="Udf1" width="10%" style="min-width:75px;") UDF1
+                        th.st-header(ng-show="EmailShow" st-sort="Email" width="10%" style="min-width:80px;") Email
+                        th.st-header-nosort(width="14%" style="min-width:90px;") Actions
 
                 tbody
                     tr
@@ -64,7 +64,7 @@ table.table.table-striped.ng-table-responsive.primary_search_table(st-table="sho
                         span
 
                     tr(ng-repeat="trans in shownData")
-                        td.search-results-trans-id
+                        td.search-results-trans-id(style="white-space: nowrap;")
                             a.row_btn.peter_river_btn.full_width(tooltip="See transaction details for {{trans.TransactionId}}" tooltip-placement="top" href="" ng-click="open(trans)" ng-controller="transModalCtrl")
                               i.fa.fa-eye
                               span {{trans.TransactionId}}
@@ -72,7 +72,7 @@ table.table.table-striped.ng-table-responsive.primary_search_table(st-table="sho
                         td {{trans.Type}}
                         td(ng-class="(trans.Amount > 0) ? 'cash_pos' : 'cash_neg' ") {{trans.Amount | currency }}
                         td
-                          a.groupAnchor(href="")
+                          a.groupAnchor(style="white-space: nowrap;" href="")
                             i.fa.fa-info-circle
                             span(ng-class="(trans.ResultCode === 0) ? 'success' : 'failed' ")  {{returnStatus(trans)}}
                             div.floater
@@ -107,7 +107,7 @@ table.table.table-striped.ng-table-responsive.primary_search_table(st-table="sho
                         td(ng-show="EmailShow") {{trans.Email}}
                         td.paymentTypes
 
-                          div(ng-if="trans.Type == 'Authorize' && trans.ResultCode == 0 || trans.Type == 'AuthExisting' && trans.ResultCode == 0")
+                          div(style="white-space: nowrap;" ng-if="trans.Type == 'Authorize' && trans.ResultCode == 0 || trans.Type == 'AuthExisting' && trans.ResultCode == 0")
                             a.row_btn.alazarin_btn.search_width.margin-right(tooltip="Void transaction: {{trans.TransactionId}}" tooltip-placement="top" ng-click="open(trans)" href="" ng-controller="voidModalCtrl") 
                               i.fa.fa-ban
                               span void
@@ -115,7 +115,7 @@ table.table.table-striped.ng-table-responsive.primary_search_table(st-table="sho
                               i.fa.fa-money
                               span Refund
 
-                          div(ng-if="trans.Type == 'Capture' && trans.ResultCode == 0 || trans.Type == 'Charge' && trans.ResultCode == 0 || trans.Type == 'ChargeExisting'  && trans.ResultCode == 0")
+                          div(style="white-space: nowrap;" ng-if="trans.Type == 'Capture' && trans.ResultCode == 0 || trans.Type == 'Charge' && trans.ResultCode == 0 || trans.Type == 'ChargeExisting'  && trans.ResultCode == 0")
                             a.row_btn.alazarin_btn.search_width.margin-right(tooltip="Void transaction: {{trans.TransactionId}}" ng-click="open(trans)" href="" ng-controller="voidModalCtrl")
                               i.fa.fa-ban
                               span void
@@ -123,7 +123,7 @@ table.table.table-striped.ng-table-responsive.primary_search_table(st-table="sho
                               i.fa.fa-money
                               span Refund
 
-                          div(ng-if="trans.Type == 'Void' || trans.Type == 'Refund' || trans.Type == 'Credit' || trans.Type == 'CreditExisting' || trans.ResultCode !== 0")
+                          div(style="white-space: nowrap;" ng-if="trans.Type == 'Void' || trans.Type == 'Refund' || trans.Type == 'Credit' || trans.Type == 'CreditExisting' || trans.ResultCode !== 0")
                             a.row_btn.alazarin_btn.search_width.margin-right.disabled(tooltip="Unable to void with this processed type" tooltip-placement="top")
                               i.fa.fa-ban
                               span void

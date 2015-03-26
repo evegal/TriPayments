@@ -64,6 +64,7 @@
 .st-header {
     cursor:pointer;
     position:relative;
+    white-space: nowrap;
     &:after {
         content:'';
         position:absolute;

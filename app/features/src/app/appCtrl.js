@@ -164,11 +164,9 @@ app.controller("appCtrl", function($rootScope,$scope,$state,$timeout,$http,baseU
     // FORMAT GROUPS FOR POPOVER DISPLAY
     $scope.groupNames = [];
 
-
     for(var i=0;i<data.length;i++) {
        //console.log(data[i].GroupMembership);
        $scope.groupNames.push(data[i].GroupMembership);
-
     }
 
     //    CSV EXPORT

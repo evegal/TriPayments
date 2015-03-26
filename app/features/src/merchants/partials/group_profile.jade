@@ -2,5 +2,5 @@ a.groupAnchor(href="")
     i.fa.fa-info-circle
     span  Belongs to {{groupLen}}  Groups
     div.floater
-        ul(ng-repeat="mid in groupNames")
-            li {{mid.Name}}      
+        ul(ng-repeat="group in groupNames")
+            li {{group.Id}}-{{group.DisplayName}}      

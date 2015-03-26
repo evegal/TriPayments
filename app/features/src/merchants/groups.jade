@@ -33,6 +33,7 @@ include ../modals/merchantEditModal.jade
                  th(colspan="7")
                    input.form-control(st-search="" type="search" placeholder="Filter through all MID groups")
                  tr
+                   th.st-header(st-sort="Id") MID Group ID
                    th.st-header(st-sort="Name") Merchant Name
                    th.st-header(st-sort="BalancingType") Balancing Type
                    //th.st-header(st-sort="CapLimitNotificationEmails" style="width:15%") Cap Limit Notification Email
@@ -43,6 +44,7 @@ include ../modals/merchantEditModal.jade
 
 
                tr(id="base{{$index}}")
+                 td {{merchant.Id}}
                  td {{merchant.Name}}
                  td {{merchant.BalancingType}}
                  //td {{merchant.CapLimitNotificationEmails}}
