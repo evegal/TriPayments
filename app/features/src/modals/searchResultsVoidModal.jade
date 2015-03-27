@@ -1,0 +1,43 @@
+script(type="text/ng-template" id="searchResultsVoidModal.html")
+	.modal-header
+		h3.modal-title
+			span.subtle Void Transaction:
+			|  {{trans.TransactionId}} 
+			span.subtle Name:
+			|  {{trans.FirstName}} {{trans.LastName}}
+		button.close(type='button', ng-click='cancelVoid()') x
+	.modal-body
+		table.table.table-responsive
+			thead
+				tr
+					th Transaction Id
+					th CRM MID
+					th Amount
+					th Currency
+					th First Name
+					th Last Name
+			thead
+				tbody
+					tr
+						td {{trans.TransactionId}}
+						td {{trans.MidDisplayName}}
+						td {{trans.Amount | currency}}
+						td {{trans.Currency}}
+						td {{trans.FirstName}}
+						td {{trans.LastName}}
+	.MID_feedback
+		p.p-title Are You Sure You Want To Void This Transaction?
+		h3 {{activeUser}}
+		a.confirm_btn(href='', ng-click='confirmVoid()') Confirm
+	.userCreateSuccess
+		p Void Successful
+	.userError
+		p Void Failed
+
+	.modal-footer
+		a.row_btn.action_btn(href='', ng-click='processVoid(trans.TransactionId)')
+			i.fa.fa-ban
+			span Void
+		a.row_btn.cancel_btn(href="" ng-click="cancel()")
+			i.fa.fa-sign-out
+			span Exit				

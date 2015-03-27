@@ -692,7 +692,7 @@ app.controller('transModalCtrl', function($scope,$modal,$log) {
 
   $scope.open = function(trans) {
      var modalInstance = $modal.open({
-        templateUrl:'transModalContent.html',
+        templateUrl:'searchResultsTransactionModal.html',
         controller:transModalInstanceCtrl,
         size:'lg',
         resolve: {
@@ -718,7 +718,7 @@ app.controller('refundModalCtrl', function($scope,$modal,$log) {
 
   $scope.open = function(trans) {
      var modalInstance = $modal.open({
-        templateUrl:'refundModalContent.html',
+        templateUrl:'searchResultsRefundModal.html',
         controller:refundModalInstanceCtrl,
         size:'lg',
         resolve: {
@@ -734,7 +734,7 @@ var refundModalInstanceCtrl = function($scope,$modalInstance,trans,$http,$timeou
     $scope.trans = trans;
 
     // CANCEL REFUND
-    $scope.cancelRefund = function() {
+    $scope.cancel = function() {
        $modalInstance.close();
     }
 
@@ -839,7 +839,7 @@ app.controller('voidModalCtrl', function($scope,$modal,$log) {
 
   $scope.open = function(trans) {
     var modalInstance = $modal.open({
-      templateUrl:'voidModalContent.html',
+      templateUrl:'searchResultsVoidModal.html',
       controller:voidModalInstanceCtrl,
       size:'lg',
       resolve: {
@@ -855,7 +855,7 @@ app.controller('voidModalCtrl', function($scope,$modal,$log) {
 var voidModalInstanceCtrl = function($scope,$modalInstance,trans,$http,$timeout,baseUrl) {
   $scope.trans = trans;
   
-  $scope.cancelVoid = function() {
+  $scope.cancel = function() {
     $modalInstance.close();
   }
 
@@ -902,3 +902,6 @@ var voidModalInstanceCtrl = function($scope,$modalInstance,trans,$http,$timeout,
   } // process void 
 };
 
+// TabsDemoCtrl
+app.controller('TabsDemoCtrl', function($scope) {
+});
