@@ -32,20 +32,19 @@ include ../modals/subscriberRemoveConfirmModal.jade
                    input.form-control(st-search="" type="search" placeholder="Filter through all subscriptions")
                  tr
                    th.st-header(st-sort="DisplayName" width="20%") Name
-                   th.st-header(st-sort="PlanType.Id" width="20%") Recurring Type
-                   th.st-header(st-sort="CalendarDayOrInterval" width="5%") Day
-                   th.st-header(st-sort="Amount" width="10%") Amount
-                   th.st-header(st-sort="NextBillingDate" width="15%") Next Invoice Date
-                   th.st-header(st-sort="Mid" width="10%") Processing MID
+                   th.st-header(st-sort="Amount" width="5%") Amount
+                   th.st-header(st-sort="StartDate" width="10%") Start Date
+                   th.st-header(st-sort="FrequencyDsc" width="10%") Pay Frequency
+                   th.st-header(st-sort="NextBillingDate" width="10%") Next Invoice Date
+                   th.st-header(st-sort="Mid" width="15%") Processing MID
                    th.st-header-nosort(width="20%") Actions 
               
              tbody(ng-repeat="subscription in shownSubscriptions")
               tr(id="base{{$index}}")
                 td {{subscription.DisplayName}}
-                td(ng-if="subscription.PlanType.Id == 1") Calendar Date
-                td(ng-if="subscription.PlanType.Id == 2") Cycle Days
-                td {{subscription.CalendarDayOrInterval}}
                 td {{subscription.Amount | currency}}
+                td {{subscription.StartDate | date:'MM/dd/yyyy'}}
+                td {{subscription.FrequencyDsc}}
                 td {{subscription.NextBillingDate | date:'MM/dd/yyyy'}}
                 td {{subscription.Mid | uppercase }}
                 td

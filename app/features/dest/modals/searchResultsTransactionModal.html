@@ -1,1 +1,42 @@
-<script type="text/ng-template" id="searchResultsTransactionModal.html"><div class="modal-header"><h3 class="modal-title"><span class="subtle">Transaction:</span></h3><button type="button" ng-click="cancelVoid()" class="close">x</button></div></script>
+<script type="text/ng-template" id="searchResultsTransactionModal.html"><div class="modal-header"><h3 class="modal-title"><span class="subtle">Transaction Details:</span> {{trans.TransactionId}} <span class="subtle">Name:</span> {{trans.FirstName}} {{trans.LastName}}</h3><button type="button" ng-click="cancel()" class="close">x</button></div><div class="modal-body sale_info"><div ng-controller="TabsDemoCtrl"><tabset justified="true"><tab heading="Sale Information"><div class="row"><div class="col-md-6"><p><span>Transaction ID:</span>{{trans.TransactionId}}</p><p><span>Mid Display Name:</span>{{trans.MidDisplayName}}</p><p><span>Transaction Type:</span>{{trans.Type}}</p><p><span>Amount:</span>{{trans.Amount | currency}} {{trans.Currency}}</p><p><span>Response:</span>{{trans.ResponseDescription}}</p><p><span>Request Date:</span>{{trans.RequestDate}}</p><p><span>API User:</span>{{trans.ApiUser}}</p><p><span>Reference Number:</span>{{trans.ReferenceNumber}}</p><p><span>Authorization Code:</span>{{trans.AuthorizationCode}}</p><p></p></div><div class="col-md-6"><p><span>First Name:</span>{{trans.FirstName}}</p><p><span>Last Name:</span>{{trans.LastName}}</p><p><span>Email:</span>{{trans.Email}}</p><p><span>IP:</span>{{trans.Ip}}</p><p><span>Billing Address:</span>{{trans.BillingAddress}}</p><p><span>Billing Address:</span>{{trans.BillingAddress2}}</p><p><span>Billing City:</span>{{trans.BillingCity}}</p><p><span>Billing Zip:</span>{{trans.BillingZip}}</p></div><div class="row past_info"><div class="col-lg-12"><p><span>Original MID Transaction Number:</span>{{trans.OriginalMidTransactionNumber}}<span ng-show="trans.OriginalMidTransactionNumber == ''" class="subtle">No original MIDe</span></p><p><span>Previous Transaction Sent:</span>{{trans.PreviousTransactionNumberSent}}<span ng-show="trans.PreviousTransactionNumberSent == ''" class="subtle">No previous transaction</span></p><p><span>Authorization Code Sent:</span>{{trans.AuthorizationCodeSent}}<span ng-show="trans.AuthorizationCodeSent == ''" class="subtle">No authorization code</span></p></div></div></div></tab></tabset><!--  Commented out till we have further direction from the businesstab(heading='chargeback')
+    .row
+        .col-md-6.col-md-offset-3
+            span Chargeback Status
+            select.form-control
+                option Disputed
+                option Declined
+            span Chargeback Status
+            select.form-control
+                option --Select--
+                option Declined
+            span Case #:
+            input.form-control(type='text')
+            span ARN #
+            input.form-control(type='text')
+tab(heading='fraud info')
+    .row
+        .col-md-6
+            p
+                span Risk Score:
+                | {{transaction.fraud_info.risk_score}}
+            p
+                span Free Mail:
+                | {{transaction.fraud_info.free_mail}}
+            p
+                span Carder Email:
+                | {{transaction.fraud_info.carder_email}}
+            p
+                span Explanation:
+            p
+                span Bin Match:
+                | {{transaction.fraud_info.bin_match}}
+            p
+                span Bin Country:
+                | {{transaction.fraud_info.bin_country}}
+            p
+                span Bin Name:
+                | {{transaction.fraud_info.bin_name}}
+            p
+                span Phone:
+                | {{transaction.fraud_info.bin_phone}}
+--></div></div><div class="modal-footer"><a href="" ng-click="cancel()" class="row_btn cancel_btn"><i class="fa fa-sign-out"></i><span>Exit   </span></a></div></script>

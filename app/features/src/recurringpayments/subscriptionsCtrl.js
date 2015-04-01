@@ -20,6 +20,8 @@ app.controller('subscriptionsCtrl', function($timeout,$filter,$rootScope,$scope,
       $scope.subscriptionsBulk = data;
       $scope.subscriptionsAmount = data.length;
 
+      //console.log($scope.subscriptionsBulk[0].Frequency);
+
       // CSV Export
       $scope.subscriptionsCSV = data;
       // copy the references
@@ -27,6 +29,7 @@ app.controller('subscriptionsCtrl', function($timeout,$filter,$rootScope,$scope,
 
       angular.forEach(data, function(value,key) {
          $rootScope.subscriptionModalGroups.push(value);
+         console.log(value);
       }); 
 
     });
@@ -51,11 +54,16 @@ app.controller('subscriptionsCtrl', function($timeout,$filter,$rootScope,$scope,
     });
   });
 
-
- 
-
-
   $scope.shownSubscriptions = $scope.subscriptionsBulk;
+
+
+
+
+
+
+
+
+
   
   // LOAD MIDS INTO NESTED TABLE
   $scope.loadSubscribers = function(subscriptionId,subscription,item) {
@@ -103,6 +111,42 @@ app.controller('subscriptionsCtrl', function($timeout,$filter,$rootScope,$scope,
 }); // subscriptionsCtrl
 
 
+// DATE PICKER CONTROLS - GROUP SEARCH
+app.controller('subscriptionStartDateCtrl', function($scope){
+
+  // GET TODAY DATE
+  $scope.today = function() {
+    $scope.fromDate = new Date();
+  };
+  $scope.today();
+
+  $scope.clear = function () {
+    $scope.fromDate = null;
+  };
+
+  $scope.toggleMin = function() {
+    $scope.minDate = new Date();
+  };
+  $scope.toggleMin();
+
+  $scope.open = function($event) {
+    $event.preventDefault();
+    $event.stopPropagation();
+
+    $scope.opened = true;
+  };
+
+  $scope.dateOptions = {
+    formatYear: 'yyyy',
+    startingDay: 1
+  };
+
+  $scope.initDate = new Date('2013-15-20');
+  $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+  $scope.format = $scope.formats[3];
+});
+
+
 //  SUBSCRIPTION CREATION MODAL
 app.controller('subscriptionsCreateModalCtrl', function($scope,$modal,$log) {
     $scope.open = function() {
@@ -125,8 +169,12 @@ var subscriptionCreateModalInstance = function($scope,$modalInstance,$log,$http,
     $scope.subscriptionProcessors = [];
     $scope.selectProcessingID = '';
 
+
+
     //CREATE SUBSCRIPTION STEP 1 SUBSCRIPTION CONFIG
     $scope.subscriptionCreateConfig = function(theForm) {
+
+      console.log(document.getElementById('subscriptionDate').value);
 
         // BIND CREDIT CARD CHECKBOXES
         $scope.paymentTypes = [];
@@ -144,8 +192,9 @@ var subscriptionCreateModalInstance = function($scope,$modalInstance,$log,$http,
         if(theForm.$valid && $scope.paymentTypes.length > 0 && $scope.currencyTypes.length > 0) {
             var Query = {
                 "DisplayName":document.getElementById('subscriptionFormName').value,
-                "PlanTypeId":document.getElementById('subscriptionFormRecurringType').value,
-                "DateOrDays":document.getElementById('subscriptionFormDateVal').value,
+                "StartDate":document.getElementById('subscriptionDate').value,
+                //"PlanTypeId":document.getElementById('subscriptionFormRecurringType').value,
+                "DateOrDays":document.getElementById('subscriptionPayFrequency').value,
                 "Amount":+document.getElementById('subscriptionFormAmount').value,
                 "CardTypeIds":$scope.paymentTypes,
                 "CurrencyIds":$scope.currencyTypes,

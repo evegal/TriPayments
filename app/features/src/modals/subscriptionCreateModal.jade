@@ -15,45 +15,38 @@ script(type="text/ng-template" id="subscriptionCreateModal.html")
 
                         .row
                             .col-md-4
-                                label *Recurring Type: 
+                                label *Subscription Start Date: 
+                            .col-md-2
+                                div.daterangePick(ng-controller='subscriptionStartDateCtrl' tooltip="Select the date to start this subscription on.")
+                                    input.form-control(type='text', id='subscriptionDate' ng-model='subscriptionDate.fromDate', datepicker-popup='{{format}}', is-open='opened', min-date='"minDate"', max-date='"maxDate"', datepicker-options='dateOptions', date-disabled='disabled(date, mode)', ng-required='false', close-text='Close', placeholder='{{fromDate | date:"MM/dd/yyyy"}}')
+                                    span.input-group-btn
+                                        button.btn.btn-default(type='button', ng-click='open($event)' style="width:70px;" )
+                                            i.glyphicon.glyphicon-calendar
+                        .row
+                            .col-md-4
+                                label *Payment Frequency: 
                             .col-md-3
-                                select.form-control(id="subscriptionFormRecurringType" ng-model="subscriptionFormRecurringType" tooltip="Select type of recurring cycle (Required) " tooltip-placement="top")
-                                    option(value="1") Calendar
-                                    option(value="2") Num Days
-                            .col-md-3(ng-if="subscriptionFormRecurringType == 1")
-                                select.form-control(required="" id="subscriptionFormDateVal" tooltip="Select the day of the month for the recurring charge to occur. If 29, 30 31 is not availble for certain months the charge will occur on the last day of the month. (Required) " tooltip-placement="top")
-                                    option(value="") Select Monthly Date
-                                    option(value="1") Every 1st
-                                    option(value="2") Every 2nd
-                                    option(value="3") Every 3rd
-                                    option(value="4") Every 4th
-                                    option(value="5") Every 5th
-                                    option(value="6") Every 6th
-                                    option(value="7") Every 7th
-                                    option(value="8") Every 8th
-                                    option(value="9") Every 9th
-                                    option(value="10") Every 10th
-                                    option(value="11") Every 11th
-                                    option(value="12") Every 12th
-                                    option(value="13") Every 13th
-                                    option(value="14") Every 14th
-                                    option(value="15") Every 15th
-                                    option(value="16") Every 16th
-                                    option(value="17") Every 17th
-                                    option(value="18") Every 18th
-                                    option(value="19") Every 19th
-                                    option(value="20") Every 10th
-                                    option(value="21") Every 21th
-                                    option(value="22") Every 22th
-                                    option(value="23") Every 23th
-                                    option(value="24") Every 24th
-                                    option(value="25") Every 25th
-                                    option(value="26") Every 26th
-                                    option(value="27") Every 27th
-                                    option(value="28") Every 28th
-                                    option(value="29") Every 29th
-                                    option(value="30") Every 30th
-                                    option(value="31") Every 31st
+                                select.form-control(required="" id="subscriptionPayFrequency" ng-model="subscriptionPayFrequency" tooltip="Select the date to start this subscription on.")
+                                    option(value="" selected) Select below
+                                    option(value="100") Every week
+                                    option(value="200") Every 2 weeks
+                                    option(value="300") Every 3 weeks
+                                    option(value="001") Once per month
+                                    option(value="002") Every 2 months
+                                    option(value="003") Every 3 months
+                                    option(value="004") Quarterly
+                                    option(value="005") Every 5 months
+                                    option(value="006") Every 6 months
+                                    option(value="007") Every 7 months
+                                    option(value="008") Every 8 months
+                                    option(value="009") Every 9 months
+                                    option(value="010") Every 10 months
+                                    option(value="011") Every 11 months
+                                    option(value="012") Once per year
+
+                            .col-md-3
+                                input.form-control(id="subscriptionRecurCount" type="number" placeholder="Re-occur Count" tooltip="Enter the value of how many times the subscription will re-occur.  Leave blank for infinity." tooltip-placement="top")
+
 
                             .col-md-3(ng-if="subscriptionFormRecurringType == 2")
                                 input.form-control(id="subscriptionFormDateVal" type="number" placeholder="value" tooltip="Enter value (Required)" tooltip-placement="top")

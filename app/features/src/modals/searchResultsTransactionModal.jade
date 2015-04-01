@@ -1,5 +1,131 @@
 script(type="text/ng-template" id="searchResultsTransactionModal.html")
-	.modal-header
-		h3.modal-title
-			span.subtle Transaction:
-		button.close(type='button', ng-click='cancelVoid()') x
+    .modal-header
+        h3.modal-title
+            span.subtle Transaction Details:
+            |  {{trans.TransactionId}} 
+            span.subtle Name:
+            |  {{trans.FirstName}} {{trans.LastName}}
+        button.close(type='button', ng-click='cancel()') x
+    .modal-body.sale_info
+        div(ng-controller='TabsDemoCtrl')
+            tabset(justified='true')
+                tab(heading='Sale Information')
+                    .row
+                        .col-md-6
+                            p
+                                span Transaction ID:
+                                | {{trans.TransactionId}}
+                            p
+                                span Mid Display Name:
+                                | {{trans.MidDisplayName}}
+                            p
+                                span Transaction Type:
+                                | {{trans.Type}}
+                            p
+                                span Amount:
+                                | {{trans.Amount | currency}} {{trans.Currency}}
+                            p
+                                span Response:
+                                | {{trans.ResponseDescription}}
+                            p
+                                span Request Date:
+                                | {{trans.RequestDate}}
+                            p
+                                span API User:
+                                | {{trans.ApiUser}}
+                            p
+                                span Reference Number:
+                                | {{trans.ReferenceNumber}}
+                            p
+                                span Authorization Code:
+                                | {{trans.AuthorizationCode}}
+                            p
+                        .col-md-6
+                            p
+                               span First Name:
+                               | {{trans.FirstName}}
+                            p
+                               span Last Name:
+                               | {{trans.LastName}}
+                            p
+                               span Email:
+                               | {{trans.Email}}
+                            p
+                               span IP:
+                               | {{trans.Ip}}
+                            p
+                               span Billing Address:
+                               | {{trans.BillingAddress}}
+                            p
+                               span Billing Address:
+                               | {{trans.BillingAddress2}}
+                            p
+                               span Billing City:
+                               | {{trans.BillingCity}}
+                            p
+                               span Billing Zip:
+                               | {{trans.BillingZip}}
+
+
+                        .row.past_info
+                            .col-lg-12
+                                p
+                                    span Original MID Transaction Number:
+                                    | {{trans.OriginalMidTransactionNumber}}
+                                    span.subtle(ng-show="trans.OriginalMidTransactionNumber == ''") No original MIDe
+                                p
+                                    span Previous Transaction Sent:
+                                    | {{trans.PreviousTransactionNumberSent}}
+                                    span.subtle(ng-show="trans.PreviousTransactionNumberSent == ''") No previous transaction
+                                p
+                                    span Authorization Code Sent:
+                                    | {{trans.AuthorizationCodeSent}}
+                                    span.subtle(ng-show="trans.AuthorizationCodeSent == ''") No authorization code
+
+            //  Commented out till we have further direction from the business
+                tab(heading='chargeback')
+                    .row
+                        .col-md-6.col-md-offset-3
+                            span Chargeback Status
+                            select.form-control
+                                option Disputed
+                                option Declined
+                            span Chargeback Status
+                            select.form-control
+                                option --Select--
+                                option Declined
+                            span Case #:
+                            input.form-control(type='text')
+                            span ARN #
+                            input.form-control(type='text')
+                tab(heading='fraud info')
+                    .row
+                        .col-md-6
+                            p
+                                span Risk Score:
+                                | {{transaction.fraud_info.risk_score}}
+                            p
+                                span Free Mail:
+                                | {{transaction.fraud_info.free_mail}}
+                            p
+                                span Carder Email:
+                                | {{transaction.fraud_info.carder_email}}
+                            p
+                                span Explanation:
+                            p
+                                span Bin Match:
+                                | {{transaction.fraud_info.bin_match}}
+                            p
+                                span Bin Country:
+                                | {{transaction.fraud_info.bin_country}}
+                            p
+                                span Bin Name:
+                                | {{transaction.fraud_info.bin_name}}
+                            p
+                                span Phone:
+                                | {{transaction.fraud_info.bin_phone}}
+
+    .modal-footer
+        a.row_btn.cancel_btn(href="" ng-click="cancel()")
+            i.fa.fa-sign-out
+            span Exit   

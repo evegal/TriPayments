@@ -65,7 +65,7 @@ table.table.table-striped.ng-table-responsive.primary_search_table(st-table="sho
 
                     tr(ng-repeat="trans in shownData")
                         td.search-results-trans-id(style="white-space: nowrap;")
-                            a.row_btn.peter_river_btn.full_width(tooltip="See transaction details for {{trans.TransactionId}}" tooltip-placement="top" href="" ng-click="open(trans)" ng-controller="transModalCtrl")
+                            a.row_btn.peter_river_btn.full_width(tooltip="See transaction details for {{trans.TransactionId}}" tooltip-placement="top" href="" ng-click="open(trans)" ng-controller="searchResultsTransactionCtrl")
                               i.fa.fa-eye
                               span {{trans.TransactionId}}
                         td {{trans.RequestDateOnly}}

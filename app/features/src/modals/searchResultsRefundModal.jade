@@ -35,10 +35,10 @@ script(type="text/ng-template" id="searchResultsRefundModal.html")
                 td {{trans.Currency}}
                 td {{trans.FirstName}}
                 td {{trans.LastName}}
-      .MID_feedback
-        p.p-title Are You Sure You Want To Refund?
-        h3 {{trans.Currency}} {{refundAmount | currency}}
-        a.confirm_btn(href='', ng-click='confirmRefund()') Confirm
+    .MID_feedback
+      p.p-title Are You Sure You Want To Refund?
+      h3 {{trans.Currency}} {{refundAmount | currency}}
+      a.confirm_btn(href='', ng-click='confirmRefund()') Confirm
 
     .userCreateSuccess
       p Refund Successful

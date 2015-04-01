@@ -39,7 +39,7 @@
                     tbody(ng-repeat="tran in shownData")
                         tr
                             td.search-results-trans-id
-                                a.row_btn.peter_river_btn.full_width(ng-click="open(tran)" ng-controller="transModalCtrl")
+                                a.row_btn.peter_river_btn.full_width(ng-click="open(tran)" ng-controller="searchResultsTransactionCtrl")
                                     i.fa.fa-eye
                                     span {{tran.TransactionId}}
                             td {{tran.Type}}
