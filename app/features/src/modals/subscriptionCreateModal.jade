@@ -45,11 +45,8 @@ script(type="text/ng-template" id="subscriptionCreateModal.html")
                                     option(value="012") Once per year
 
                             .col-md-3
-                                input.form-control(id="subscriptionRecurCount" type="number" placeholder="Re-occur Count" tooltip="Enter the value of how many times the subscription will re-occur.  Leave blank for infinity." tooltip-placement="top")
+                                input.form-control(required="" id="subscriptionRecurCount" ng-model="subscriptionRecurCount" type="number" placeholder="Re-occur Count" tooltip="Enter the value of how many times the subscription will re-occur.  Leave blank for infinity." tooltip-placement="top")
 
-
-                            .col-md-3(ng-if="subscriptionFormRecurringType == 2")
-                                input.form-control(id="subscriptionFormDateVal" type="number" placeholder="value" tooltip="Enter value (Required)" tooltip-placement="top")
 
                         .row
                             .col-md-4
