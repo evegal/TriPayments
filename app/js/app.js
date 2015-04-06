@@ -112,6 +112,11 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider,$httpP
         templateUrl:'../features/dest/recurringpayments/subscribers.html',
         controller:'subscribersCtrl'
     })
+    .state('app.recurring_payments.subscriptionReports', {
+        url:'/subscriptionReports',
+        templateUrl:'../features/dest/recurringpayments/subscriptionsReport.html',
+        controller:'subscriptionsReportCtrl'
+    })
     .state('app.virtual_terminal', {
         url:'/virtual_terminal',
         templateUrl:'../features/dest/vterminal/vterminal.html',

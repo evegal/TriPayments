@@ -11,15 +11,15 @@ include ../modals/subscriberRemoveModal.jade
                 i.fa.fa-icon
                 | Subscribers : {{subscribersAmount}}
             .col-md-6
-                a.def_btn.wet_asphalt_btn.float-right(href="" ng-csv='subscriberCSV' filename="midsExport.csv" ng-if="subscribersLen != 0" tooltip="Export results to excel")
+                a.def_btn.wet_asphalt_btn.float-right(href="" ng-csv='subscriberCSV' filename="midsExport.csv" ng-if="subscribersAmount != 0" tooltip="Export results to excel")
                     i.fa.fa-file-excel-o 
                     span Excel Export
                 a.def_btn.emerald_btn.float-right.margin-right(href="" ng-click="open()" ng-controller="subscriberCreateModal" tooltip="Create Subscriber")
                     i.fa.fa-plus
                     span Create Subscriber
     .panel-body
-        h3.noResults(ng-if="subscribersLen == 0") {{'There are currently no subscribers setup for this account.'}}
-        table.table.table-striped.ng-table-responsive.midsTable(st-table="shownSubscribers" st-safe-src="subscribersBulk" ng-if="subscribersLen != 0")
+        h3.noResults(ng-if="subscribersAmount == 0") {{'There are currently no subscribers configured for this account.'}}
+        table.table.table-striped.ng-table-responsive.midsTable(st-table="shownSubscribers" st-safe-src="subscribersBulk" ng-if="subscribersAmount != 0")
             thead
                 tr
                     th(colspan="10")
