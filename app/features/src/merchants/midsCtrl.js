@@ -114,6 +114,11 @@ var midEditInstanceCtrl = function($scope,$modalInstance,$log,$http,$rootScope,W
     });
         
     $scope.editMidConfig = function(theForm) {
+
+        console.log('form validation ' + theForm.$valid );
+        console.log('form changed ' + theForm.$dirty );
+
+
         if(theForm.$valid && theForm.$dirty) {
 
             // BIND CREDIT CARD CHECKBOXES
@@ -160,7 +165,11 @@ var midEditInstanceCtrl = function($scope,$modalInstance,$log,$http,$rootScope,W
                 
             });
         } else {
-            WizardHandler.wizard().next();
+            $scope.errorMsg = 'Please ensure that the required fields (*) are entered.';
+            $('.errorMsg').slideDown(500);
+            $timeout(function() {
+                $('.errorMsg').slideUp(500);
+            },2500);
         }
            
     //GET ALL EMAIL FOR NOTIFICATION
