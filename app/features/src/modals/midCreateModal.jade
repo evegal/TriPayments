@@ -17,7 +17,7 @@ script(type="text/ng-template" id="midCreateContent.html")
                                 select.form-control(required="" ng-model="selectedMerchant" id="GatewayId" ng-options="obj.Id as obj.DisplayName for obj in gateways" tooltip="Select a gateway service from a list of available gateways  (Required)" tooltip-placement="top")
                                     option(value="") Select an item
 
-                        .row
+                        //.row
                             .col-md-4
                                 label *Processor:
                             .col-md-8
@@ -260,6 +260,10 @@ script(type="text/ng-template" id="midCreateContent.html")
                         p {{errorMsg}}
 
                 wz-step(title="3. Email Notification")
+                    .row
+                        .col-md-12.text-center.subtleTxt
+                            i.fa.fa-info-circle
+                            span  An email will be sent out to the user(s) specified below, for every transaction.
                     .row
                         form
                             //.col-md-4

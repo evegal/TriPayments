@@ -148,7 +148,7 @@ script(type="text/ng-template" id="midsModalContent.html")
 
                         .row
                             .col-md-6.text-left
-                                a.row_btn.emerald_btn(href="" type="submit" wz-previous="")
+                                a.row_btn.disabled_btn(tooltip="Previous selection not available in first step" tooltip-placement="top")
                                     i.fa.fa-arrow-left
                                     span Previous
 
@@ -163,14 +163,19 @@ script(type="text/ng-template" id="midsModalContent.html")
                             p {{successMsg}}
 
                 wz-step.virtual_panel(title="2. Email Notification")
-                    .col-md-8
-                        p Email Address
-                        input.form-control(type="text" placeholder="Enter Your Email (optional)" id="notificationEmail")
-                        
-                    .col-md-4
-                        a.row_btn.emerald_btn.add_email(href="" ng-click="addEditEmail()") 
-                            i.fa.fa-plus
-                            span Add Email
+                    .row
+                        .col-md-12.text-center.subtleTxt
+                            i.fa.fa-info-circle
+                            span  An email will be sent out to the user(s) specified below, for every transaction.                    
+                    .row
+                        .col-md-8
+                            p Email Address
+                            input.form-control(type="text" placeholder="Enter Your Email (optional)" id="notificationEmail")
+                            
+                        .col-md-4
+                            a.row_btn.emerald_btn.add_email(href="" ng-click="addEditEmail()") 
+                                i.fa.fa-plus
+                                span Add Email
 
                     
                     .row 

@@ -21,16 +21,11 @@ body {
     font-weight:300;
 }
 
-.min15pad{
-    margin-left: -15px !important;
-}
-
-.required-blank, .ng-dirty.ng-touched.ng-invalid{
-    border: solid 1px $alizarin;
-  }
-
+.min15pad{margin-left: -15px !important;}
+.required-blank, .ng-dirty.ng-touched.ng-invalid{border: solid 1px $alizarin;}
 .nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
 .bg-info{padding:20px;}
+.subtleTxt{color: $silver;}
 
 ///////////////
 // OFF-CANVAS

@@ -385,8 +385,14 @@ form.merchantCreateForm {
             display:block;
             padding:15px 0;
         }
-        li.current a:before {
+        li.current a:before, li.editing a:before {
             background:$pumpkin;
+        }
+        li.current a, li.editing a {
+            color:$pumpkin;
+            font-size:14px;
+            border-bottom:5px solid $pumpkin;
+            font-weight:bold;
         }
         li.done a:before {
             background:$greensea;
@@ -394,12 +400,6 @@ form.merchantCreateForm {
         li.done a {
             color:$greensea;
             border-bottom:5px solid $greensea;
-        }
-        li.current a {
-            color:$pumpkin;
-            font-size:14px;
-            border-bottom:5px solid $pumpkin;
-            font-weight:bold;
         }
     }
     aside {
