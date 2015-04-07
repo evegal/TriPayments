@@ -1,15 +1,10 @@
 app.controller('vterminalCtrl', function($rootScope,$scope,$http,$timeout,$state,$timeout, baseUrl) {
 
+$scope.authType = 'Charge';
+$scope.charge_form.currency = $scope.currencies[0].Name;
 
-// load MID Groups
-/*
-merchantsService.getOrders().then(function(results) {
-  $scope.midGroups = results.data;
-});
-*/
-
-//$state.current.name = "Virtual Terminal"; 
-    // form submit AUTH FORM
+console.log('test');
+console.log($scope.charge_form.currency);
 
 $scope.auth_form = {};
 

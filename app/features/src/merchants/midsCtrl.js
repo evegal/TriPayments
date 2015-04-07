@@ -601,7 +601,7 @@ var midCreateModalInstance = function($scope,$modalInstance,$log,$http,$rootScop
            var selectedGate = document.getElementById('GatewayId');
            $scope.gatewayIdTxt = selectedGate.options[selectedGate.selectedIndex].text;
 
-           $scope.processorId = document.getElementById('processorId').value;
+           //$scope.processorId = document.getElementById('processorId').value;
            $scope.newMerchantCompany = document.getElementById('MerchantCompany').value;
            $scope.newGatewayUsername = document.getElementById('Merchant.UserNamegate').value;
            $scope.GatewayType = document.getElementById('GatewayType').value;

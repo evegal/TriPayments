@@ -17,7 +17,7 @@ app.controller('subscriptionsReportCtrl', function($scope,$http,Notify,baseUrl) 
     $scope.upcomingSubscriptionsBulk = data;
 
     // CSV Export
-    //$scope.subscriberCSV = data;
+    $scope.upcomingSubscriptionsCSV = data;
   });
 
     $scope.shownUpcomingSubscriptions = $scope.upcomingSubscriptionsBulk;
