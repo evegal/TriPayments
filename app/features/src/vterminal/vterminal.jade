@@ -48,10 +48,18 @@
 .panel.panel-default.userSearch(ng-if="authType == 'Charge'")
     .panel-heading
         .row
-            .col-md-10
-                h2 Charge Query
+            .col-md-10(nowrap='')
+                h2.panel-title
+                  i.fa.fa-icon
+                  | Charge Parameters:
             .col-md-2
-                a.addMIDGroup(href="" ng-click="reloadVirtual()") New Operation
+                a.def_btn.emerald_btn.float-right.margin-right(href="" ng-click="reloadVirtual()" tooltip="New Operation")
+                    i.fa.fa-recycle
+                    span New Operation
+                
+                
+
+
     .panel-body
          table.table
           thead
@@ -60,14 +68,36 @@
                 th Last name
                 th Email
                 th Address
+                th City
                 th Zip
           tbody
             tr
-                td {{charge_form.fname}}
-                td {{charge_form.lname}}
-                td {{charge_form.email}}
-                td {{charge_form.address}}
-                td {{charge_form.zip}}
+                td {{chargeFname}}
+                td {{chargeLname}}
+                td {{chargeEmail}}
+                td {{chargeAddress}}
+                td {{chargeCity}}
+                td {{chargeZip}}
+
+         table.table
+          thead
+            tr
+                th First name
+                th Last name
+                th Email
+                th Address
+                th City
+                th Zip
+          tbody
+            tr
+                td {{chargeFname}}
+                td {{chargeLname}}
+                td {{chargeEmail}}
+                td {{chargeAddress}}
+                td {{chargeCity}}
+                td {{chargeZip}}
+
+
 // REFUND FEEDBACK
 .panel.panel-default.userSearch(ng-if="authType == 'Refund'")
     .panel-heading
@@ -140,57 +170,62 @@
                             .form-group
                                 label First name:
                                     span.required-icon *
-                                input.form-control(type="text" name="fname" placeholder="Lee" ng-model="user.fname" required="")
+                                input.form-control(type="text" name="fname" placeholder="Lee" ng-model="chargeFname" required="")
                             .form-group
                                 label Last name:
                                     span.required-icon *
-                                input.form-control(type="text" name="lname" placeholder="Nelson" ng-model="user.lname" required="")
+                                input.form-control(type="text" name="lname" placeholder="Nelson" ng-model="chargeLname" required="")
                             .form-group
                                 label Email:
                                     span.required-icon *
-                                input.form-control(type="email" name="email" placeholder="youremail@gmail.com" ng-model="user.email" required="")
+                                input.form-control(type="email" name="email" placeholder="youremail@gmail.com" ng-model="chargeEmail" required="")
                             .form-group
                                 label Billing address:
                                     span.required-icon *
-                                input.form-control(type="text" name="address" placeholder="123 Main St" ng-model="user.address" required="")
+                                input.form-control(type="text" name="address" placeholder="123 Main St" ng-model="chargeAddress" required="")
                             .form-group
                                 label Billing city:
                                     span.required-icon *
-                                input.form-control(type="text" name="city" placeholder="ex San Diego" ng-model="user.city" required="")
+                                input.form-control(type="text" name="city" placeholder="ex San Diego" ng-model="chargeCity" required="")
                             .form-group
                                 label Billing state:
                                     span.required-icon *
-                                input.form-control(type="text" name="state" placeholder="ex CA" ng-model="user.state" required="")
+                                input.form-control(type="text" name="state" placeholder="ex CA" ng-model="chargeState" required="")
                             .form-group
                                 label Billing country:
                                     span.required-icon *
-                                input.form-control(type="text" name="country" placeholder="ex USA" ng-model="user.country" required="")
+                                select.form-control(type="text" name="country" placeholder="ex USA" ng-model="chargeCountry" ng-options="obj.Id as obj.Country for obj in countries" required="")
+                                    option(value="") Select Country 
+
                             .form-group
                                 label Billing postal:
                                     span.required-icon *
-                                input.form-control(type="text" name="zip" placeholder="ex 92111" ng-model="user.zip" required="")
+                                input.form-control(type="text" name="zip" placeholder="ex 92111" ng-model="chargeZip" required="")
                             .form-group
                                 label Billing phone:
                                     span.required-icon *
-                                input.form-control(type="text" name="phone" placeholder="ex 619-540-9909" ng-model="user.phone" required="")
+                                input.form-control(type="text" name="phone" placeholder="ex 619-540-9909" ng-model="chargePhone" required="")
 
                         .col-md-6
                             .form-group
                                 label Amount: 
-                                input.form-control(type="text" name="amount" ng-model="user.amount" required="")
+                                    span.required-icon *
+                                input.form-control(type="text" name="amount" ng-model="chargeAmount" required="")
                             .form-group
                                 label Currency:
-                                select.form-control(name="currency" ng-model="charge_form.currency" required="" ng-options="obj.Id as obj.Name for obj in currencies")
+                                select.form-control(name="currency" ng-model="chargeCurrency" required="" ng-options="obj.Id as obj.Name for obj in currencies")
                                     
                             .form-group
                                 label Credit Card Number:
-                                input.form-control(type="text" name="ccNumber" placeholder="ex. 4264-6542-4984-4116" ng-model="user.ccNumber" required="")
+                                    span.required-icon *
+                                input.form-control(type="text" name="ccNumber" placeholder="ex. 4264-6542-4984-4116" ng-model="chargeCcNumber" required="")
                             .form-group
                                 label CVV:
-                                input.form-control(type="password" name="Cvv" maxlength="4" ng-model="user.Cvv" required="")
+                                    span.required-icon *
+                                input.form-control(type="password" name="Cvv" maxlength="4" ng-model="chargeCvv" required="")
                             .form-group
                                 label Expiration Date
-                                select.form-control(name="ExpireMonth" ng-model="user.ExpireMonth" required="")
+                                select.form-control(name="ExpireMonth" ng-model="chargeExpireMonth" required="")
                                     option(value="") MM
                                     option(value=01) 01-Jan
                                     option(value=02) 02-Feb
@@ -204,7 +239,7 @@
                                     option(value=10) 10-Oct
                                     option(value=11) 11-Nov
                                     option(value=12) 12-Dec
-                                select.form-control(name="ExpireYear" ng-model="user.ExpireYear" required="")
+                                select.form-control(name="ExpireYear" ng-model="chargeExpireYear" required="")
                                     option(value="") YYYY
                                     option 2015
                                     option 2016
@@ -218,15 +253,21 @@
                             h3 Reference Details:
                             .form-group
                                 label MID Group:
-                                select.form-control(name="midGroup" ng-model="user.midGroup" ng-options="obj.Id as obj.Name for obj in groupsBulk" required="")
+                                select.form-control(name="midGroup" ng-model="chargeMidGroup" ng-options="obj.Id as obj.Name for obj in groupsBulk" required="" tooltip="Select the MID group to process this charge")
+                                    option(value="") Select MID Group
 
                             .form-group
                                 label Ref Details:
-                                input(type="text" name="refnumber" placeholder="ex 564-984716" ng-model="user.refnumber" required="")
+                                    span.required-icon *
+                                input(type="text" name="refnumber" placeholder="ex 564-984716" ng-model="chargeRefnumber" required="" tooltip="This is a unique identifier, this may be replaced with your own custom unique identifier")
+                    .row.errorMsg
+                        p {{errorMsg}}
+
                     .row
-                        div.userError
-                            p Please Fill In Required Fields
                         a(href="" ng-click="chargeSubmit()").generate_results Charge
+
+
+
                 // AUTHORIZE FORM
                 form.form-inline.virtual_form(name="auth_form" ng-show="authType == 'Authorize'" ng-submit="submit()" novalidate)
                     h2.stand Authorization form:
