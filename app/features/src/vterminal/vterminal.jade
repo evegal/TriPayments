@@ -1,6 +1,6 @@
 .row
     h1 Virtual Terminal
-.panel.panel-default.userSearch(ng-if="authType == 'Authorize'")
+.panel.panel-default.feedback(ng-if="authType == 'Authorize'")
     .panel-heading
         .row
             .col-md-10
@@ -24,7 +24,7 @@
                 td {{user.address}}
                 td {{user.zip}}
 // CAPTURE FEEDBACK
-.panel.panel-default.userSearch(ng-if="authType == 'Capture'")
+.panel.panel-default.feedback(ng-if="authType == 'Capture'")
     .panel-heading
         .row
             .col-md-10
@@ -45,17 +45,22 @@
                 td {{capture_form.AuthCode}}
                 td {{capture_form.RefNumber}}
 // CHARGE FEEDBACK
-.panel.panel-default.userSearch(ng-if="authType == 'Charge'")
+.panel.panel-default.feedback(ng-if="authType == 'Charge'")
     .panel-heading
         .row
-            .col-md-10(nowrap='')
+            .col-md-8(nowrap='')
                 h2.panel-title
                   i.fa.fa-icon
                   | Charge Parameters:
-            .col-md-2
-                a.def_btn.emerald_btn.float-right.margin-right(href="" ng-click="reloadVirtual()" tooltip="New Operation")
-                    i.fa.fa-recycle
+            .col-md-4
+                a.def_btn.belize_hole_btn.float-right.margin-right(href="" ng-click="reloadVirtual()" tooltip="New Operation")
+                    i.fa.fa-share
                     span New Operation
+                a.def_btn.peter_river_btn.float-right.margin-right(href="" ng-click="modifyVt()" ng-if="repStatus != 0" tooltip="Modify Charge")
+                    i.fa.fa-reply
+                    span Modify Charge
+
+
                 
                 
 
@@ -70,6 +75,9 @@
                 th Address
                 th City
                 th Zip
+                th Mid Group
+                th Amount
+                th Unique Identifier
           tbody
             tr
                 td {{chargeFname}}
@@ -78,28 +86,13 @@
                 td {{chargeAddress}}
                 td {{chargeCity}}
                 td {{chargeZip}}
-
-         table.table
-          thead
-            tr
-                th First name
-                th Last name
-                th Email
-                th Address
-                th City
-                th Zip
-          tbody
-            tr
-                td {{chargeFname}}
-                td {{chargeLname}}
-                td {{chargeEmail}}
-                td {{chargeAddress}}
-                td {{chargeCity}}
-                td {{chargeZip}}
+                td {{chargeMidGroup}}
+                td {{chargeAmount | currency}}
+                td {{chargeRefnumber}}
 
 
 // REFUND FEEDBACK
-.panel.panel-default.userSearch(ng-if="authType == 'Refund'")
+.panel.panel-default.feedback(ng-if="authType == 'Refund'")
     .panel-heading
         .row
             .col-md-10
@@ -122,7 +115,7 @@
                 td {{refund_form.Amount}}
                 td {{refund_form.refnumber}}
 // VOID FEEDBACK
-.panel.panel-default.userSearch(ng-if="authType == 'Void'")
+.panel.panel-default.feedback(ng-if="authType == 'Void'")
     .panel-heading
         .row
             .col-md-10
@@ -150,7 +143,7 @@
 .panel.panel-default.virtual_panel
     .panel-heading
         .row
-            .col-md-1(nowrap='')
+            .col-md-1
                 h2.panel-title
                   i.fa.fa-icon
                   | Operation type: 
@@ -193,7 +186,6 @@
                                 input.form-control(type="text" name="state" placeholder="ex CA" ng-model="chargeState" required="")
                             .form-group
                                 label Billing country:
-                                    span.required-icon *
                                 select.form-control(type="text" name="country" placeholder="ex USA" ng-model="chargeCountry" ng-options="obj.Id as obj.Country for obj in countries" required="")
                                     option(value="") Select Country 
 
@@ -457,27 +449,37 @@
     .panel-heading
         .row
             .col-md-2
-                h2 Request:
-                    //span.success {{reqStatus}}
-                    span(ng-class="(reqStatus == 0) ? 'success' : 'failed'") {{RequestTxt}}
+                h2.panel-title
+                  i.fa.fa-icon
+                  | Communication Details:
+        //.row
             .col-md-2
-                h2 Response: 
-                   span(ng-class="(repStatus == 0) ? 'success' : 'failed'") {{ResponseTxt}}
+                h2.panel-title
+                  i.fa.fa-icon
+                  | Request:
+                  span(ng-class="(reqStatus == 0) ? 'success' : 'failed'") {{RequestTxt}}
+            .col-md-8
+                h2.panel-title
+                  i.fa.fa-icon
+                  | Response:
+                  span(ng-class="(repStatus == 0) ? 'success' : 'failed'") {{ResponseTxt}}
 
-            .col-md-3
-                a.toggleComm(href="" ng-click="isCollapsed = !isCollapsed; toggleText()") Hide Communication Details
-            .col-md-3
-                a(href="" clip-copy="getTextToCopy()" clip-click="doSomething()") Copy Details
-    .panel-body.comm-details(collapse="isCollapsed")
+            .col-md-2
+                a.def_btn.wet_asphalt_btn.float-right(href="" ng-click="isCollapsed = !isCollapsed")
+                    i.fa.fa-eye
+                    span Communication Details
+
+
+    .panel-body.comm-details
         .row.request_row(ng-class="(reqStatus == 0) ? 'success-bg' : 'failed-bg'")
             .col-md-1
-                h2 Request
+                h2 Request:
                 p {{RequestTxt}}
             .col-md-11
                 p {{Request}}
         .row.response_row(ng-class="(repStatus == 0) ? 'success-bg' : 'failed-bg'")
             .col-md-1
-                h2 Response
+                h2 Response:
                 p {{ResponseTxt}}
             .col-md-11
                 p {{Response}}

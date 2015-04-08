@@ -16,12 +16,13 @@ app.controller('vterminalCtrl', function($rootScope,$scope,$http,$timeout,$state
             $scope.currencies = data;
             $scope.chargeCurrency = $scope.currencies[0].Id;
         });
+    } else {
+        $scope.chargeCurrency = $scope.currencies[0].Id;
     }
 
 
     $scope.chargeFname = 'Brian';
     $scope.chargeLname = 'Phillips';
-    //$scope.chargeMidGroup = 
     $scope.chargeAmount = 1;
     $scope.chargeCcNumber = 487093009704848;
     $scope.chargeCvv = 922;
@@ -116,7 +117,7 @@ app.controller('vterminalCtrl', function($rootScope,$scope,$http,$timeout,$state
         
 
         $('.virtual_panel').slideUp(300);
-        $('.userSearch').slideDown(300);
+        $('.feedback').slideDown(300);
 
         } else {
         $('.userError').slideDown(300);
@@ -184,7 +185,7 @@ app.controller('vterminalCtrl', function($rootScope,$scope,$http,$timeout,$state
             //////////////////
             
             $('.virtual_panel').slideUp(300);
-            $('.userSearch').slideDown(300);
+            $('.feedback').slideDown(300);
             
         } else {
           //FORM NOT COMPLETELY FILLED OUT
@@ -224,17 +225,14 @@ app.controller('vterminalCtrl', function($rootScope,$scope,$http,$timeout,$state
               "ReferenceNumber": $scope.chargeRefnumber
             }
 
-            console.log(Query);
-               
-            var promise = $http({
+            $http({
                 method:'POST',
                 url: baseUrl + 'vterminal',
                 data:Query
-            });
-
-            promise.success(function(data,status) {
-
-                conole.log(data);
+            }).success(function(data,status) {
+                // FOR DISPLAY IN COMMUNCATION DETAILS
+                Query.CardNumber = '****************';
+                Query.Cvv = '***';
 
                 data.ApiRequest.Cvv = '*' + '*' + '*';
 
@@ -243,9 +241,9 @@ app.controller('vterminalCtrl', function($rootScope,$scope,$http,$timeout,$state
                 $scope.Request = data.ApiRequest;
                 $scope.RepStatus = data.ApiResponse.ResultCode;
 
-
                 var Result = data.ApiResponse.ResultCode;
-                // check success or fail of transaction
+
+                // CHECK SUCCESS OR FAIL OF TRANSACTION
                 if(Result === 0) {
                     $scope.ResponseTxt = 'Success';
                     $scope.repStatus = 0;
@@ -257,23 +255,26 @@ app.controller('vterminalCtrl', function($rootScope,$scope,$http,$timeout,$state
 
                 $('.comm-panel').slideDown(300);
 
-                // copy text
-                $rootScope.copyData = data;
-
             }).error(function(data,status) {
-                console.log(status);
+                // FOR DISPLAY IN COMMUNCATION DETAILS
+                Query.CardNumber = '****************';
+                Query.Cvv = '***';
+
+                $scope.RequestTxt = 'Failed';
+                $scope.Request = Query;
+                
+                $scope.ResponseTxt = 'Failed';
+                $scope.Response = data;
 
                 $scope.reqStatus = 'Failed';
                 $scope.repStatus = 'Failed'
                 $('.comm-panel').slideDown(300);
 
-
             });
-           
-
+          
             $('.virtual_panel').slideUp(300);
-            $('.userSearch').slideDown(300);
-            
+            $('.feedback').slideDown(300);
+           
         } else {
             
           //FORM NOT COMPLETELY FILLED OUT
@@ -332,7 +333,7 @@ app.controller('vterminalCtrl', function($rootScope,$scope,$http,$timeout,$state
         });
 
         $('.virtual_panel').slideUp(300);
-        $('.userSearch').slideDown(300);
+        $('.feedback').slideDown(300);
     }
 
     // submit Void FORM
@@ -378,41 +379,21 @@ app.controller('vterminalCtrl', function($rootScope,$scope,$http,$timeout,$state
         });
 
         $('.virtual_panel').slideUp(300);
-        $('.userSearch').slideDown(300);
+        $('.feedback').slideDown(300);
 
 
     } // end submit
 
-    // Reload Form
+    // RELOAD FORM
     $scope.reloadVirtual = function() {
         $state.go($state.$current, null, {reload: true });
     }
 
-
-    // COPY TO CLIPBOARD
-     $scope.getTextToCopy = function() {
-        return JSON.stringify($rootScope.copyData);
+    $scope.modifyVt = function() {
+        $('.virtual_panel').slideDown(300);
+        $('.feedback').slideUp(300);
+        $('.comm-panel').slideUp(300);
     }
-    $scope.doSomething = function() {
-        //console.log(JSON.stringify($rootScope.copyData));
-    }
-    /*
-    $scope.getTextToCopy = function() {
-        return "ngClip is cool";
-    }
-    $scope.doSomething = function() {
-        console.log('text copied');
-    }
-    */
-    
-    // TOGGLE COMM PANEL TEXT
-    $scope.toggleText = function() {
-
-        var txt = $('.comm-details').is(':visible') ? "Show Communication Details" : "Hide Communication Details";
-        $('a.toggleComm').text(txt);
-
-    }
-
     
 }); // virtualCtrl
 
