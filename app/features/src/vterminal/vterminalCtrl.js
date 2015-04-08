@@ -1,42 +1,30 @@
 app.controller('vterminalCtrl', function($rootScope,$scope,$http,$timeout,$state,$timeout, baseUrl) {
 
     //REFERENCE DETAILS UNIQUE IDENTIFIER
-    var d = new Date().getTime();
-    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        var r = (d + Math.random()*16)%16 | 0;
-        d = Math.floor(d/16);
-        return (c=='x' ? r : (r&0x3|0x8)).toString(16);
-    });
+    $scope.createUniqueId = function () {
+        var d = new Date().getTime();
+        var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            var r = (d + Math.random()*16)%16 | 0;
+            d = Math.floor(d/16);
+            return (c=='x' ? r : (r&0x3|0x8)).toString(16);
+        });
+        return uuid;
+    }
     //BIND TO INPUT FIELD
-    $scope.chargeRefnumber = uuid;
+    $scope.chargeRefnumber = $scope.createUniqueId();
+    $scope.authRefnumber = $scope.createUniqueId();
 
     // LOAD CURRENCIES - IN CASE USER HARD REFRESHES IN THIS PAGE
     if($scope.currencies == undefined){
         $http.get(baseUrl + 'currencies').success(function(data) {
             $scope.currencies = data;
             $scope.chargeCurrency = $scope.currencies[0].Id;
+            $scope.authCurrency = $scope.currencies[0].Id;
         });
     } else {
         $scope.chargeCurrency = $scope.currencies[0].Id;
+        $scope.authCurrency = $scope.currencies[0].Id;
     }
-
-
-    $scope.chargeFname = 'Brian';
-    $scope.chargeLname = 'Phillips';
-    $scope.chargeAmount = 1;
-    $scope.chargeCcNumber = 487093009704848;
-    $scope.chargeCvv = 922;
-    $scope.chargeExpireMonth = 1;
-    $scope.chargeExpireYear = 2017;
-    $scope.chargeEmail = 'dkontizas@gmail.com';
-    $scope.chargeAddress = '1350 columbia st';
-    $scope.chargeCity = 'San Diego';
-    $scope.chargeState = 'CA';
-    $scope.chargeCountry = 'USA';
-    $scope.chargeZip = '92101';
-    $scope.chargePhone = '6198864467';
-
-
 
     $scope.authType = 'Charge';
     
@@ -48,27 +36,26 @@ app.controller('vterminalCtrl', function($rootScope,$scope,$http,$timeout,$state
         
         var Query =  {
           "TransactionType": 4,
-          "MidGroupId": $scope.user.midGroup,
-          "Amount": +$scope.user.amount,
-          "CurrencyId": $scope.user.currency,
-          "CardNumber": $scope.user.ccNumber,
-          "Cvv": $scope.user.Cvv,
-          "ExpirationMonth": +$scope.user.ExpireMonth,
-          "ExpirationYear": +$scope.user.ExpireYear,
-          "FirstName": $scope.user.fname,
-          "LastName": $scope.user.lname,
-          "Email": $scope.user.email,
-          "Address1": $scope.user.address,
-          "City": $scope.user.city,
-          "State": $scope.user.state,
-          "Country": $scope.user.country,
-          "Zip": $scope.user.zip,
-          "Phone": $scope.user.phone,
-          "ReferenceNumber": $scope.user.refnumber
+          "MidGroupId": $scope.authMidGroup,
+          "Amount": +$scope.authAmount,
+          "CurrencyId": $scope.authCurrency,
+          "CardNumber": $scope.authCcNumber,
+          "Cvv": $scope.authCvv,
+          "ExpirationMonth": +$scope.authExpireMonth,
+          "ExpirationYear": +$scope.authExpireYear,
+          "FirstName": $scope.authFname,
+          "LastName": $scope.authLname,
+          "Email": $scope.authEmail,
+          "Address1": $scope.authAddress,
+          "City": $scope.authCity,
+          "State": $scope.authState,
+          "Country": $scope.authCountry,
+          "Zip": $scope.authZip,
+          "Phone": $scope.authPhone,
+          "ReferenceNumber": $scope.authRefnumber
         }
         
         console.log(Query);
-        //$scope.Request = Query;
         
         var promise = $http({
             method:'POST',
@@ -393,6 +380,9 @@ app.controller('vterminalCtrl', function($rootScope,$scope,$http,$timeout,$state
         $('.virtual_panel').slideDown(300);
         $('.feedback').slideUp(300);
         $('.comm-panel').slideUp(300);
+        // NEW UNIQUE IDENTIFIER NEEDED FOR PROCESSING
+        $scope.chargeRefnumber = $scope.createUniqueId();
+        $scope.authRefnumber = $scope.createUniqueId();
     }
     
 }); // virtualCtrl

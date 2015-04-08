@@ -114,11 +114,6 @@ var midEditInstanceCtrl = function($scope,$modalInstance,$log,$http,$rootScope,W
     });
         
     $scope.editMidConfig = function(theForm) {
-
-        console.log('form validation ' + theForm.$valid );
-        console.log('form changed ' + theForm.$dirty );
-
-
         if(theForm.$valid && theForm.$dirty) {
 
             // BIND CREDIT CARD CHECKBOXES
@@ -165,11 +160,7 @@ var midEditInstanceCtrl = function($scope,$modalInstance,$log,$http,$rootScope,W
                 
             });
         } else {
-            $scope.errorMsg = 'Please ensure that the required fields (*) are entered.';
-            $('.errorMsg').slideDown(500);
-            $timeout(function() {
-                $('.errorMsg').slideUp(500);
-            },2500);
+            WizardHandler.wizard().next();
         }
            
     //GET ALL EMAIL FOR NOTIFICATION
@@ -304,18 +295,7 @@ var midEditInstanceCtrl = function($scope,$modalInstance,$log,$http,$rootScope,W
 
             }
 
-        }).error(function(data, status) {
-            
-            console.log(data);
-
-            //SOMETHING ERRONEOUS WITH THE API
-            $scope.errorMsg = 'There is an error with the API please contact your customer support. Error Code: ' + status;
-            $('.errorMsg').slideDown(200);
-            $timeout(function() {
-                $('.errorMsg').slideUp(2000);
-            },3000);    
         });
-
         
 
     } // END verify
@@ -397,11 +377,11 @@ var removeMidCtrlInstance = function($scope,$modalInstance,$log,index,mid,$http,
 
 
 //  MID DISABLE MODAL
-app.controller('midDisableModalCtrl', function($scope,$modal,$log) {
+app.controller('DeleteMidCtrl', function($scope,$modal,$log) {
     $scope.openMID = function(index,mid) {
         var modalInstance = $modal.open({
-            templateUrl:'MidDisableContent.html',
-            controller:midDisableCtrlInstance,
+            templateUrl:'DeleteMidContent.html',
+            controller:DeleteMidCtrlInstance,
             size:'lg',
             resolve: {
                 mid:function() {
@@ -415,7 +395,7 @@ app.controller('midDisableModalCtrl', function($scope,$modal,$log) {
     }
 });
 
-var midDisableCtrlInstance = function($scope,$modalInstance,$log,mid,$http,Notify,index,$timeout,baseUrl) {
+var DeleteMidCtrlInstance = function($scope,$modalInstance,$log,mid,$http,Notify,index,$timeout,baseUrl) {
 
     $scope.mid = mid;
     console.log(mid);
@@ -601,7 +581,7 @@ var midCreateModalInstance = function($scope,$modalInstance,$log,$http,$rootScop
            var selectedGate = document.getElementById('GatewayId');
            $scope.gatewayIdTxt = selectedGate.options[selectedGate.selectedIndex].text;
 
-           //$scope.processorId = document.getElementById('processorId').value;
+           $scope.processorId = document.getElementById('processorId').value;
            $scope.newMerchantCompany = document.getElementById('MerchantCompany').value;
            $scope.newGatewayUsername = document.getElementById('Merchant.UserNamegate').value;
            $scope.GatewayType = document.getElementById('GatewayType').value;

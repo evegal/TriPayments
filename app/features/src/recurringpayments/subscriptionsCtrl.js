@@ -173,11 +173,16 @@ var subscriptionCreateModalInstance = function($scope,$modalInstance,$log,$http,
 
         //FORM VALIDATION FOR REQUIRED FIELDS AND SELECTION OF PAYMENT TYPE AND CURRENCY
         if(theForm.$valid && $scope.paymentTypes.length > 0 && $scope.currencyTypes.length > 0 && $scope.StartDateVal != '' ) {
+
+          // IF THE RECUR FIELD IS LEFT BLANK ASSIGN 999 FOR INFINITY
+          $scope.subscriptionRecurCount = document.getElementById('subscriptionRecurCount').value;
+          if(!$scope.subscriptionRecurCount){$scope.subscriptionRecurCount = 999;}
+
             var Query = {
                 "DisplayName":document.getElementById('subscriptionFormName').value,
                 "StartDate":document.getElementById('subscriptionDate').value,
                 "Frequency":document.getElementById('subscriptionPayFrequency').value,
-                "RecurrenceCount":document.getElementById('subscriptionRecurCount').value,
+                "RecurrenceCount":$scope.subscriptionRecurCount,
                 "Amount":+document.getElementById('subscriptionFormAmount').value,
                 "CardTypeIds":$scope.paymentTypes,
                 "CurrencyIds":$scope.currencyTypes,
