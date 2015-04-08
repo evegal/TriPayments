@@ -26,7 +26,24 @@ app.controller('vterminalCtrl', function($rootScope,$scope,$http,$timeout,$state
         $scope.authCurrency = $scope.currencies[0].Id;
     }
 
-    $scope.authType = 'Charge';
+
+    $scope.authFname = 'Brian';
+    $scope.authLname = 'Phillips';
+    $scope.authAmount = 1;
+    $scope.authCcNumber = 487093009704848;
+    $scope.authCvv = 922;
+    $scope.authExpireMonth = 1;
+    $scope.authExpireYear = 2017;
+    $scope.authEmail = 'dkontizas@gmail.com';
+    $scope.authAddress = '1350 columbia st';
+    $scope.authCity = 'San Diego';
+    $scope.authState = 'CA';
+    $scope.authCountry = 'USA';
+    $scope.authZip = '92101';
+    $scope.authPhone = '6198864467';
+
+
+    $scope.authType = 'Authorize';
     
     // SUBMIT AUTHORIZATION FORM
     $scope.auth_form = {};
@@ -382,7 +399,6 @@ app.controller('vterminalCtrl', function($rootScope,$scope,$http,$timeout,$state
         $('.comm-panel').slideUp(300);
         // NEW UNIQUE IDENTIFIER NEEDED FOR PROCESSING
         $scope.chargeRefnumber = $scope.createUniqueId();
-        $scope.authRefnumber = $scope.createUniqueId();
     }
     
 }); // virtualCtrl

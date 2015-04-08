@@ -9,7 +9,7 @@
    05. snapendDateCtrl
    06. transfromDateCtrl
    07. transendDateCtrl
-   08. transModalCtrl
+   08. searchResultsTransactionCtrl
    09. refundModalCtrl
    08. voidModalCtrl
   
@@ -688,12 +688,12 @@ app.controller('transendDateCtrl', function($scope) {
 });
 
 // TRANSACTION MODAL
-app.controller('transModalCtrl', function($scope,$modal,$log) {
+app.controller('searchResultsTransactionCtrl', function($scope,$modal,$log) {
 
   $scope.open = function(trans) {
      var modalInstance = $modal.open({
-        templateUrl:'transModalContent.html',
-        controller:transModalInstanceCtrl,
+        templateUrl:'searchResultsTransactionModal.html',
+        controller:searchResultsTransactionInstanceCtrl,
         size:'lg',
         resolve: {
           trans:function() {
@@ -702,10 +702,10 @@ app.controller('transModalCtrl', function($scope,$modal,$log) {
         }
      });
   }
-}); // transModalCtrl
+}); // searchResultsTransactionCtrl
 
 
-var transModalInstanceCtrl = function($scope,$modalInstance,trans,$http) {
+var searchResultsTransactionInstanceCtrl = function($scope,$modalInstance,trans,$http) {
     $scope.trans = trans;
 
     $scope.cancel = function() {
@@ -839,7 +839,7 @@ app.controller('voidModalCtrl', function($scope,$modal,$log) {
 
   $scope.open = function(trans) {
     var modalInstance = $modal.open({
-      templateUrl:'voidModalContent.html',
+      templateUrl:'searchResultsVoidModal.html',
       controller:voidModalInstanceCtrl,
       size:'lg',
       resolve: {
@@ -855,7 +855,7 @@ app.controller('voidModalCtrl', function($scope,$modal,$log) {
 var voidModalInstanceCtrl = function($scope,$modalInstance,trans,$http,$timeout,baseUrl) {
   $scope.trans = trans;
   
-  $scope.cancelVoid = function() {
+  $scope.cancel = function() {
     $modalInstance.close();
   }
 
