@@ -13,6 +13,7 @@ app.controller('vterminalCtrl', function($rootScope,$scope,$http,$timeout,$state
     //BIND TO INPUT FIELD
     $scope.chargeRefnumber = $scope.createUniqueId();
     $scope.authRefnumber = $scope.createUniqueId();
+    $scope.captureRefNumber = $scope.createUniqueId();
 
     // LOAD CURRENCIES - IN CASE USER HARD REFRESHES IN THIS PAGE
     if($scope.currencies == undefined){
@@ -25,7 +26,6 @@ app.controller('vterminalCtrl', function($rootScope,$scope,$http,$timeout,$state
         $scope.chargeCurrency = $scope.currencies[0].Id;
         $scope.authCurrency = $scope.currencies[0].Id;
     }
-
 
     $scope.authFname = 'Brian';
     $scope.authLname = 'Phillips';
@@ -43,36 +43,37 @@ app.controller('vterminalCtrl', function($rootScope,$scope,$http,$timeout,$state
     $scope.authPhone = '6198864467';
 
 
-    $scope.authType = 'Authorize';
+
+    $scope.authType = 'Charge';
     
     // SUBMIT AUTHORIZATION FORM
     $scope.auth_form = {};
-    $scope.submit = function() {
+    $scope.authSubmit = function() {
 
+        console.log('auth form');
+        console.log($scope.auth_form.$valid);
         if($scope.auth_form.$valid) {
         
-        var Query =  {
-          "TransactionType": 4,
-          "MidGroupId": $scope.authMidGroup,
-          "Amount": +$scope.authAmount,
-          "CurrencyId": $scope.authCurrency,
-          "CardNumber": $scope.authCcNumber,
-          "Cvv": $scope.authCvv,
-          "ExpirationMonth": +$scope.authExpireMonth,
-          "ExpirationYear": +$scope.authExpireYear,
-          "FirstName": $scope.authFname,
-          "LastName": $scope.authLname,
-          "Email": $scope.authEmail,
-          "Address1": $scope.authAddress,
-          "City": $scope.authCity,
-          "State": $scope.authState,
-          "Country": $scope.authCountry,
-          "Zip": $scope.authZip,
-          "Phone": $scope.authPhone,
-          "ReferenceNumber": $scope.authRefnumber
-        }
-        
-        console.log(Query);
+            var Query =  {
+              "TransactionType": 4,
+              "MidGroupId": $scope.authMidGroup,
+              "Amount": +$scope.authAmount,
+              "CurrencyId": $scope.authCurrency,
+              "CardNumber": $scope.authCcNumber,
+              "Cvv": $scope.authCvv,
+              "ExpirationMonth": +$scope.authExpireMonth,
+              "ExpirationYear": +$scope.authExpireYear,
+              "FirstName": $scope.authFname,
+              "LastName": $scope.authLname,
+              "Email": $scope.authEmail,
+              "Address1": $scope.authAddress,
+              "City": $scope.authCity,
+              "State": $scope.authState,
+              "Country": $scope.authCountry,
+              "Zip": $scope.authZip,
+              "Phone": $scope.authPhone,
+              "ReferenceNumber": $scope.authRefnumber
+            }
         
         var promise = $http({
             method:'POST',
@@ -103,15 +104,10 @@ app.controller('vterminalCtrl', function($rootScope,$scope,$http,$timeout,$state
            
             console.log(data);
 
-            $('.comm-panel').slideDown(300);
-
-            // copy text
-            $rootScope.copyData = data;
-           
+            $('.comm-panel').slideDown(300);         
         
         }).error(function(data,status) {
             //console.log(status);
-
             $scope.reqStatus = 'Failed';
             $scope.repStatus = 'Failed';
 
@@ -124,11 +120,13 @@ app.controller('vterminalCtrl', function($rootScope,$scope,$http,$timeout,$state
         $('.feedback').slideDown(300);
 
         } else {
-        $('.userError').slideDown(300);
+          //FORM NOT COMPLETELY FILLED OUT
+          $scope.errorMsg = 'Please ensure to fill in all required fields';
+          $('.errorMsg').slideDown(500);
+          $timeout(function() {
+              $('.errorMsg').slideUp(500);
+          },3000);
 
-        $timeout(function() {
-            $('.userError').slideUp(300);
-        },1000);
         }
     } // END AUTHORIZATION FORM
 
@@ -140,9 +138,9 @@ app.controller('vterminalCtrl', function($rootScope,$scope,$http,$timeout,$state
 
             var Query = {
                 "TransactionType":6,
-                "PreviousTransactionNumber":$scope.user.TransNumber,
-                "AuthorizationCode":$scope.user.AuthCode,
-                "ReferenceNumber":$scope.user.RefNumber
+                "PreviousTransactionNumber":$scope.captureTransNumber,
+                "AuthorizationCode":$scope.captureAuthCode,
+                "ReferenceNumber":$scope.captureRefNumber
             }
 
             // POST REQUEST
@@ -151,7 +149,6 @@ app.controller('vterminalCtrl', function($rootScope,$scope,$http,$timeout,$state
                 url: baseUrl + 'vterminal',
                 data:Query
             });
-
 
             promise.success(function(data,status) {
                 
@@ -399,6 +396,8 @@ app.controller('vterminalCtrl', function($rootScope,$scope,$http,$timeout,$state
         $('.comm-panel').slideUp(300);
         // NEW UNIQUE IDENTIFIER NEEDED FOR PROCESSING
         $scope.chargeRefnumber = $scope.createUniqueId();
+        $scope.authRefnumber = $scope.createUniqueId();
+        $scope.captureRefNumber = $scope.createUniqueId();
     }
     
 }); // virtualCtrl

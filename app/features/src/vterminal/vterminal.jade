@@ -44,10 +44,17 @@
 .panel.panel-default.feedback(ng-if="authType == 'Capture'")
     .panel-heading
         .row
-            .col-md-10
-                h2 Capture Query
-            .col-md-2
-                a.addMIDGroup(href="" ng-click="reloadVirtual()") New Operation
+            .col-md-8(nowrap='')
+                h2.panel-title
+                  i.fa.fa-icon
+                  | Capture Parameters:
+            .col-md-4
+                a.def_btn.belize_hole_btn.float-right.margin-right(href="" ng-click="reloadVirtual()" tooltip="New Operation")
+                    i.fa.fa-share
+                    span New Operation
+                a.def_btn.peter_river_btn.float-right.margin-right(href="" ng-click="modifyVt()" ng-if="repStatus != 0" tooltip="Modify Capture")
+                    i.fa.fa-reply
+                    span Modify Capture
     .panel-body
          table.table
           thead
@@ -58,9 +65,9 @@
                
           tbody
             tr
-                td {{capture_form.TransNumber}}
-                td {{capture_form.AuthCode}}
-                td {{capture_form.RefNumber}}
+                td {{captureTransNumber}}
+                td {{captureAuthCode}}
+                td {{captureRefNumber}}
 // CHARGE FEEDBACK
 .panel.panel-default.feedback(ng-if="authType == 'Charge'")
     .panel-heading
@@ -264,7 +271,7 @@
                             .form-group
                                 label Ref Details:
                                     span.required-icon *
-                                input(type="text" name="refnumber" placeholder="ex 564-984716" ng-model="chargeRefnumber" required="" tooltip="This is a unique identifier, this may be replaced with your own custom unique identifier")
+                                input(type="text" name="refnumber" placeholder="ex 564-984716" ng-model="chargeRefnumber" required="" tooltip="This is a unique identifier to track this charge, this may be replaced with your own custom unique identifier")
                     .row.errorMsg
                         p {{errorMsg}}
 
@@ -360,10 +367,11 @@
                             .form-group
                                 label Ref Details:
                                 input(name="refnumber" type="text" placeholder="ex 564-984716" ng-model="authRefnumber" required="")
+                    .row.errorMsg
+                        p {{errorMsg}}
+
                     .row
-                        div.userError
-                            p Please Fill In Required Fields
-                        a(href="" ng-click="submit()" type="submit").generate_results Authorize
+                        a(href="" ng-click="authSubmit()" type="submit").generate_results Authorize
 
 
 
@@ -376,20 +384,22 @@
                             .form-group
                                 label Transaction number:
                                     span.required-icon *
-                                input(type="text" name="TransNumber" ng-model="user.TransNumber" placeholder="ex. 5489629" required="")
+                                input(type="text" name="TransNumber" ng-model="captureTransNumber" placeholder="ex. 5489629" required="")
                             .form-group
                                 label Authorization code:
                                     span.required-icon *
-                                input(type="text" name="AuthCode" ng-model="user.AuthCode" placeholder="Enter Authorization Code" required="")
+                                input(type="text" name="AuthCode" ng-model="captureAuthCode" placeholder="Enter Authorization Code" required="")
                         .col-md-6
                             h3 Reference Details:
                             .form-group
                                 label Ref number:
                                     span.required-icon *
-                                input(type="text" name="RefNumber" ng-model="user.RefNumber" placeholder="Enter Your Unique Identifier" required="")
-                     .row
-                        div.userError
-                            p Please Fill In Required Fields
+                                input(type="text" name="RefNumber" ng-model="captureRefNumber" placeholder="Enter Your Unique Identifier" required="" tooltip="This is a unique identifier to track this capture, this may be replaced with your own custom unique identifier")
+
+                    .row.errorMsg
+                        p {{errorMsg}}
+
+                    .row
                         a(href="" ng-click="captureSubmit()").generate_results Capture
 
 
