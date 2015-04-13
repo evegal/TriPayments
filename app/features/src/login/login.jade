@@ -6,9 +6,9 @@
                  img(ng-src="../../images/{{logoName}}.png")
             p Sign In To Your Account
             
-            input.form-control(type="text" placeholder="Username" id="username" ng-model="loginData.userName" required="" autofocus="")
+            input.form-control(type="text" placeholder="Username" id="username" ng-model="loginData.userName" required="" autofocus="" autocomplete="off")
             
-            input.form-control(type="password" placeholder="Password" id="password" ng-model="loginData.password" required="")
+            input.form-control(type="password" placeholder="Password" id="password" ng-model="loginData.password" required="" autocomplete="off")
             
             button.btn.btn-primary.form-control(type="submit" id="submit" ng-click="login()") Enter Portal
             .user_help
