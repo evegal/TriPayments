@@ -49,6 +49,36 @@ script(type="text/ng-template" id="subscriberCreateOrEditContent.html")
                                 input.form-control(required="" ng-model="subscriberEmail" id="subscriberEmail" type="email" placeholder="Enter email" tooltip="Enter email" tooltip-placement="top")
                             .col-md-3
                                 input.form-control(required="" ng-model="subscriberPhone" id="subscriberPhone" type="tel" placeholder="Enter phone" tooltip="Enter phone" tooltip-placement="top")
+                        .row(ng-if="udfCount >= 1")
+                            .col-md-4
+                                label UDF 1:
+                            .col-md-6
+                                input.form-control(ng-model="subscriberUdf1" id="subscriberUdf1" type="text" placeholder="" tooltip="" tooltip-placement="top")
+                            //.col-md-1
+                                a.row_btn.wet_asphalt_btn.full_width(href="" type="submit" ng-click="removeUdf()")
+                                    i.fa.fa-trash
+                        .row(ng-if="udfCount >= 2")
+                            .col-md-4
+                                label UDF 2:
+                            .col-md-6
+                                input.form-control(ng-model="subscriberUdf2" id="subscriberUdf2" type="text" placeholder="" tooltip="" tooltip-placement="top")
+                        .row(ng-if="udfCount >= 3")
+                            .col-md-4
+                                label UDF 3:
+                            .col-md-6
+                                input.form-control(ng-model="subscriberUdf3" id="subscriberUdf3" type="text" placeholder="" tooltip="" tooltip-placement="top")
+                        .row(ng-if="udfCount >= 4")
+                            .col-md-4
+                                label UDF 4:
+                            .col-md-6
+                                input.form-control(ng-model="subscriberUdf4" id="subscriberUdf4" type="text" placeholder="" tooltip="" tooltip-placement="top")
+                        .row
+                            .col-md-4
+                            .col-md-6.text-left(ng-hide="udfCount >= 4")
+                                a.row_btn.wet_asphalt_btn.full_width(href="" type="submit" ng-click="addUdf()")
+                                    i.fa.fa-plus
+                                    span Add User Defined Field
+
 
                         .row
                             .col-md-6.text-left

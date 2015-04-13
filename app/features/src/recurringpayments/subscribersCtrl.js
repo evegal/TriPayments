@@ -42,6 +42,7 @@ app.controller('subscribersCtrl', function($scope,$http,Notify,baseUrl) {
 
 
     $scope.shownSubscribers = $scope.subscribersBulk;
+
 });
 
 
@@ -58,7 +59,7 @@ app.controller('subscriberCreateModal', function($scope,$modal,$log) {
 
 var subscriberCreateModalInstance = function($scope,$modalInstance,$log,$http,$rootScope,WizardHandler,$timeout,Notify,baseUrl) {
 
-    $scope.createOrEditMsg = 'Create new subscriber';
+    $scope.createOrEditMsg = 'Create New Subscriber';
 
     //FLAG FOR TO KNOW ITS AN EDIT
     $scope.editFlag = false;
@@ -72,6 +73,8 @@ var subscriberCreateModalInstance = function($scope,$modalInstance,$log,$http,$r
     // DEFAULT STATE AND ZIP
     $scope.stateOrProvince = "State";
     $scope.zipOrPostal = "Zip";
+
+    $scope.udfCount = 0;
 
     //TRACK CHANGE IN COUNTRY DROPDOWN
     $scope.selectCountryType = function(countryId) {
@@ -91,6 +94,11 @@ var subscriberCreateModalInstance = function($scope,$modalInstance,$log,$http,$r
         $modalInstance.close();
     }
 
+    // ADD UDF FIELDS UP TO 4
+    $scope.addUdf = function() {
+        $scope.udfCount++
+    }
+
     //CREATE SUBSCRIBER PERSONAL INFO
     $scope.subscriberInfoCreate = function(theForm){
         if(theForm.$valid){
@@ -106,8 +114,25 @@ var subscriberCreateModalInstance = function($scope,$modalInstance,$log,$http,$r
 
     //CREATE SUBSCRIBER PERSONAL INFO
     $scope.subscriberPayCreate = function(theForm){
-        console.log('subscriberPayCreate');
         if(theForm.$valid){
+
+            if(document.getElementById('subscriberUdf1')){
+                $scope.udf1Val = document.getElementById('subscriberUdf1').value;
+            } else {$scope.udf1Val = ''}
+            
+            if(document.getElementById('subscriberUdf2')){
+                $scope.udf2Val = document.getElementById('subscriberUdf2').value;
+            } else {$scope.udf2Val = ''}
+
+            if(document.getElementById('subscriberUdf3')){
+                $scope.udf3Val = document.getElementById('subscriberUdf3').value;
+            } else {$scope.udf3Val = ''}
+
+            if(document.getElementById('subscriberUdf4')){
+                $scope.udf4Val = document.getElementById('subscriberUdf4').value;
+            } else {$scope.udf4Val = ''}
+
+
             var Query = {
                 "FirstName":document.getElementById('subscriberFirstName').value,
                 "LastName":document.getElementById('subscriberLastName').value,
@@ -123,7 +148,12 @@ var subscriberCreateModalInstance = function($scope,$modalInstance,$log,$http,$r
                 "ExpMonth":+document.getElementById('subscriberPayCcMm').value,
                 "ExpYear":+document.getElementById('subscriberPayCcYy').value,
                 "Cvv":document.getElementById('subscriberPayCvv').value,
+                "Udf1":$scope.udf1Val,
+                "Udf2":$scope.udf2Val,
+                "Udf3":$scope.udf3Val,
+                "Udf4":$scope.udf4Val,
             };
+
             
             $http({
               method:'POST',
