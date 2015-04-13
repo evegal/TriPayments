@@ -291,10 +291,19 @@ var subscriberEditInstanceCtrl = function($scope,$modalInstance,$log,$http,$root
         $modalInstance.close();
     }
 
-    $scope.createOrEditMsg = 'Edit subscriber';
+    $scope.createOrEditMsg = 'Edit Subscriber';
 
     //FLAG FOR VIEW TO KNOW ITS AN EDIT TOGGLES THE BTN
     $scope.editFlag = true;
+
+    $scope.udfCount = 0;
+
+    // ADD UDF FIELDS UP TO 4
+    $scope.addUdf = function() {
+        $scope.udfCount++
+    }
+
+
 
     //COUNTRY CODES FOR SUBSCRIBER
     $scope.countries = $rootScope.countries;
@@ -315,6 +324,23 @@ var subscriberEditInstanceCtrl = function($scope,$modalInstance,$log,$http,$root
         $scope.subscriberPayCcMm = data.ExpMonth;
         $scope.subscriberPayCcYy = data.ExpYear;
         $scope.subscriberPayCvv  = '***';
+
+        if(data.Udf1){
+            $scope.udfCount = 1;
+            $scope.subscriberUdf1 = data.Udf1;
+        }
+        if(data.Udf2){
+            $scope.udfCount = 2;
+            $scope.subscriberUdf2 = data.Udf2;
+        }
+        if(data.Udf3){
+            $scope.udfCount = 3;
+            $scope.subscriberUdf3 = data.Udf3;
+        }
+        if(data.Udf4){
+            $scope.udfCount = 4;
+            $scope.subscriberUdf4 = data.Udf4;
+        }
 
         //INITIALIZE BINDING FOR LABELS
         if (data.Country == 'US') {
@@ -352,6 +378,26 @@ var subscriberEditInstanceCtrl = function($scope,$modalInstance,$log,$http,$root
 
     $scope.subscriberEditPersInfo = function(theForm){
         if(theForm.$dirty && theForm.$valid ) {
+
+
+            if(document.getElementById('subscriberUdf1')){
+                $scope.udf1Val = document.getElementById('subscriberUdf1').value;
+            } else {$scope.udf1Val = ''}
+            
+            if(document.getElementById('subscriberUdf2')){
+                $scope.udf2Val = document.getElementById('subscriberUdf2').value;
+            } else {$scope.udf2Val = ''}
+
+            if(document.getElementById('subscriberUdf3')){
+                $scope.udf3Val = document.getElementById('subscriberUdf3').value;
+            } else {$scope.udf3Val = ''}
+
+            if(document.getElementById('subscriberUdf4')){
+                $scope.udf4Val = document.getElementById('subscriberUdf4').value;
+            } else {$scope.udf4Val = ''}
+
+
+
             var Query = {
                 "FirstName":document.getElementById('subscriberFirstName').value,
                 "LastName":document.getElementById('subscriberLastName').value,
@@ -363,6 +409,10 @@ var subscriberEditInstanceCtrl = function($scope,$modalInstance,$log,$http,$root
                 "PostalCode":document.getElementById('subscriberZipPostal').value,
                 "Email":document.getElementById('subscriberEmail').value,
                 "Phone":document.getElementById('subscriberPhone').value,
+                "Udf1":$scope.udf1Val,
+                "Udf2":$scope.udf2Val,
+                "Udf3":$scope.udf3Val,
+                "Udf4":$scope.udf4Val,                
             }
             
             $http({
@@ -475,13 +525,5 @@ var subscriberEditInstanceCtrl = function($scope,$modalInstance,$log,$http,$root
 
 
     }
-
-
-                // GET SUBSCRIBERS AND PUSH DATA TO SUBSCRIPTION SERVICE
-                $http.get(baseUrl + 'recurring/subscriptions/'+207+'/subscribers').success(function(data) {
-                  console.log('available processor');
-                  console.log(data);
-                }); 
-        
 
 }
