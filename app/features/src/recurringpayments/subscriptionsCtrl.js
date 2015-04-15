@@ -198,8 +198,7 @@ var subscriptionCreateModalInstance = function($scope,$modalInstance,$log,$http,
 
                     // ASSIGN ID FOR THE NEW SUBSCRIPTION
                     $scope.SubscriptionPlanId = data.SubscriptionPlanId;
-
-                   
+                  
                     //GET PROCESSING TYPES
                     $http.get(baseUrl + 'recurring/subscriptions/' + $scope.SubscriptionPlanId + '/available-processors').success(function(data) {
                       $scope.subscriptionProcessors = data;
@@ -229,9 +228,9 @@ var subscriptionCreateModalInstance = function($scope,$modalInstance,$log,$http,
                 
                 // GET SUBSCRIPTION AND PUSH DATA TO SUBSCRIPTION SERVICE
                 //work on this its pulling duplicates with different values
-                $http.get(baseUrl + 'recurring/subscriptions/'+ $scope.SubscriptionPlanId).success(function(data) {
-                  Notify.sendMsg('NewSubscription', data);
-                });
+                //$http.get(baseUrl + 'recurring/subscriptions/'+ $scope.SubscriptionPlanId).success(function(data) {
+                //  Notify.sendMsg('NewSubscription', data);
+                //});
 
                 //PROCEED TO FOLLOWING TAB
                 WizardHandler.wizard().next();

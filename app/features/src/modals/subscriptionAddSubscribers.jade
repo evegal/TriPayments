@@ -20,7 +20,7 @@ script(type='text/ng-template', id='addSubscribersContent.html')
 							th Card last 4
 							th Actions
 					tbody
-						tr(ng-repeat='subscriber in availableSubscribers')
+						tr(ng-repeat="subscriber in availableSubscribers | orderBy:'LastName'")
 							td {{subscriber.LastName}}, {{subscriber.FirstName}}
 							td {{subscriber.City}}
 							td {{subscriber.State}}
