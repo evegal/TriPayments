@@ -10,6 +10,7 @@ app.controller('vterminalCtrl', function($rootScope,$scope,$http,$timeout,$state
         });
         return uuid;
     }
+
     //BIND TO INPUT FIELD
     $scope.chargeRefnumber = $scope.createUniqueId();
     $scope.authRefnumber = $scope.createUniqueId();
@@ -39,7 +40,7 @@ app.controller('vterminalCtrl', function($rootScope,$scope,$http,$timeout,$state
         
             var Query =  {
               "TransactionType": 4,
-              "MidGroupId": $scope.authMidGroup,
+              "MidId": $scope.authMid,
               "Amount": +$scope.authAmount,
               "CurrencyId": $scope.authCurrency,
               "CardNumber": $scope.authCcNumber,
@@ -190,7 +191,7 @@ app.controller('vterminalCtrl', function($rootScope,$scope,$http,$timeout,$state
        
             var Query =  {
               "TransactionType": 1,
-              "MidGroupId": $scope.chargeMidGroup,
+              "MidId": $scope.chargeMid,
               "Amount": +$scope.chargeAmount,
               "CurrencyId": $scope.chargeCurrency,
               "CardNumber": $scope.chargeCcNumber,
@@ -269,13 +270,10 @@ app.controller('vterminalCtrl', function($rootScope,$scope,$http,$timeout,$state
           },3000);
 
         }
-     
-
     } // end submit
 
     // submit REFUND FORM
     $scope.refundSubmit = function() {
-
         var Query = {
             "TransactionType":3,
             "PreviousTransactionNumber":$scope.refund_form.transNumber,
@@ -364,14 +362,72 @@ app.controller('vterminalCtrl', function($rootScope,$scope,$http,$timeout,$state
 
         $('.virtual_panel').slideUp(300);
         $('.feedback').slideDown(300);
-
-
     } // end submit
 
     // RELOAD FORM
     $scope.reloadVirtual = function() {
         $state.go($state.$current, null, {reload: true });
     }
+
+  // LOAD SUBSCRIBERS
+  $http.get(baseUrl + 'recurring/subscribers').success(function(data) {
+    $scope.subscribersBulk = data;
+    $scope.subscribersBulkLength = data.length;
+  });
+
+  $scope.selectExistingUser = function(subscriberSelection){
+    if(subscriberSelection){
+        //CHARGE DATA
+        $scope.chargeFname = subscriberSelection.FirstName;
+        $scope.chargeLname = subscriberSelection.LastName;
+        $scope.chargeEmail = subscriberSelection.Email;
+        $scope.chargeAddress = subscriberSelection.Address1;
+        $scope.chargeCity = subscriberSelection.City;
+        $scope.chargeState = subscriberSelection.State;
+        $scope.chargeCountry = subscriberSelection.Country;
+        $scope.chargeZip = subscriberSelection.PostalCode;
+        $scope.chargePhone = subscriberSelection.Phone;
+
+        // AUTH DATA
+        $scope.authFname = subscriberSelection.FirstName;
+        $scope.authLname = subscriberSelection.LastName;
+        $scope.authEmail = subscriberSelection.Email;
+        $scope.authAddress = subscriberSelection.Address1;
+        $scope.authCity = subscriberSelection.City;
+        $scope.authState = subscriberSelection.State;
+        $scope.authCountry = subscriberSelection.Country;
+        $scope.authZip = subscriberSelection.PostalCode;
+        $scope.authPhone = subscriberSelection.Phone;
+
+    } else {
+        $scope.chargeFname = '';
+        $scope.chargeLname = '';
+        $scope.chargeEmail = '';
+        $scope.chargeAddress = '';
+        $scope.chargeCity = '';
+        $scope.chargeState = '';
+        $scope.chargeCountry = '';
+        $scope.chargeZip = '';
+        $scope.chargePhone = '';
+
+        // AUTH DATA
+        $scope.authFname = '';
+        $scope.authLname = '';
+        $scope.authEmail = '';
+        $scope.authAddress = '';
+        $scope.authCity = '';
+        $scope.authState = '';
+        $scope.authCountry = '';
+        $scope.authZip = '';
+        $scope.authPhone = '';
+    }
+
+  }
+
+
+
+
+
 
     $scope.modifyVt = function() {
         $('.virtual_panel').slideDown(300);

@@ -1,46 +1,49 @@
-.row
+.dash
     h1 Recurring Payments - Subscription Reports
-.panel.panel-default
-    .panel-heading
-        .row
-            .col-md-6
-              h2.panel-title
-                i.fa.fa-icon
-                | Upcoming Subscriptions : {{upcomingSubscriptionsAmount}}
-            .col-md-6
-                a.def_btn.wet_asphalt_btn.float-right(href="" ng-csv='upcomingSubscriptionsCSV' filename="upcomingSubscriptionsExport.csv" ng-if="upcomingSubscriptionsAmount != 0" tooltip="Export results to excel")
-                    i.fa.fa-file-excel-o 
-                    span Excel Export
+    .panel.panel-default
+        .panel-heading
+            .row
+                .col-md-6
+                  h2.panel-title
+                    i.fa.fa-icon
+                    | Subscriptions Report
 
-    .panel-body
-        h3.noResults(ng-if="upcomingSubscriptionsAmount == 0") {{'There are currently no upcoming subscriptions.'}}
-        table.table.table-striped.ng-table-responsive.midsTable(st-table="shownUpcomingSubscriptions" st-safe-src="upcomingSubscriptionsBulk" ng-if="upcomingSubscriptionsAmount != 0")
-            thead
-                tr
-                    th(colspan="10")
-                        input.form-control(st-search="" type="search" placeholder="Filter through all subscribers" tooltip="Filter through all subscriber results")
-                tr
-                    th.st-header(st-sort="PlanID" st-sort-default style="width:5%") 
-                        span(tooltip="Sort Plan ID") Plan ID
-                    th.st-header(st-sort="PlanName" style="width:10%") 
-                        span(tooltip="Sort Plan name") Plan Name
-                    th.st-header(st-sort="SubscriberID" style="width:10%")
-                        span(tooltip="Sort SubscriberID") Subscriber ID
-                    th.st-header(st-sort="Country" style="width:10%") 
-                        span(tooltip="Sort Country") Subscriber First Name
-                    th.st-header(st-sort="Email" style="width:5%")
-                        span(tooltip="Sort Email") Subscriber Last Name
-                    th.st-header-nosort(style="width:15%")
-                        span() Actions
-            tbody
-                tr(ng-repeat="upcomingSubscriptions in shownUpcomingSubscriptions")
-                    td {{upcomingSubscriptions.PlanID}}
-                    td {{upcomingSubscriptions.PlanName}}
-                    td {{upcomingSubscriptions.SubscriberID}}
-                    td {{upcomingSubscriptions.FirstName}}
-                    td {{upcomingSubscriptions.LastName}}
+        .panel-body
+            .form-inline
+                    // CHARGE FORM
+                    form.form.searcher(name="subForm" novalidate)
+                        .row
+                            .col-md-4
+                                label Select report type:
+                                select.form-control(ng-model="test")
+                                    option(value="") Queued report
+                                    option(value="") Subscription report
 
-            tfoot
-                tr
-                    td.text-center(colspan="10")
-                        div(st-pagination="" st-items-by-page="20")
+                            .col-md-4
+                                label Start date:
+                                div.daterangePick(ng-controller='subscriptionDateStartCtrl')
+                                    input.form-control(type='text', ng-model='subForm.startDate', datepicker-popup='{{format}}', is-open='opened', min-date='"minDate"', max-date='"maxDate"', datepicker-options='dateOptions', date-disabled='disabled(date, mode)', ng-required='false', close-text='Close', placeholder='{{placeholderFromDate | date:"MM/dd/yyyy"}}')
+                                    span.input-group-btn
+                                        button.btn.btn-default(type='button', ng-click='open($event)')
+                                            i.glyphicon.glyphicon-calendar
+
+                            .col-md-4
+                                label End date:
+                                div.daterangePick(ng-controller='subscriptionDateEndCtrl')
+                                    input.form-control(type='text', ng-model='subForm.endDate', datepicker-popup='{{format}}', is-open='opened', min-date='"minDate"', max-date='"maxDate"', datepicker-options='dateOptions', date-disabled='disabled(date, mode)', ng-required='false', close-text='Close', placeholder='{{placeholderToDate | date:"MM/dd/yyyy"}}')
+                                    span.input-group-btn
+                                        button.btn.btn-default(type='button', ng-click='open($event)')
+                                            i.glyphicon.glyphicon-calendar
+
+
+                        .row.errorMsg
+                            p {{errorMsg}}
+
+                        .row
+                            .col-md-4
+                            .col-md-4
+                                a.generate_results(href="" ng-click="subscriptionReportSubmit()") Submit
+                            .col-md-4
+
+
+

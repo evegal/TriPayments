@@ -171,6 +171,13 @@
                     option(value="Charge") Charge
                     option(value="Authorize") Authorize
                     option(value="Capture") Capture
+            .col-md-1(ng-hide="authType == 'Capture'")
+                h2.panel-title
+                  i.fa.fa-icon
+                  | Existing cust:
+            .col-md-3(ng-hide="authType == 'Capture'")
+                select.form-control(ng-model="subscriberSelection" ng-change="selectExistingUser(subscriberSelection)" ng-options="obj as obj.LastName + ' ' + obj.FirstName + '  -  ' + obj.Email for obj in subscribersBulk | orderBy:'LastName'")
+                    option(value="") Select 
 
 
     .panel-body
@@ -234,7 +241,7 @@
                             .form-group
                                 label CVV:
                                     span.required-icon *
-                                input.form-control(type="password" name="Cvv" maxlength="4" ng-model="chargeCvv" required="")
+                                input.form-control(type="password" name="Cvv" maxlength="4" ng-model="chargeCvv")
                             .form-group
                                 label Expiration Date
                                 select.form-control(name="ExpireMonth" ng-model="chargeExpireMonth" required="")
@@ -264,9 +271,9 @@
 
                             h3 Reference Details:
                             .form-group
-                                label MID Group:
-                                select.form-control(name="midGroup" ng-model="chargeMidGroup" ng-options="obj.Id as obj.Name for obj in groupsBulk" required="" tooltip="Select the MID group to process this charge")
-                                    option(value="") Select MID Group
+                                label MID:
+                                select.form-control(name="midSelect" ng-model="chargeMid" ng-options="obj.Id as obj.DisplayName for obj in shownMids" required="" tooltip="Select the MID to process this charge")
+                                    option(value="") Select MID
 
                             .form-group
                                 label Ref Details:
@@ -328,7 +335,7 @@
                                 input.form-control(type="text" placeholder="ex. 4264-6542-4984-4116" name="ccNumber" ng-model="authCcNumber" required="")
                             .form-group
                                 label CVV:
-                                input.form-control(type="password" maxlength="4" name="authCvv" ng-model="authCvv" required="")
+                                input.form-control(type="password" maxlength="4" name="authCvv" ng-model="authCvv")
                             .form-group
                                 label Expiration Date
                                 select.form-control(name="ExpireMonth" ng-model="authExpireMonth" required="")
@@ -347,7 +354,6 @@
                                     option(value=12) 12-Dec
                                 select.form-control(name="ExpireYear" ng-model="authExpireYear" required="")
                                     option(value="") YYYY
-                                    option 2014
                                     option 2015
                                     option 2016
                                     option 2017
@@ -359,10 +365,9 @@
 
                             h3 Reference Details:
                             .form-group
-                                label MID Group:
-                                select.form-control(name="midGroup" ng-model="authMidGroup" ng-options="obj.Id as obj.Name for obj in groupsBulk" required="")
-                                    option(value="") Select MID Group
-
+                                label MID:
+                                select.form-control(name="authmidSelect" ng-model="authMid" ng-options="obj.Id as obj.DisplayName for obj in shownMids" required="" tooltip="Select the MID to process this authorization")
+                                    option(value="") Select MID
                                     
                             .form-group
                                 label Ref Details:

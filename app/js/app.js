@@ -98,6 +98,11 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider,$httpP
         templateUrl:'../features/dest/merchants/groups.html',
         controller:'groupsCtrl'
     })
+    .state('app.recurring_payments.subscriptionReports', {
+        url:'/subscriptions',
+        templateUrl:'../features/dest/recurringpayments/subscriptionsReport.html',
+        controller:'subscriptionsReportCtrl'
+    })    
     .state('app.recurring_payments', {
         url:'/recurring_payments',
         templateUrl:'../features/dest/recurringpayments/recurringpayments.html'
