@@ -219,7 +219,7 @@ a[class*='merchants'], a[class*='recurring'] {
             width:5px;
         }
 }
-a[class$='midsmids'], a[class$='subscriptionssubscriptions'] {
+a[class$='midsmids'], a[class$='subscriptionssubscriptions'], a[class$='subscriptionReportsreports'] {
   font-weight:800;
   &:after {
     background:$in_blue;
@@ -231,7 +231,7 @@ a[class$='midsmids'], a[class$='subscriptionssubscriptions'] {
     width:5px;
   }
 }
-a[class$='groupsgroups'], a[class$='subscriberssubscribers'] {
+a[class$='groupsgroups'], a[class$='subscriberssubscribers'], a[class$='subscriptionReportsreports'] {
   font-weight:800;
   &:after {
     background:$in_blue;

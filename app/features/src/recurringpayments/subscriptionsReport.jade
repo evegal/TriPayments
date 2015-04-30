@@ -1,5 +1,5 @@
-.dash
-    h1 Recurring Payments - Subscription Reports
+.dash.report_parameters
+    h1 Recurring Payments - Reports
     .panel.panel-default
         .panel-heading
             .row
@@ -15,9 +15,10 @@
                         .row
                             .col-md-4
                                 label Select report type:
-                                select.form-control(ng-model="test")
-                                    option(value="") Queued report
-                                    option(value="") Subscription report
+                                select(ng-model="reportSelect")
+                                    option(value="0") Queued report
+                                    option(value="1") Subscriber report
+                                    option(value="2") Subscription report
 
                             .col-md-4
                                 label Start date:
@@ -34,7 +35,9 @@
                                     span.input-group-btn
                                         button.btn.btn-default(type='button', ng-click='open($event)')
                                             i.glyphicon.glyphicon-calendar
-
+                        .row
+                            .col-md-12
+                                p &nbsp;
 
                         .row.errorMsg
                             p {{errorMsg}}
@@ -42,8 +45,223 @@
                         .row
                             .col-md-4
                             .col-md-4
-                                a.generate_results(href="" ng-click="subscriptionReportSubmit()") Submit
+                                a.generate_results(href="" ng-click="recurringReportSubmit()") Submit
                             .col-md-4
 
+.dash.report_results_subscription
+    .row
+        h1 Recurring Payments - Subscription Report
+    .panel.panel-default
+        .panel-heading
+            .row
+                .col-md-6
+                  h2.panel-title
+                    i.fa.fa-icon
+                    | Subscription Results : {{subscriptionReportAmount}}
+                .col-md-6
+                    a.def_btn.wet_asphalt_btn.float-right.margin-right(ng-csv="shownsubscriptionReport" filename="subscriptions_report.csv" ng-show="subscriptionReportBulk.length")
+                        i.fa.fa-file
+                        span Export Excel
+                    a.def_btn.belize_hole_btn.float-right.margin-right(ng-click="new_search()")
+                        i.fa.fa-search
+                        span New Search
+                    a.def_btn.peter_river_btn.float-right.margin-right(ng-click="modify_search()")
+                        i.fa.fa-search-plus
+                        span Modify Search
+        .panel-body
+            h3.noResults(ng-if="subscriptionReportAmount == 0") {{'There are currently no subscriptions results.'}}
+            table.table.table-striped.ng-table-responsive.midsTable(st-table="shownsubscriptionReport" st-safe-src="subscriptionReportBulk" ng-if="subscriptionReportAmount != 0")
+                thead
+                    tr
+                        th(colspan="10")
+                            input.form-control(st-search="" type="search" placeholder="Filter through all subscription" tooltip="Filter through all subscription results")
+                    tr
+                        th.st-header(st-sort="Id" st-sort-default style="width:10%") 
+                            span(tooltip="Sort ID") ID
+
+                        th.st-header(st-sort="PlanName" style="width:15%") 
+                            span(tooltip="Sort subscription name") Plan Name
+
+                        th.st-header(st-sort="StartDate" style="width:15%")
+                            span(tooltip="Sort start date") Start Date
+
+                        th.st-header(st-sort="RecurrenceCount" style="width:10%")
+                            span(tooltip="Sort recurrence count") Re-occur Count
+
+                        th.st-header(st-sort="CurrentPaymentIndex" style="width:10%")
+                            span(tooltip="Sort occurence count") Occurence Count
+
+                        th.st-header(st-sort="ActiveClients" style="width:10%")
+                            span(tooltip="Sort active subscribers") Active Subscribers
+
+                        th.st-header(st-sort="AmountDue" style="width:15%") 
+                            span(tooltip="Sort amount due") Amount Due
+
+                        th.st-header(st-sort="AmountCollected" style="width:15%")
+                            span(tooltip="Sort amount collected") Amount Collected
+
+                tbody
+                    tr(ng-repeat="subscription in shownsubscriptionReport")
+                        td {{subscription.Id}}
+                        td {{subscription.PlanName}}
+                        td {{subscription.StartDate | date:'MM/dd/yyyy' }}
+                        td {{subscription.RecurrenceCount}}
+                        td {{subscription.CurrentPaymentIndex}}
+                        td {{subscription.ActiveClients}}
+                        td {{subscription.AmountDue | currency}}
+                        td {{subscription.AmountCollected | currency}}
+
+                tfoot
+                    tr
+                        td.text-center(colspan="10")
+                            div(st-pagination="" st-items-by-page="20")
 
 
+
+
+.dash.report_results_subscriber
+    .row
+        h1 Recurring Payments - Subscriber Report
+    .panel.panel-default
+        .panel-heading
+            .row
+                .col-md-6
+                  h2.panel-title
+                    i.fa.fa-icon
+                    | Subscriber Results : {{subscriberReportAmount}}
+                .col-md-6
+                    a.def_btn.wet_asphalt_btn.float-right.margin-right(ng-csv="shownsubscriberReport" filename="subscriber_report.csv" ng-show="subscriberReportBulk.length")
+                        i.fa.fa-file
+                        span Export Excel
+                    a.def_btn.belize_hole_btn.float-right.margin-right(ng-click="new_search()")
+                        i.fa.fa-search
+                        span New Search
+                    a.def_btn.peter_river_btn.float-right.margin-right(ng-click="modify_search()")
+                        i.fa.fa-search-plus
+                        span Modify Search
+        .panel-body
+            h3.noResults(ng-if="subscriberReportAmount == 0") {{'There is no subscriber report with the parameters specified.'}}
+            table.table.table-striped.ng-table-responsive.midsTable(st-table="shownsubscriberReport" st-safe-src="subscriberReportBulk" ng-if="subscriberReportAmount != 0")
+                thead
+                    tr
+                        th(colspan="10")
+                            input.form-control(st-search="" type="search" placeholder="Filter through all subscription" tooltip="Filter through all subscription results")
+                    tr
+
+                        th.st-header(st-sort="LastName" style="width:15%") 
+                            span(tooltip="Sort last name") Last Name
+
+                        th.st-header(st-sort="FirstName" style="width:15%")
+                            span(tooltip="Sort first name") First Name
+
+                        th.st-header(st-sort="PlanName" style="width:15%")
+                            span(tooltip="Sort subscription") Subscription Name
+
+                        th.st-header(st-sort="LastProcessed" style="width:10%")
+                            span(tooltip="Sort last processed") Last Processed
+
+                        th.st-header(st-sort="NextSchPayment" style="width:10%")
+                            span(tooltip="Sort active subscribers") Next Payment
+
+                        th.st-header(st-sort="PaymentAmount " style="width:10%") 
+                            span(tooltip="Sort amount ") Amount
+
+                        th.st-header(st-sort="AmountCollected" style="width:15%")
+                            span(tooltip="Sort amount collected") Amount Collected
+
+                tbody
+                    tr(ng-repeat="subscriber in shownsubscriberReport")
+                        td {{subscriber.LastName}}
+                        td {{subscriber.FirstName}}
+                        td {{subscriber.PlanName}}
+                        td {{subscriber.LastProcessed | date:'MM/dd/yyyy' }}
+                        td {{subscriber.NextSchPayment | date:'MM/dd/yyyy' }}
+                        td {{subscriber.PaymentAmount | currency}}
+                        td {{subscriber.AmountCollected | currency}}
+
+                tfoot
+                    tr
+                        td.text-center(colspan="10")
+                            div(st-pagination="" st-items-by-page="20")
+
+
+
+
+
+.dash.report_results_qued
+    .row
+        h1 Recurring Payments - Queued Report
+    .panel.panel-default
+        .panel-heading
+            .row
+                .col-md-6
+                  h2.panel-title
+                    i.fa.fa-icon
+                    | Queued Results : {{queuedReportAmount}}
+                .col-md-6
+                    a.def_btn.wet_asphalt_btn.float-right.margin-right(ng-csv="shownQueuedReport" filename="queued_report.csv" ng-show="queuedReportBulk.length")
+                        i.fa.fa-file
+                        span Export Excel
+                    a.def_btn.belize_hole_btn.float-right.margin-right(ng-click="new_search()")
+                        i.fa.fa-search
+                        span New Search
+                    a.def_btn.peter_river_btn.float-right.margin-right(ng-click="modify_search()")
+                        i.fa.fa-search-plus
+                        span Modify Search
+        .panel-body
+            h3.noResults(ng-if="queuedReportAmount == 0") {{'There is no queued reports with the parameters specified.'}}
+            table.table.table-striped.ng-table-responsive.midsTable(st-table="shownQueuedReport" st-safe-src="queuedReportBulk" ng-if="queuedReportAmount != 0")
+                thead
+                    tr
+                        th(colspan="10")
+                            input.form-control(st-search="" type="search" placeholder="Filter through all qued results" tooltip="Filter through all qued results")
+                    tr
+
+                        th.st-header(st-sort="QueueId" style="width:5%") 
+                            span(tooltip="Sort queue") ID
+
+                        th.st-header(st-sort="SubscriptionName" style="width:15%")
+                            span(tooltip="Sort first name") Subscription Name
+
+                        th.st-header(st-sort="ScheduledPaymentDate" style="width:10%")
+                            span(tooltip="Sort subscription") Payment Date
+
+                        th.st-header(st-sort="Status" style="width:10%")
+                            span(tooltip="Sort last processed") Status
+
+                        th.st-header(st-sort="FirstName" style="width:10%")
+                            span(tooltip="Sort active subscribers") First Name
+
+                        th.st-header(st-sort="LastName " style="width:10%") 
+                            span(tooltip="Sort amount ") Last Name
+
+                        th.st-header(st-sort="Amount" style="width:5%")
+                            span(tooltip="Sort amount collected") Amount 
+
+                        th.st-header(st-sort="AmountCollected" style="width:10%")
+                            span(tooltip="Sort amount collected") Re-Occur Count
+
+                        th.st-header(st-sort="CurrentPaymentIndex" style="width:10%")
+                            span(tooltip="Sort amount collected") Occurence Count
+
+                        th.st-header(st-sort="RetryAttempt" style="width:10%")
+                            span(tooltip="Sort amount collected") Retry Attempt
+
+
+                tbody
+                    tr(ng-repeat="queue in shownQueuedReport")
+                        td {{queue.QueueId}}
+                        td {{queue.SubscriptionName}}
+                        td {{queue.ScheduledPaymentDate | date:'MM/dd/yyyy'}}
+                        td {{queue.Status}}
+                        td {{queue.FirstName}}
+                        td {{queue.LastName}}
+                        td {{queue.Amount | currency }}
+                        td {{queue.PlanPaymentCount}}
+                        td {{queue.CurrentPaymentIndex}}
+                        td {{queue.RetryAttempt}}
+
+                tfoot
+                    tr
+                        td.text-center(colspan="10")
+                            div(st-pagination="" st-items-by-page="20")

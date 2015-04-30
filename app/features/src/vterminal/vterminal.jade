@@ -171,11 +171,11 @@
                     option(value="Charge") Charge
                     option(value="Authorize") Authorize
                     option(value="Capture") Capture
-            .col-md-1(ng-hide="authType == 'Capture'")
+            .col-md-1(ng-hide="authType == 'Capture' || subscribersBulk == 0 ")
                 h2.panel-title
                   i.fa.fa-icon
                   | Existing cust:
-            .col-md-3(ng-hide="authType == 'Capture'")
+            .col-md-3(ng-hide="authType == 'Capture' || subscribersBulk == 0 ")
                 select.form-control(ng-model="subscriberSelection" ng-change="selectExistingUser(subscriberSelection)" ng-options="obj as obj.LastName + ' ' + obj.FirstName + '  -  ' + obj.Email for obj in subscribersBulk | orderBy:'LastName'")
                     option(value="") Select 
 

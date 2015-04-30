@@ -29,10 +29,6 @@ div(id="wrapper")
                             span Recurring Payments
                         ul.nav_subNav(collapse="isCollapsed[1]")
                             li
-                                a(ng-class="noteState('reports')" ui-sref="app.recurring_payments.subscriptionReports")
-                                    i.fa.fa-area-chart
-                                    span Subscriptions Reports
-                            li
                                 a(ng-class="noteState('subscriptions')" ui-sref="app.recurring_payments.subscriptions")
                                     i.fa.fa-tasks
                                     span Subscriptions
@@ -40,7 +36,10 @@ div(id="wrapper")
                                 a(ng-class="noteState('subscribers')" ui-sref="app.recurring_payments.subscribers")
                                     i.fa.fa-user
                                     span Subscribers
-
+                            li
+                                a(ng-class="noteState('reports')" ui-sref="app.recurring_payments.subscriptionReports")
+                                    i.fa.fa-area-chart
+                                    span Subscriptions Reports
 
                             
                     li 
