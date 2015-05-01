@@ -15,8 +15,7 @@ app.controller('loginCtrl', ['$scope', '$location', 'authService', 'appLogo', fu
     $scope.loginData = {
         userName: "",
         password: "",
-        useRefreshTokens: false,
-        origin: $location.$$host
+        useRefreshTokens: true
     };
 
     $scope.login = function() {
