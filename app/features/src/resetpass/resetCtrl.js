@@ -94,8 +94,19 @@ app.controller('resetPasswordCtrl', function($scope,$location,$http,$timeout,bas
                     url: baseUrl + 'users/resetPassword',
                     data:passQuery
                 }).success(function(data,status) {
-                    console.log('password updated');
-                    $location.path('/reset_success');
+                    
+                    if(data.Success == false){
+                        //SOMETHING 
+                        $scope.errorMsg = data.Errors[0];
+                        $('.user_help').slideDown(500);
+                        $timeout(function() {
+                            $('.user_help').slideUp(500);
+                        },5000);
+                    } else {
+                        console.log('password updated');
+                        $location.path('/reset_success');
+                    }
+
                 }).error(function(data, status) {
                         
                     //SOMETHING ERRONEOUS WITH THE API
@@ -103,7 +114,7 @@ app.controller('resetPasswordCtrl', function($scope,$location,$http,$timeout,bas
                     $('.user_help').slideDown(500);
                     $timeout(function() {
                         $('.user_help').slideUp(500);
-                    },3000);    
+                    },3000);
                 });
 
             } else {

@@ -1,0 +1,23 @@
+script(type="text/ng-template" id="userRemoveContent.html")
+    .modal-header
+        h3.modal-title
+            span.subtle Delete User: 
+            span {{user.UserName}}
+        button.close(type="button" ng-click="cancel()") x
+
+    .modal-body
+        p.text-center Are you sure you want to delete user: {{user.UserName}}
+
+        .row.errorMsg
+            p {{errorMsg}}
+            
+        .userCreateSuccess
+            p User Successfully Deleted
+
+    .modal-footer
+        a.row_btn.action_btn(href="" ng-click="removeUser()" tooltip="Delete User") 
+                i.fa.fa-trash
+                span Delete
+        a.row_btn.cancel_btn(href="" ng-click="cancel()" tooltip="Cancel")
+                i.fa.fa-sign-out
+                span Cancel

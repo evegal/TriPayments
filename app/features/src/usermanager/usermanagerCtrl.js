@@ -1,70 +1,59 @@
+/** *************************************** **
+  
+  TABLE OF CONTENTS
+  ---------------------------
+   01. usermanagerCtrl
+   02. createUserModalCtrl
+   03. removeUserModalCtrl
+   04. editUserModalCtrl
+  
+ **  *************************************** **/
+
 app.controller('usermanagerCtrl', function($scope,$http,$state,baseUrl,$rootScope,Notify) {
-///////////////////
-// LOAD USERS
-///////////////////
-$http.get(baseUrl + 'users').success(function(data) {
-  $scope.Users = data;
-  $scope.shownUsers = $scope.Users;
 
-  //console.log(data);
-  
-  // CSV Export
-  $scope.usersCSV = data;
-});
+  // LOAD USERS
+  $http.get(baseUrl + 'users').success(function(data) {
+    $scope.Users = data;
+    $scope.shownUsers = $scope.Users;
 
-  ///////////////////
+    // CSV Export
+    $scope.usersCSV = data;
+  });
+
   // NOTIFY NEW USER
-  ///////////////////
   Notify.getMsg('NewUser', function(event,data) {
-    
     $http.get(baseUrl + 'users').success(function(data) {
        $scope.Users = data;
     });
 
   });
-  //////////////////////
-  // NOTIFY DELETE USER
-  //////////////////////
-  Notify.getMsg('RemoveUser', function(event,data) {
 
+  // NOTIFY DELETE USER
+  Notify.getMsg('RemoveUser', function(event,data) {
     $http.get(baseUrl + 'users').success(function(data) {
        $scope.Users = data;
     });
 
   });
   
- 
-  $scope.saveUser = function(data,id) {
+  // NOTIFY EDIT USER
+  Notify.getMsg('UpdateUser', function(event,data) {
+    $http.get(baseUrl + 'users').success(function(data) {
+       $scope.Users = data;
+    });
 
-    if(id) {
-      console.log('saving');
-      angular.extend(data, {id:id});
-          return $http.put( baseUrl + 'users/' + id, data);
-          console.log('user information updated');
-      } else {
-        angular.extend(data, {id:id});
-          return $http.post( baseUrl + 'users', data);
-          console.log('user created');
-
-      }
-      
-  }
-
+  });
 }); // end usermanagerCtrl
 
-
-
-// MODALS
 app.controller('createUserModalCtrl', function($scope,$modal,$log) {
   $scope.open = function() {
      var modalInstance = $modal.open({
         templateUrl:'userModalContent.html',
-      controller:userCreateInstanceCtrl,
+        controller:userCreateInstanceCtrl,
         size:'lg'
      });
   }
 });
-
 
 var userCreateInstanceCtrl = function($scope,$modalInstance,$http,$timeout,$rootScope,Notify,baseUrl) {
 
@@ -72,90 +61,80 @@ var userCreateInstanceCtrl = function($scope,$modalInstance,$http,$timeout,$root
        $modalInstance.close();
     }
 
+    $scope.createUser = function(theForm) {
 
-    $scope.ok = function() {
+      if(theForm.$valid) {
 
-      if(document.getElementById('username').value === '') {
-        console.log('name empty');
-        $('.nameError').slideDown(300);
+          // VERIFY PASSWORDS MATCH
+          if(document.getElementById('newUserPwInitial').value == document.getElementById('newUserPwRepeat').value) {
+            var Query = {
+              "Username":document.getElementById('newUserName').value,
+              "Password":document.getElementById('newUserEmail').value,
+              "Email":document.getElementById('newUserPwInitial').value,
+            }
 
-        $scope.createErrorMsg = 'Please Enter A User Name';
-        // hide error messages
-        $timeout(function() {
-          $('.nameError').slideUp(300);
-        },1500);
-      } else if(document.getElementById('email').value === '') {
-        $('.nameError').slideDown(300);
+            $http({
+              method:'POST',
+              url:baseUrl + 'users',
+              data:Query
+            }).success(function(data,status) {
 
-        $scope.createErrorMsg = 'Please Enter An Email';
-        $timeout(function() {
-          $('.nameError').slideUp(300);
-        },1500);
-      } else if (document.getElementById('password').value === '' || document.getElementById('repeatpassword').value === '') {
-        $('.nameError').slideDown(300);
+              if(data.success) {
+                Notify.sendMsg('NewUser', {'id':data.id});
 
-        $scope.createErrorMsg = 'Please Create & Repeat Password';
-        $timeout(function() {
-          $('.nameError').slideUp(300);
-        },1500);
-      }  else {
+                console.log('user created');
 
-        var emailInput = document.getElementById('email').value;
+                $timeout(function() {
+                  $modalInstance.close();
+                },2000);
 
-        var regex = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i
-        if(regex.test(emailInput) === false) {
-           $('.nameError').slideDown(300);
+              } else {
+                // PASSWORDS DO NOT MATCH
+                $scope.errorMsg = data.Errors[0];
+                $('.errorMsg').slideDown(500);
+                $timeout(function() {
+                    $('.errorMsg').slideUp(500);
+                },3000); 
+              }
 
-           console.log(regex.test(emailInput));
+            }).error(function(data, status) {
+                        
+                //SOMETHING ERRONEOUS WITH THE API
+                $scope.errorMsg = 'There is an error with the API please contact your customer support. Error Code: ' + status;
+                $('.errorMsg').slideDown(500);
+                $timeout(function() {
+                    $('.errorMsg').slideUp(500);
+                },3000);    
+            });
 
-           $scope.createErrorMsg = 'Invalid Email';
-           $timeout(function() {
-              $('.nameError').slideUp(300);
-            },1500);
-        } else {
-          console.log('checking passwords');
+          } else {
 
-        var primePassword = document.getElementById('password').value;
-        var secondPassword = document.getElementById('repeatpassword').value;
+            // PASSWORDS DO NOT MATCH
+            $scope.errorMsg = 'Passwords do not match.';
+            $('.errorMsg').slideDown(500);
+            $timeout(function() {
+                $('.errorMsg').slideUp(500);
+            },3000); 
+          }
 
-        if(primePassword === secondPassword) {
-           $('.user_feedback').slideDown(300);
-           $('.create_btn').remove();
-           $('.save_btn').show();
-        } else {
-          $('.nameError').slideDown(300);
 
-          $scope.createErrorMsg = 'Passwords Do Not Match';
+
+      } else {
+
+          // FORM NOT PROPERLY FILLED
+          $scope.errorMsg = 'Please complete all required input fields.';
+          $('.errorMsg').slideDown(500);
           $timeout(function() {
-              $('.nameError').slideUp(300);
-            },1500);
-        }
+              $('.errorMsg').slideUp(500);
+          },3000);
 
-
-        }
-        
       }
 
     }
   
-  
-  //$scope.userCreateForm = {};    
-  // SAVE USER
     $scope.submit = function() {
+   
 
-    console.log('user created');
-    
-    var userDetails = {
-      "Username": document.getElementById('username').value,
-      "Password": document.getElementById('password').value,
-      "Email": document.getElementById('email').value,
-      "TriPaymentsApiCompanyId":4
-    }
-
-    // Updated Displayed Users
-    //$scope.Users.push(userDetails);
-    
-    // POST REQUEST
     
     var promise = $http({
       method:'POST',
@@ -163,23 +142,9 @@ var userCreateInstanceCtrl = function($scope,$modalInstance,$http,$timeout,$root
       data:userDetails
     });
 
-    // UPDATE UI
-    //$rootScope.displayedUsers.push(userDetails);
-
     promise.success(function(data) {
       
-      Notify.sendMsg('NewUser', {'id':data.id});
 
-      console.log('user created');
-
-      $('.user_feedback').hide();
-      $('.userCreateSuccess').show();
-      $('.userError').hide();
-      $scope.userCreateSuccess = 'User Created';
-
-      $timeout(function() {
-        $modalInstance.close();
-      },2000);
 
     }).error(function(data,status) {
       console.log(data,status);
@@ -196,12 +161,9 @@ var userCreateInstanceCtrl = function($scope,$modalInstance,$http,$timeout,$root
 
 } // end userCreateInstanceCtrl
 
-
-//////////////////////
-//// USER REMOVE
-//////////////////////
+// USER REMOVE
 app.controller('removeUserModalCtrl', function($scope,$modal,$log) {
-  $scope.openIt = function(user) {
+  $scope.open = function(user) {
      var modalInstance = $modal.open({
       templateUrl:'userRemoveContent.html',
       controller:userRemoveInstanceCtrl,
@@ -215,7 +177,8 @@ app.controller('removeUserModalCtrl', function($scope,$modal,$log) {
   }
 });
 
-var userRemoveInstanceCtrl = function($scope,$modalInstance,$http,$timeout,user,baseUrl,$rootScope,UserService,Notify,baseUrl) {
+var userRemoveInstanceCtrl  = function($scope,$modalInstance,$http,$timeout,user,baseUrl,Notify) {
+
    $scope.user = user;
    $scope.userId = user.UserId;
 
@@ -232,24 +195,29 @@ var userRemoveInstanceCtrl = function($scope,$modalInstance,$http,$timeout,user,
         method:'DELETE',
         url: baseUrl + 'users/' + $scope.userId
      }).success(function(data,status) {
-
-      // NOTIFY SERVICE
-      Notify.sendMsg('RemoveUser', {'id':data.id});
-
-        console.log(status);
-
+        
+        Notify.sendMsg('RemoveUser', {'id':data.id});
         $('.userCreateSuccess').show();
 
         $timeout(function() {
           $modalInstance.close();
         },500);
-     });
+
+     }).error(function(data, status) {
+                        
+        //SOMETHING ERRONEOUS WITH THE API
+        $scope.errorMsg = 'There is an error with the API please contact your customer support. Error Code: ' + status;
+        $('.errorMsg').slideDown(500);
+        $timeout(function() {
+            $('.errorMsg').slideUp(500);
+        },3000);    
+
+      });
 
    }
-}
-//////////////////////
-//// USER EDIT
-//////////////////////
+} // END userRemoveInstanceCtrl
+
+// editUserModalCtrl
 app.controller('editUserModalCtrl', function($scope,$modal,$log) {
   $scope.open = function(user) {
      var modalInstance = $modal.open({
@@ -265,7 +233,7 @@ app.controller('editUserModalCtrl', function($scope,$modal,$log) {
   }
 });
 
-var userEditInstanceCtrl = function($scope,$modalInstance,$http,$timeout,user,baseUrl) {
+var userEditInstanceCtrl = function($scope,$modalInstance,$http,$timeout,Notify,user,baseUrl) {
 
   $scope.original = user;
   $scope.copyCat = angular.copy(user);
@@ -273,10 +241,8 @@ var userEditInstanceCtrl = function($scope,$modalInstance,$http,$timeout,user,ba
 
   $scope.cancel = function() {
       $scope.user = $scope.original;
-
-       $modalInstance.close();
+      $modalInstance.close();
     }
-
 
     $scope.updateUser = function(user) {
 
@@ -285,16 +251,29 @@ var userEditInstanceCtrl = function($scope,$modalInstance,$http,$timeout,user,ba
         "Email":$scope.user.Email
       }
 
-      console.log(updateQuery);
-
       $http({
         method:'PUT',
         url: baseUrl + 'users/' + user.UserId,
         data:updateQuery
       }).success(function(status,data) {
-        console.log(status + ' ' + data);
+
+        Notify.sendMsg('UpdateUser');
+        $('.userCreateSuccess').show();
+
+        $timeout(function() {
+          $modalInstance.close();
+        },500);
+      
+      }).error(function(data, status) {
+                        
+        //SOMETHING ERRONEOUS WITH THE API
+        $scope.errorMsg = 'There is an error with the API please contact your customer support. Error Code: ' + status;
+        $('.errorMsg').slideDown(500);
+        $timeout(function() {
+            $('.errorMsg').slideUp(500);
+        },3000); 
+
       });
 
-    } // END updateUser
-
-}
+    } // END userEditInstanceCtrl
+} // END userEditInstanceCtrl

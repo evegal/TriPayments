@@ -1,0 +1,36 @@
+script(type="text/ng-template" id="userEditContent.html")
+    .modal-header
+        h3.modal-title
+            span.subtle Edit User: 
+            span {{user.UserName}}
+        button.close(type="button" ng-click="cancel()") x
+
+    .modal-body
+        form(name='editUserForm')
+            table.table
+                thead
+                    tr
+                        th User Name
+                        th User Email
+                        th User Password
+                tbody
+                    tr
+                        td {{user.UserName}}
+                        td
+                            input.form-control(type='text', ng-model='user.Email')
+                        td
+                            input.form-control(type='password', ng-model='user.Password', placeholder='Enter New Password' tooltip="Only enter password if needed to be updated.")
+
+        .row.errorMsg
+            p {{errorMsg}}
+
+        .userCreateSuccess
+            p User Successfully Updated
+
+    .modal-footer
+        a.row_btn.action_btn(href="" ng-click="updateUser(user)" ng-show="editUserForm.$dirty" tooltip="Save") 
+                i.fa.fa-floppy-o
+                span Save
+        a.row_btn.cancel_btn(href="" ng-click="cancel()" tooltip="Cancel")
+                i.fa.fa-sign-out
+                span Cancel

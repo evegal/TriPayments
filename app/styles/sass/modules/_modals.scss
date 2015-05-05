@@ -358,7 +358,6 @@ form.merchantCreateForm {
         padding:10px 0;
     }    
     .modal-body {
-        min-height:300px;
         padding:80px 20px 20px 20px;
         section {
             width:95%;
@@ -464,4 +463,64 @@ form.merchantCreateForm {
 }
 #notificationEmail{
     margin-top:10px;
+}
+
+
+.default_modal {
+    input[type="checkbox"] {
+        width:20px;
+        height:20px !important;
+    }
+    label {
+        font-size:12px;
+        padding-top:10px;
+    }
+    a {
+        i {
+            margin-left:5px;
+        }
+    }
+    .row_btn {
+        width:20%;
+        padding:15px 0;
+    }
+    .row_inbody_btn {
+        width:35%;
+        padding:10px 0;
+    }    
+    .modal-body {
+        padding:20px;
+        section {
+            width:95%;
+        }
+        .row {
+            padding:5px 0;
+        }
+        .btn{
+            width: 120px;
+        }
+        .daterangePick .btn{
+            width: 45px;   
+        } 
+    }
+
+    .gateway-option, .modal-seperation {
+        border-bottom:5px solid #777;
+        padding:10px 0;
+        margin-bottom:20px;
+        label {
+            line-height:2em !important;
+        }
+        input {
+            height:20px;
+            margin-left:10px;
+        }
+    }
+    .form-group {
+        margin-bottom:0px;
+    }
+    .emerald_btn, .disabled_btn, .full_width {
+        width:100%;
+    }
+
 }

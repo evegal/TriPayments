@@ -1,0 +1,49 @@
+script(type="text/ng-template" id="userModalContent.html")
+    .default_modal
+        .modal-header
+            h3.modal-title
+                span.subtle Create User: 
+            button.close(type="button" ng-click="cancel()") x
+
+        .modal-body
+            form.form(ng-submit="submit()" name="userCreateForm" novalidate ng-class="")
+                .row
+                    .col-md-3
+                    .col-md-6
+                        .input-group
+                            span.input-group-addon
+                                span.glyphicon.glyphicon-user
+                            input.form-control(type="text" placeholder="Enter User Name" id="newUserName" ng-model="userCreateUserName" required="" autofocus="" autocomplete="off")
+                .row
+                    .col-md-3
+                    .col-md-6
+                        .input-group
+                            span.input-group-addon
+                                span.glyphicon.glyphicon-envelope
+                            input.form-control(type="Email" placeholder="Enter user email" id="newUserEmail" ng-model="newUserEmail" required="" autocomplete="off")
+                .row
+                    .col-md-3
+                    .col-md-6
+                        .input-group
+                            span.input-group-addon
+                                span.glyphicon.glyphicon-lock
+                            input.form-control(type="password" placeholder="Password minimum 6 characters" id="newUserPwInitial" ng-model="userCreatePwInitial" required="")
+                .row
+                    .col-md-3
+                    .col-md-6
+                        .input-group
+                            span.input-group-addon
+                                span.glyphicon.glyphicon-lock
+                            input.form-control(type="password" placeholder="Repeat Password" id="newUserPwRepeat" ng-model="userCreatePwCheck" required="")
+
+                .row.errorMsg
+                    p {{errorMsg}}
+
+
+        .modal-footer
+            a.row_btn.action_btn(href="" ng-click="createUser(userCreateForm)" tooltip="Create User") 
+                    i.fa.fa-floppy-o
+                    span Create User
+            a.row_btn.cancel_btn(href="" ng-click="cancel()" tooltip="Cancel")
+                    i.fa.fa-sign-out
+                    span Cancel

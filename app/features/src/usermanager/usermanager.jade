@@ -1,6 +1,6 @@
-include ../modals/userCreateModal.html
-include ../modals/userEditModal.html
-include ../modals/userRemoveModal.html
+include ../modals/userCreateModal.jade
+include ../modals/userEditModal.jade
+include ../modals/userRemoveModal.jade
 .row
     h1 User Management
 .panel.panel-default
@@ -37,6 +37,6 @@ include ../modals/userRemoveModal.html
                       .row_btn.turquoise_btn.margin-right(ng-click="open(User)" ng-controller="editUserModalCtrl")
                         i.fa.fa-edit
                         span Edit
-                      .row_btn.alazarin_btn(ng-click="openIt(User)" ng-controller="removeUserModalCtrl")
+                      .row_btn.alazarin_btn(ng-click="open(User)" ng-controller="removeUserModalCtrl")
                         i.fa.fa-trash
                         span Delete
