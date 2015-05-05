@@ -17,7 +17,7 @@ app.controller('usermanagerCtrl', function($scope,$http,$state,baseUrl,$rootScop
     $scope.shownUsers = $scope.Users;
 
     // CSV Export
-    $scope.usersCSV = data;
+    $scope.usersCSV = $scope.shownUsers;
   });
 
   // NOTIFY NEW USER
@@ -69,8 +69,8 @@ var userCreateInstanceCtrl = function($scope,$modalInstance,$http,$timeout,$root
           if(document.getElementById('newUserPwInitial').value == document.getElementById('newUserPwRepeat').value) {
             var Query = {
               "Username":document.getElementById('newUserName').value,
-              "Password":document.getElementById('newUserEmail').value,
-              "Email":document.getElementById('newUserPwInitial').value,
+              "Password":document.getElementById('newUserPwInitial').value,
+              "Email":document.getElementById('newUserEmail').value,
             }
 
             $http({
@@ -79,10 +79,11 @@ var userCreateInstanceCtrl = function($scope,$modalInstance,$http,$timeout,$root
               data:Query
             }).success(function(data,status) {
 
-              if(data.success) {
+              if(data.Success) {
+
                 Notify.sendMsg('NewUser', {'id':data.id});
 
-                console.log('user created');
+                $('.userCreateSuccess').show();
 
                 $timeout(function() {
                   $modalInstance.close();
@@ -91,6 +92,7 @@ var userCreateInstanceCtrl = function($scope,$modalInstance,$http,$timeout,$root
               } else {
                 // PASSWORDS DO NOT MATCH
                 $scope.errorMsg = data.Errors[0];
+
                 $('.errorMsg').slideDown(500);
                 $timeout(function() {
                     $('.errorMsg').slideUp(500);
@@ -132,33 +134,6 @@ var userCreateInstanceCtrl = function($scope,$modalInstance,$http,$timeout,$root
 
     }
   
-    $scope.submit = function() {
-   
-
-    
-    var promise = $http({
-      method:'POST',
-      url: baseUrl + 'users',
-      data:userDetails
-    });
-
-    promise.success(function(data) {
-      
-
-
-    }).error(function(data,status) {
-      console.log(data,status);
-
-      $('.userError').show();
-
-      $timeout(function() {
-        $('.userError').slideUp(300);
-      });
-    });
-    
-    
-  } // END SUBMIT saveUser
-
 } // end userCreateInstanceCtrl
 
 // USER REMOVE
@@ -275,5 +250,6 @@ var userEditInstanceCtrl = function($scope,$modalInstance,$http,$timeout,Notify,
 
       });
 
-    } // END userEditInstanceCtrl
+    } 
+    
 } // END userEditInstanceCtrl
