@@ -1,10 +1,7 @@
   app.service('SubscriptionsService', function SubServiceFun() {
     this.getData = [];
     this.getDataCount = '';
-  })
-
-
-
+  });
 
 //////////////////
 // NOTIFY SERVICE
@@ -71,17 +68,15 @@ app.factory('authService', ['$q', '$injector', 'localStorageService', 'ngAuthSet
     };
 
     var _login = function (loginData) {
-              
+             
         localStorageService.remove('authorizationData');
 		
 		// PRIOR SETTINGS		
-        var data = "grant_type=password&username=" + loginData.userName + "&password=" + loginData.password  + "&client_id=" + ngAuthSettings.clientId;
-
+        var data = "grant_type=password&username=" + loginData.userName + "&password=" + loginData.password;
 
         if (loginData.useRefreshTokens) {
             data = data + "&client_id=" + ngAuthSettings.clientId;
         }
-        
 
         /*
         if (loginData.origin == 'whitelabel.myfreedomgateway.com') {
