@@ -279,6 +279,27 @@
                                 label Ref Details:
                                     span.required-icon *
                                 input(type="text" name="refnumber" placeholder="ex 564-984716" ng-model="chargeRefnumber" required="" tooltip="This is a unique identifier to track this charge, this may be replaced with your own custom unique identifier")
+
+
+
+                            .row(ng-if='chargeUDF1 || udfChargeCount >= 1')
+                                label UDF 1:
+                                input(type='text', name='chargeUDF1', placeholder='', ng-model='chargeUDF1', tooltip='')
+                            .row(ng-if='chargeUDF2 || udfChargeCount >= 2')
+                                label UDF 2:
+                                input(type='text', name='chargeUDF2', placeholder='', ng-model='chargeUDF2', tooltip='')
+                            .row(ng-if='chargeUDF3 || udfChargeCount >= 3')
+                                label UDF 3:
+                                input(type='text', name='chargeUDF3', placeholder='', ng-model='chargeUDF3', tooltip='')
+                            .row(ng-if='chargeUDF4 || udfChargeCount >= 4')
+                                label UDF 4:
+                                input(type='text', name='chargeUDF4', placeholder='', ng-model='chargeUDF4', tooltip='')
+                            .form-group(ng-if="udfChargeCount < 4")
+                                a.row_btn.wet_asphalt_btn.full_width(href='', type='submit', ng-click='addChargeUdf()')
+                                    i.fa.fa-plus
+                                    span Add User Defined Field
+
+
                     .row.errorMsg
                         p {{errorMsg}}
 
@@ -372,6 +393,26 @@
                             .form-group
                                 label Ref Details:
                                 input(name="refnumber" type="text" placeholder="ex 564-984716" ng-model="authRefnumber" required="")
+
+
+                            .row(ng-if='authUDF1 || udfAuthCount >= 1')
+                                label UDF 1:
+                                input(type='text', name='authUDF1', placeholder='', ng-model='authUDF1', tooltip='')
+                            .row(ng-if='authUDF2 || udfAuthCount >= 2')
+                                label UDF 2:
+                                input(type='text', name='authUDF2', placeholder='', ng-model='authUDF2', tooltip='')
+                            .row(ng-if='authUDF3 || udfAuthCount >= 3')
+                                label UDF 3:
+                                input(type='text', name='authUDF3', placeholder='', ng-model='authUDF3', tooltip='')
+                            .row(ng-if='authUDF4 || udfAuthCount >= 4')
+                                label UDF 4:
+                                input(type='text', name='authUDF4', placeholder='', ng-model='authUDF4', tooltip='')
+                            .form-group(ng-if="udfAuthCount  < 4")
+                                a.row_btn.wet_asphalt_btn.full_width(href='', type='submit', ng-click='addAuthUdf()')
+                                    i.fa.fa-plus
+                                    span Add User Defined Field
+
+
                     .row.errorMsg
                         p {{errorMsg}}
 

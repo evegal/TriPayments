@@ -15,9 +15,20 @@ app.controller('vterminalCtrl', function($rootScope,$scope,$http,$timeout,$state
     $scope.chargeRefnumber = $scope.createUniqueId();
     $scope.authRefnumber = $scope.createUniqueId();
     $scope.captureRefNumber = $scope.createUniqueId();
+    $scope.udfAuthCount = 0;
+    $scope.udfChargeCount = 0;
+ 
+    // ADD UDF FIELDS UP TO 4
+    $scope.addAuthUdf = function() {
+        $scope.udfAuthCount++;
+    }
 
+    // ADD UDF FIELDS UP TO 4
+    $scope.addChargeUdf = function() {
+        $scope.udfChargeCount++;
+    }
     // LOAD CURRENCIES - IN CASE USER HARD REFRESHES IN THIS PAGE
-    if($scope.currencies == undefined){
+    if($scope.currencies.length == 0){
         $http.get(baseUrl + 'currencies').success(function(data) {
             $scope.currencies = data;
             $scope.chargeCurrency = $scope.currencies[0].Id;
@@ -34,8 +45,6 @@ app.controller('vterminalCtrl', function($rootScope,$scope,$http,$timeout,$state
     $scope.auth_form = {};
     $scope.authSubmit = function() {
 
-        console.log('auth form');
-        console.log($scope.auth_form.$valid);
         if($scope.auth_form.$valid) {
         
             var Query =  {
@@ -56,7 +65,11 @@ app.controller('vterminalCtrl', function($rootScope,$scope,$http,$timeout,$state
               "Country": $scope.authCountry,
               "Zip": $scope.authZip,
               "Phone": $scope.authPhone,
-              "ReferenceNumber": $scope.authRefnumber
+              "ReferenceNumber": $scope.authRefnumber,
+              "Udf1": $scope.authUDF1,
+              "Udf2": $scope.authUDF2,
+              "Udf3": $scope.authUDF3,
+              "Udf4": $scope.authUDF4
             }
         
         var promise = $http({
@@ -207,7 +220,11 @@ app.controller('vterminalCtrl', function($rootScope,$scope,$http,$timeout,$state
               "Country": $scope.chargeCountry,
               "Zip": $scope.chargeZip,
               "Phone": $scope.chargePhone,
-              "ReferenceNumber": $scope.chargeRefnumber
+              "ReferenceNumber": $scope.chargeRefnumber,
+              "Udf1": $scope.chargeUDF1,
+              "Udf2": $scope.chargeUDF2,
+              "Udf3": $scope.chargeUDF3,
+              "Udf4": $scope.chargeUDF4
             }
 
             $http({
@@ -375,6 +392,18 @@ app.controller('vterminalCtrl', function($rootScope,$scope,$http,$timeout,$state
     $scope.subscribersBulkLength = data.length;
   });
 
+  $scope.evaluateUdfCountAuth = function(value,index){
+    if (value) {
+        $scope.udfAuthCount = index;
+    }
+  }
+
+  $scope.evaluateUdfCountCharge = function(value,index){
+    if (value) {
+        $scope.udfChargeCount = index;
+    } 
+  }
+
   $scope.selectExistingUser = function(subscriberSelection){
     if(subscriberSelection){
         //CHARGE DATA
@@ -388,6 +417,16 @@ app.controller('vterminalCtrl', function($rootScope,$scope,$http,$timeout,$state
         $scope.chargeZip = subscriberSelection.PostalCode;
         $scope.chargePhone = subscriberSelection.Phone;
 
+        $scope.udfChargeCount = 0;
+        $scope.chargeUDF1 = subscriberSelection.Udf1;
+        $scope.evaluateUdfCountCharge($scope.chargeUDF1,1);
+        $scope.chargeUDF2 = subscriberSelection.Udf2;
+        $scope.evaluateUdfCountCharge($scope.chargeUDF2,2);
+        $scope.chargeUDF3 = subscriberSelection.Udf3;
+        $scope.evaluateUdfCountCharge($scope.chargeUDF3,3);
+        $scope.chargeUDF4 = subscriberSelection.Udf4;
+        $scope.evaluateUdfCountCharge($scope.chargeUDF4,4);
+
         // AUTH DATA
         $scope.authFname = subscriberSelection.FirstName;
         $scope.authLname = subscriberSelection.LastName;
@@ -399,6 +438,15 @@ app.controller('vterminalCtrl', function($rootScope,$scope,$http,$timeout,$state
         $scope.authZip = subscriberSelection.PostalCode;
         $scope.authPhone = subscriberSelection.Phone;
 
+        $scope.udfAuthCount = 0;
+        $scope.authUDF1 = subscriberSelection.Udf1;
+        $scope.evaluateUdfCountAuth($scope.authUDF1,1);
+        $scope.authUDF2 = subscriberSelection.Udf2;
+        $scope.evaluateUdfCountAuth($scope.authUDF2,2);
+        $scope.authUDF3 = subscriberSelection.Udf3;
+        $scope.evaluateUdfCountAuth($scope.authUDF3,3);
+        $scope.authUDF4 = subscriberSelection.Udf4;
+        $scope.evaluateUdfCountAuth($scope.authUDF4,4);
     } else {
         $scope.chargeFname = '';
         $scope.chargeLname = '';
@@ -409,6 +457,11 @@ app.controller('vterminalCtrl', function($rootScope,$scope,$http,$timeout,$state
         $scope.chargeCountry = '';
         $scope.chargeZip = '';
         $scope.chargePhone = '';
+        $scope.chargeUDF1 = '';
+        $scope.chargeUDF2 = '';
+        $scope.chargeUDF3 = '';
+        $scope.chargeUDF4 = '';
+        $scope.udfChargeCount = 0;
 
         // AUTH DATA
         $scope.authFname = '';
@@ -420,6 +473,11 @@ app.controller('vterminalCtrl', function($rootScope,$scope,$http,$timeout,$state
         $scope.authCountry = '';
         $scope.authZip = '';
         $scope.authPhone = '';
+        $scope.authUDF1 = '';
+        $scope.authUDF2 = '';
+        $scope.authUDF3 = '';
+        $scope.authUDF4 = '';
+        $scope.udfAuthCount = 0;
     }
 
   }
