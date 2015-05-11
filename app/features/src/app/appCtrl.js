@@ -100,31 +100,30 @@ app.controller("appCtrl", function($rootScope,$scope,$state,$timeout,$http,baseU
         $("#wrapper").toggleClass("toggled");      
   });
   
+
   // LOAD MIDGROUPS
-  $rootScope.modalGroups = [];
+  $scope.modalGroups = [];
 
-    $http.get(baseUrl + 'midgroups').success(function(data) {
-      $scope.groupsBulk = data;
-      $scope.groupAmount = data.length;
+  $http.get(baseUrl + 'midgroups').success(function(data) {
+    $scope.groupsBulk = data;
+    $scope.groupAmount = data.length;
 
-      // CSV Export
-      $scope.groupCSV = data;
-      // copy the references
-      //$scope.shownMerchants = [].concat($scope.groupsBulk);
+    // CSV Export
+    $scope.groupCSV = data;
 
-      angular.forEach(data, function(value,key) {
-         $rootScope.modalGroups.push(value);
-      }); 
+    angular.forEach(data, function(value,key) {
+       $scope.modalGroups.push(value);
+    }); 
 
-    });
+  }); 
 
-
-  // NOTIFY ADD MERCHANT
-  Notify.getMsg('NewMerchant', function(event,data) {
+  // NOTIFY ADD MIDGROUP
+  Notify.getMsg('CreateNewMerchantGroup', function(event,data) {
     $scope.groupsBulk.push(data);
+    $scope.groupAmount++;
   });
 
-  // NOTIFY EDIT MERCHANT
+  // NOTIFY EDIT MIDGROUP
   Notify.getMsg('MerchantUpdated', function(event,data) {
 
     $http.get(baseUrl + 'midgroups').success(function(data) {
@@ -133,10 +132,33 @@ app.controller("appCtrl", function($rootScope,$scope,$state,$timeout,$http,baseU
 
   });
 
+  // NOTIFY DELETE MIDGROUP
+  Notify.getMsg('DeleteMidGroup', function(event,data) {
+    $scope.groupsBulk.splice(data,1);
+    $scope.groupAmount--;
+  });
+
+
+
+
+
+
+  $rootScope.currencies = [];
+
   // LOAD CURRENCIES
   $http.get(baseUrl + 'currencies').success(function(data) {
+
       $scope.currencies = data;
+
+      angular.forEach(data, function(value,key) {
+        $rootScope.currencies.push(value);
+      });
+
   });
+
+
+
+
 
 
   // LOAD GATEWAYS
@@ -147,7 +169,7 @@ app.controller("appCtrl", function($rootScope,$scope,$state,$timeout,$http,baseU
     $scope.gateways = data; 
     
     angular.forEach(data, function(value,key) {
-            $rootScope.gateways.push(value);
+      $rootScope.gateways.push(value);
     });
       
   });
@@ -213,13 +235,6 @@ app.controller("appCtrl", function($rootScope,$scope,$state,$timeout,$http,baseU
 
   }); // END GET
 
-
-  //////////////////////////
-  // NOTIFY DELETE MERCHANT
-  //////////////////////////
-  Notify.getMsg('RemoveMerchant', function(event,data) {
-    $scope.groupsBulk.splice(data,1);
-  });
 
   //////////////////////////
   // NOTIFY DELETE MERCHANT

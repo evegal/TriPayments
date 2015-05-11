@@ -38,59 +38,56 @@ app.controller('groupsCtrl', function($timeout,$filter,$rootScope,$scope,$http,$
       //console.log(data);
     });
 
-};
+  };
 
-$scope.gotoMID = function(index,shownMerchants) {
+  $scope.gotoMID = function(index,shownMerchants) {
 
-/*
-  $timeout(function() {
-    if($scope.isMidLoaded) {
+    /*
+      $timeout(function() {
+        if($scope.isMidLoaded) {
 
-       shownMerchants[index].open = !shownMerchants[index].open;
+           shownMerchants[index].open = !shownMerchants[index].open;
 
-       // set the location.hash to the id of
-      // the element you wish to scroll to.
-      // each row has a class of base and then the items $index
-      
-        $location.hash('base' + index);
-        //$anchorScroll();
-      
-       
-    } else {
-      
-    }
-  },1000);
-*/
+           // set the location.hash to the id of
+          // the element you wish to scroll to.
+          // each row has a class of base and then the items $index
+          
+            $location.hash('base' + index);
+            //$anchorScroll();
+          
+           
+        } else {
+          
+        }
+      },1000);
+    */
 
-  shownMerchants[index].open = !shownMerchants[index].open;
+    shownMerchants[index].open = !shownMerchants[index].open;
 
-};
+  };
 
-$scope.checkWindow = function(info) {
-   //console.log(index);
-   console.log(info[0]);
-   
-};
+  $scope.checkWindow = function(info) {
+     //console.log(index);
+     console.log(info[0]);
+     
+  };
 
-$scope.CapValues = [
-  {'value':10},
-  {'value':20},
-  {'value':30},
-  {'value':40},
-  {'value':50},
-  {'value':60},
-  {'value':70},
-  {'value':80},
-  {'value':90},
-];
+  $scope.CapValues = [
+    {'value':10},
+    {'value':20},
+    {'value':30},
+    {'value':40},
+    {'value':50},
+    {'value':60},
+    {'value':70},
+    {'value':80},
+    {'value':90},
+  ];
 
 
 }); // mainMerchantCtrl
 
-/////////////////
 // GROUP CREATE
-/////////////////
-
 app.controller('createMerchantModalCtrl', function($scope,$modal,$log,$http) {
 
     $scope.open = function() {
@@ -98,109 +95,72 @@ app.controller('createMerchantModalCtrl', function($scope,$modal,$log,$http) {
         templateUrl:'merchantCreateContent.html',
         controller:merchantCreateInstanceCtrl,
         size:'lg'
-     });
-  };
+      });
+    };
 
 });
 
 
 var merchantCreateInstanceCtrl = function($scope,$modalInstance,$http,$timeout,$window,$state,baseUrl,$rootScope,Notify) {
 
-$http.get( baseUrl + 'currencies').success(function(data) {
-    $scope.currencies = data;
-});
+    $scope.cancel = function() {
+       $modalInstance.close();
+    };
 
-$scope.actives = [
-  'exit',
-  'enter',
-  'loading'
-];
+    // LOAD CURRENCIES FOR DROPDOWN 
+    $scope.merchantCreateGroupCurrency = $scope.currencies[0].Id;
 
-// SELECT OPTIONS
-$scope.BalancingTypes = [
-   {BalancingTypeId:0, BalancingType:"None"},
-   {BalancingTypeId:1, BalancingType:"Cap"},
-   {BalancingTypeId:2, BalancingType:"Priority"}
-];
-$scope.CapValues = [
-  {'value':10},
-  {'value':20},
-  {'value':30},
-  {'value':40},
-  {'value':50},
-  {'value':60},
-  {'value':70},
-  {'value':80},
-  {'value':90},
-];
+    // UPDATE CURRENCY SELECTION
+    $scope.selectUpdate = function(item) {
+        console.log(item);
+        $scope.merchantCreateGroupCurrency = item;
+    } 
+  
+   $scope.submitCreateMerchantGroup = function(theForm) {
 
-
-   $scope.merchantCreateForm = {};
-
-   $scope.submitUserCreate = function() {
-
-    if(document.getElementById('merchantGroupName').value === '') {
-      $('.nameError').slideDown(300);
+    if(theForm.$valid){
+        var Query = {
+            "Name":document.getElementById('merchantCreateGroupName').value,
+            "Currency":$scope.merchantCreateGroupCurrency,
+            "BalancingType":"Cap"
+        };
       
-      $scope.createErrorMsg = 'Please Enter A User Name';
-        // hide error messages
-        $timeout(function() {
-          $('.nameError').slideUp(300);
-        },1500);
-    } else {
+        // POST REQUEST
+        $http({
+            method:'POST',
+            url: baseUrl + 'midgroups',
+            data:Query
+        }).success(function(data) {
 
-      $('.merchant_feedback').slideDown(300);
-      $('.create_btn').hide();
-      $('.save_btn').slideDown(300);
+            Notify.sendMsg('CreateNewMerchantGroup', data);
+            $('.userCreateSuccess').show();
+
+            $timeout(function() {
+              $modalInstance.close();
+            },1000);
+
+        }).error(function(data,status) {
+            $scope.errorMsg = 'There is an error with the API please contact your customer support. Error Code: ' + status;
+            $('.errorMsg').slideDown(500);           
+            $timeout(function() {
+                $('.errorMsg').slideUp(500);
+            },3000);
+        });
+
+    } else {
+        $scope.errorMsg = 'Please complete all fields';
+        $('.errorMsg').slideDown(500);           
+        $timeout(function() {
+            $('.errorMsg').slideUp(500);
+        },3000);
     }
 
    };
 
-   $scope.ok = function() {
-       
-       var merchantDetails = {
-          "Name":document.getElementById('merchantGroupName').value,
-          "CapLimitNotificationEmails":document.getElementById('MerchantEmail').value,
-          "BalancingType":document.getElementById('BalancingType').value,
-          "Currency":document.getElementById('Currency').value
-    };
-        
 
-       //console.log(merchantDetails);
-       // POST REQUEST
-       var promise = $http({
-          method:'POST',
-          url: baseUrl + 'midgroups',
-          data:merchantDetails
-      }).success(function(data) {
-
-        Notify.sendMsg('NewMerchant', data);
-          //$rootScope.$data.push(merchantDetails);
-
-          //console.log('merchant group added');
-          $('.userCreateSuccess').show();
-          $('.merchant_feedback').hide();
-
-          //$window.location.reload();
-          //$state.go($state.$current, null, {reload: true });
-          $timeout(function() {
-            $modalInstance.close();
-          },1000);
-
-      }).error(function(data,status) {
-          console.log(status);
-      });
-
-   }; // END ok
-
-   $scope.cancel = function() {
-       $modalInstance.close();
-    };
 };
 
-/////////////////
 // GROUP DELETE
-/////////////////
 app.controller('removeMerchantModalCtrl', function($scope,$modal,$log) {
     $scope.open = function(index,merchant) {
        var modalInstance = $modal.open({
@@ -235,9 +195,7 @@ var removeMerchantInstanceCtrl = function($scope,$modalInstance,$log,merchant,$h
         url: baseUrl + 'midgroups/' + merchant.Id
       }).success(function(status,data) {
 
-        Notify.sendMsg('RemoveMerchant', index);
-
-        console.log('group removed' + status);
+        Notify.sendMsg('DeleteMidGroup', index);
 
         $('.userCreateSuccess').show();
 
@@ -349,17 +307,17 @@ var addMIDSInstanceCtrl = function($scope,$modalInstance,$log,$timeout,$rootScop
 app.controller('editMerchantModalCtrl', function($scope,$http,$modal,$log) {
 
     $scope.open = function(merchant) {
-     var modalInstance = $modal.open({
-      templateUrl:'merchantEditContent.html',
-      controller:merchantEditInstanceCtrl,
-      size:'lg',
-      resolve: {
-        merchant:function() {
-           return merchant;
+      var modalInstance = $modal.open({
+        templateUrl:'merchantEditContent.html',
+        controller:merchantEditInstanceCtrl,
+        size:'lg',
+        resolve: {
+          merchant:function() {
+             return merchant;
+          }
         }
-      }
-     });
-  };
+      });
+    };
 
 });
 
@@ -370,50 +328,27 @@ var merchantEditInstanceCtrl = function($scope,$modalInstance,$http,$timeout,mer
   $scope.original = merchant;
   $scope.merchant = angular.copy(merchant);
 
-
-// CURRENCY SERVICE
-$http.get( baseUrl + 'currencies').success(function(data) {
-    $scope.currencies = data;
-});
-
-$scope.BalancingTypes = [
-   {BalancingTypeId:0, BalancingType:"None"},
-   {BalancingTypeId:1, BalancingType:"Cap"},
-   {BalancingTypeId:2, BalancingType:"Priority"}
-];
-
-
   $scope.cancel = function() {
-    // Reset object to original object
-    // Abandon our copied object
     $scope.merchant = $scope.original
-
     $modalInstance.close();
-
   };
+
+  $scope.merchant.Currency = merchant.Currency.Id;
 
   $scope.updateMerchant = function(merchant) {
 
     var updateQuery = {
       "Name":$scope.merchant.Name,
       "CapLimitNotificationEmails":$scope.merchant.CapLimitNotificationEmails,
-      "Currency":$scope.merchant.Currency,
-      "BalancingType":$scope.merchant.BalancingType
+      "Currency":$scope.merchant.Currency
     };
 
-    //console.log(merchant.Id)
-    console.log(updateQuery);
-
-    // PUT REQUEST
-    
+   
     $http({
       method:'PUT',
-      url:baseUrl + '/midgroups/' + merchant.Id,
+      url:baseUrl + 'midgroups/' + merchant.Id,
       data:updateQuery
     }).success(function(status,data) {
-
-       //console.log(data);
-       //console.log('merchant updated');
 
       // UPDATE LOCAL UI DATA
       Notify.sendMsg('MerchantUpdated',data);
@@ -421,9 +356,10 @@ $scope.BalancingTypes = [
       // SUCCESS MSG
       $('.userCreateSuccess').slideDown(300);
       // HIDE SUCCESS MSG
+
       $timeout(function() {
         $('.userCreateSuccess').slideUp(300);
-        //$modalInstance.close();
+        $modalInstance.close();
       },2000);
 
     });

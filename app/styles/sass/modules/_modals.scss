@@ -160,9 +160,9 @@
     }
     .create_btn {
         @extend .cancel_btn;
-        background:$turquoise;
+        background:$nephritis;
         &:hover {
-            background:$greensea;
+            background:$emerald;
         }
     }
     .save_btn{
@@ -173,7 +173,14 @@
             background:$greensea;
         }
     }
-    
+    .disabled_ftr_btn{
+        @extend .cancel_btn;
+        background:$asbestos;
+        color:#FFF;
+        &:hover {
+            background:$asbestos;
+        }
+    }
 }
 .remove_btn {
     background:$alizarin !important;
@@ -521,6 +528,12 @@ form.merchantCreateForm {
     }
     .emerald_btn, .disabled_btn, .full_width {
         width:100%;
+    }
+    .align-right {
+        label {
+            display:block;
+            text-align:right;
+        }
     }
 
 }
