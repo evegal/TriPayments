@@ -94,7 +94,7 @@ include ../modals/removeMidModal.jade
                             span  {{showRolloverParents(mid)}} Rollover MID(s)
                             div.floater
                                 ul(ng-repeat="roll in rollGroups track by $index")
-                                    li {{roll.Name | uppercase}}
+                                    li {{roll.DisplayName | uppercase}}
                     td 
                         a.row_btn.edit_mid_btn(ng-click="openIt(mid)" ng-controller="midEditModalCtrl" tooltip="Edit {{mid.DisplayName | uppercase}}")
                             i.fa.fa-edit
