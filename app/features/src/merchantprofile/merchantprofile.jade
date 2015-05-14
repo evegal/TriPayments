@@ -1,0 +1,109 @@
+include ../modals/searchResultsTransactionModal.jade
+
+.dash
+    h1 Merchant Profile Settings
+    .panel.panel-default
+        .panel-heading
+            .row
+                .col-md-6
+                    h2.panel-title
+                        span Merchant Information:
+        .panel-body
+            form.form-horizontal(name="merchantCompanyInfoForm")
+                fieldset()
+                    h2.stand Merchant Company Information:
+                    .form-group
+                      label.control-label.col-xs-2(for="inputMerchantCompanyName") Company Name:
+                      .col-xs-9
+                        input#inputMerchantCompanyName.form-control(type="text" name="merchantCompanyName" placeholder="Company Name" ng-model="merchantCompanyName" required="" tooltip="Company Name")
+      
+                    .form-group
+                      label.control-label.col-xs-2(for="inputMerchantAddress") Address:
+                      .col-xs-5
+                        input#inputMerchantAddress.form-control(type="text" name="merchantCompanyAddress" placeholder="Street Address" ng-model="merchantCompanyAddress" required="" tooltip="Street Address") 
+                      .col-xs-4
+                        input#inputMerchantAddress2.form-control(type="text" name="merchantCompanyAddress2" placeholder="Suite" ng-model="merchantCompanyAddress2" tooltip="Suite")
+
+                    .form-group
+                      label.control-label.col-xs-2
+                      .col-xs-3
+                        input#inputMerchantCity.form-control(type="text" name="merchantCompanyCity" placeholder="City" ng-model="merchantCompanyCity" required="" tooltip="")
+                      .col-xs-3
+                        input#inputMerchantState.form-control(type="text" name="merchantCompanyState" placeholder="State" ng-model="merchantCompanyState" required="" tooltip="")
+                      .col-xs-3
+                        input#inputMerchantZip.form-control(type="text" name="merchantCompanyZip" placeholder="Zip" ng-model="merchantCompanyZip" required="" tooltip="")
+
+                    .form-group
+                      label.control-label.col-xs-2(for="inputMerchantWebsite") Website:
+                      .col-xs-9
+                        input#inputMerchantWebsite.form-control(type="text" name="merchantCompanyWeb" placeholder="Company Website" ng-model="merchantCompanyWeb" tooltip="Company Website") 
+
+
+
+
+                    h2.stand Company Point of Contact:
+                    .form-group
+                        label.control-label.col-xs-1.col-xs-offset-1(for="inputMerchantContactName") FullName:
+                        .col-xs-2
+                            input#inputMerchantContactName.form-control(type="text" name="merchantCompanyContactName" placeholder="Name" ng-model="merchantCompanyContactName" required="" tooltip="Full Name")
+
+                        label.control-label.col-xs-1(for="inputMerchantContactPhone") Phone:
+                        .col-xs-2
+                            input#inputMerchantContactPhone.form-control(type="text" name="merchantCompanyContactPhone" placeholder="Phone Number" ng-model="merchantCompanyContactPhone" required="" tooltip="Phone Number")
+                        
+                        label.control-label.col-xs-1(for="inputMerchantContactEmail") Email:
+                        .col-xs-2
+                            input#inputMerchantContactEmail.form-control(type="text" name="merchantCompanyContactEmail" placeholder="Email" ng-model="merchantCompanyContactEmail" required="" tooltip="Email")
+
+
+
+                    h2.stand Merchant Bank Information (for billing):
+                    .form-group
+                        label.control-label.col-xs-2(for="inputMerchantAccountNumber") Account Number:
+                        .col-xs-3
+                            input#inputMerchantAccountNumber.form-control(type="text" name="merchantCompanyBankNumber" placeholder="Account Number" ng-model="merchantCompanyBankNumber" required="" tooltip="Account Number")
+                        label.control-label.col-xs-2(for="inputMerchantAba") ABA Number:
+                        .col-xs-3
+                            input#inputMerchantAba.form-control(type="text" name="merchantCompanyBankABA" placeholder="ABA Routing Number" ng-model="merchantCompanyBankABA" required="" tooltip="ABA Routing Number")
+
+ 
+                    .form-group
+                        .col-xs-offset-4.col-xs-2
+                            button.btn.btn-success.btn-block(type="submit" ng-click="merchantInfoSubmit(merchantCompanyInfoForm)") 
+                                i.fa.fa-save
+                                span Save Changes
+                        .col-xs-2
+                            button.btn.btn-default.btn-block(type="submit") 
+                                i.fa.fa-undo
+                                span Undo Changes
+
+
+
+    .panel.panel-default
+        .panel-heading
+            .row
+                .col-md-6
+                    h2.panel-title
+                        span Account Information:
+        .panel-body
+            form.form-horizontal(name="merchantAccountInfoForm")
+                fieldset()
+                    .form-group
+                          label.control-label.col-xs-2(for="inputMerchantAccountUsername") UserName:
+                          .col-xs-3
+                            input#inputMerchantAccountUsername.form-control(type="text" name="merchantCompanyUsername" placeholder="Username" ng-model="merchantCompanyUsername" required="" tooltip="Username")
+                          label.control-label.col-xs-2(for="inputMerchantAccountName") Password:
+                          .col-xs-3
+                            input#inputMerchantAccountPw.form-control(type="text" name="merchantCompanyUserPW" placeholder="Password" ng-model="merchantCompanyUserPW" required="" tooltip="Password")
+
+ 
+                    .form-group
+                        .col-xs-offset-4.col-xs-2
+                            button.btn.btn-success.btn-block(type="submit" ng-click="accountInfoSubmit(merchantAccountInfoForm)") 
+                                i.fa.fa-save
+                                span Save Changes
+                        .col-xs-2
+                            button.btn.btn-default.btn-block(type="submit") 
+                                i.fa.fa-undo
+                                span Undo Changes
+

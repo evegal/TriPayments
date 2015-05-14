@@ -46,12 +46,19 @@ div(id="wrapper")
                         a(ng-class="{{'app.virtual_terminal' | isState }}" ui-sref=".virtual_terminal" ng-click="checkState()") 
                             i.fa.fa-icon.fa-terminal
                             span Virtual Terminal
-                   
+
+
+                    //li(data-ng-hide="!authentication.isAuth")
+                        a(ng-class="{{'app.merchant_profile' | isState }}" ui-sref=".merchant_profile" ng-click="checkState()")
+                            i.fa.fa-icon.fa-wrench
+                            span Merchant Profle
 
                     li(data-ng-hide="!authentication.isAuth")
                         a(ng-class="{{'app.usermanager' | isState }}" ui-sref=".usermanager" ng-click="checkState()")
-                            i.fa.fa-icon.fa-users
+                            i.fa.fa-icon.fa-user
                             span User Management
+
+
 
             div#page-content-wrapper
                .container-fluid

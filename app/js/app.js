@@ -122,6 +122,11 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider,$httpP
         templateUrl:'../features/dest/vterminal/vterminal.html',
         controller:'vterminalCtrl'
     })
+    .state('app.merchant_profile', {
+        url:'/merchantprofile',
+        templateUrl:'../features/dest/merchantprofile/merchantprofile.html',
+        controller:'merchantProfileCtrl'
+    })    
     .state('app.usermanager', {
         url:'/usermanager',
         templateUrl:'../features/dest/usermanager/usermanager.html',

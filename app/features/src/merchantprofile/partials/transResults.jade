@@ -1,0 +1,155 @@
+.transForm_feedback
+    .panel.panel-default.transForm_results
+        .panel-heading
+            .row
+                .col-md-6
+                    h2.panel-title
+                        span {{dataLen}} results
+                .col-md-6
+                    a.def_btn.wet_asphalt_btn.float-right.margin-right(ng-csv="transactionCSV" filename="transactions.csv" ng-show="transactionCSV.length")
+                        i.fa.fa-file
+                        span Export Excel
+                    a.def_btn.belize_hole_btn.float-right.margin-right(ng-click="new_search()")
+                        i.fa.fa-search
+                        span New Search
+                    a.def_btn.peter_river_btn.float-right.margin-right(ng-click="modify_search()")
+                        i.fa.fa-search-plus
+                        span Modify Search
+        .panel-body
+            accordion(close-others="oneAtATime")
+                table.table(st-table="shownData" st-safe-src="transData")
+                    thead
+                        tr
+                            th(colspan="13")
+                                input.form-control(st-search="" type="text" placeholder="Filter through all search results...")
+                        tr
+                            th Trans ID
+                            th Type
+                            th Gateway
+                            th MID Name
+                            th Date
+                            th Amount
+                            th CC Type
+                            th #CC
+                            th Status
+                            th First Name
+                            th Last Name
+                            th(style="width:10%") Email
+                            th(style="width:20%") Actions
+                    tbody(ng-repeat="tran in shownData")
+                        tr
+                            td.search-results-trans-id
+                                a.row_btn.peter_river_btn.full_width(ng-click="open(tran)" ng-controller="searchResultsTransactionCtrl")
+                                    i.fa.fa-eye
+                                    span {{tran.TransactionId}}
+                            td {{tran.Type}}
+                            td {{tran.Gateway}}
+                            td {{tran.MidDisplayName}}
+                            td {{tran.RequestDate | date:'shortDate'}}
+                            td {{tran.Amount}}
+                            td {{tran.PaymentTypeName}}
+                            td {{tran.CcLastFour}}
+                            //td {{returnStatus(tran)}}
+                            td
+                                a.groupAnchor(href="")
+                                    span(ng-class="(tran.ResultCode === 0) ? 'success' : 'failed' ") {{returnStatus(tran)}}
+                                    i.fa.fa-info-circle
+                                    div.floater
+                                        ul
+                                            li {{tran.ResponseDescription}}
+                            td {{tran.FirstName}}
+                            td {{tran.LastName}}
+                            td {{tran.Email}}
+                            td
+                                a.table_action_btn.peter_river_btn.margin-right(ng-click="open(tran)" ng-controller="refundModalCtrl")
+                                    i.fa.fa-money
+                                    span.btn_text Refund
+                                a.table_action_btn.alazarin_btn.margin-right(ng-click="open(tran)" ng-controller="voidModalCtrl")
+                                    i.fa.fa-ban
+                                    span.btn_text Void
+                                a.table_action_btn.peter_river_btn(ng-click="doToggle(tran)" ng-if="tran.RelatedTransactions && tran.RelatedTransactions.length > 0")
+                                    i.fa.fa-eye
+                                    span.btn_text Trans
+                                    span {{tran.RelatedTransactions.length}}
+                                    
+                            //td.paymentTypes
+                                div(ng-if="trans.Type == 'Authorize' && trans.ResultCode == 0")
+                                    a.table_action_btn.alazarin_btn.margin-right(tooltip="Void transaction: {{trans.TransactionId}}" tooltip-placement="top" ng-click="open(trans)" href="" ng-controller="voidModalCtrl") 
+                                      i.fa.fa-ban
+                                      span void
+                                    a.table_action_btn.orange_btn.disabled.margin-right(tooltip="Unable to refund with type as authorize" tooltip-placement="top")
+                                      i.fa.fa-money
+                                      span Refund
+                                    a.table_action_btn.peter_river_btn
+                                      i.fa.fa-eye
+                                      span Trans  
+
+                                div(ng-if="trans.Type == 'Capture' || trans.Type == 'Charge' && trans.ResultCode == 0")
+                                  a.table_action_btn.alazarin_btn.margin-right(tooltip="Void transaction: {{trans.TransactionId}}" ng-click="open(trans)" href="" ng-controller="voidModalCtrl")
+                                    i.fa.fa-ban
+                                    span void
+                                  a.table_action_btn.orange_btn.margin-right(tooltip="Refund transaction: {{trans.TransactionId}}" ng-click="open(trans)" href="" ng-controller="refundModalCtrl")
+                                    i.fa.fa-money
+                                    span Refund
+                                  a.table_action_btn.peter_river_btn
+                                    i.fa.fa-eye
+                                    span Trans
+
+  
+                                div(ng-if="trans.Type == 'Void' || trans.Type == 'Refund' || trans.Type == 'Credit' || trans.ResultCode !== 0")
+                                  a.table_action_btn.alazarin_btn.margin-right.disabled(tooltip="Unable to void with this processed type" tooltip-placement="top")
+                                    i.fa.fa-ban
+                                    span void
+                                  a.table_action_btn.orange_btn.disabled.margin-right(tooltip="Unable to refund with this processed type" tooltip-placement="top")
+                                    i.fa.fa-money
+                                    span Refund
+                                  a.table_action_btn.peter_river_btn
+                                    i.fa.fa-eye
+                                    span Trans
+
+                                  
+
+                            td
+                                tr
+                                    td.pushToggle(colspan="13" ng-if="tran.RelatedTransactions && tran.RelatedTransactions.length > 0")
+                                        accordion-group(heading="" is-open="true")
+                                            h2 
+                                                i.fa.fa-exchange
+                                                span Related Transactions
+                                            table.table.table-striped
+                                                thead
+                                                    tr
+                                                        th Transaction ID
+                                                        th API User
+                                                        th Amount
+                                                        th Type
+                                                        th Status
+                                                        th Gateway
+                                                        th Name
+                                                        th MID
+                                                        th Payment Type
+                                                        th Date
+                                                tbody {{getNestedApiUser(tran)}}
+                                                    tr(ng-repeat="thing in nestedTrans")
+                                                        td {{thing.TransactionId}}
+                                                        td {{thing.ApiUser}}
+                                                        td {{thing.Amount}}
+                                                        td {{thing.Type}}
+                                                        //td {{getNestedStatus(thing)}}
+                                                        td
+                                                            a.groupAnchor(href="")
+                                                                span(ng-class="(thing.ResultCode === 0) ? 'success' : 'failed'") {{getNestedStatus(thing)}}
+                                                                i.fa.fa-info-circle
+                                                                div.floater
+                                                                    ul
+                                                                        li {{thing.ResponseDescription}}
+                                                        td {{thing.Gateway}}
+                                                        td {{thing.MidDisplayName}}
+                                                        td {{thing.Mid}}
+                                                        td {{thing.PaymentTypeName}}
+                                                        td {{thing.RequestDate  | date:'shortDate'}}
+                        tfoot
+                            tr
+                                td.text-center(colspan="13")
+                                    div(st-items-by-page='20', st-pagination='')                                       
+                                                        

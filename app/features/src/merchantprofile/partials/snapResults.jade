@@ -1,0 +1,65 @@
+.dash.snapForm_feedback
+    .panel.panel-default.snapForm_results
+        .panel-heading
+            .row
+                .col-md-6
+                    h2.panel-title
+                        span {{snapLen}} results
+                .col-md-6
+                    a.def_btn.wet_asphalt_btn.float-right.margin-right(ng-csv="transactionCSV" filename="transactions.csv" ng-show="transactionCSV.length")
+                        i.fa.fa-file
+                        span Export Excel
+                    a.def_btn.belize_hole_btn.float-right.margin-right(ng-click="new_search()")
+                        i.fa.fa-search
+                        span New Search
+                    a.def_btn.peter_river_btn.float-right.margin-right(ng-click="modify_snap_search()")
+                        i.fa.fa-search-plus
+                        span Modify Search
+        .panel-body
+            table.table.table-striped(st-table="shownSnapData" st-safe-src="snapData")
+                thead
+                    tr
+                        th(colspan="7")
+                            input.form-control(st-search="" type="search" placeholder="Global Search..")
+                    tr
+                        th Merchant Accounts:
+                        th 
+                            i.fa.fa-pie-chart
+                            span Pending
+                        th 
+                            i.fa.fa-pie-chart
+                            span Charges
+                        th 
+                            i.fa.fa-pie-chart
+                            span Refunds
+                        th 
+                            i.fa.fa-pie-chart
+                            span Voids
+                        th 
+                            i.fa.fa-pie-chart
+                            span Declines
+                        th 
+                            i.fa.fa-pie-chart
+                            span Totals
+
+                tbody.snapBody
+                    tr(ng-repeat="snap in shownSnapData")
+                        td 
+                            //i.fa.fa-search
+                            span {{snap.MerchantAccount}}
+                        td 0.00
+                        td 
+                            span.snapSpan {{snap.Charges.Count}}
+                            span {{snap.Charges.Total | currency }}
+                        td
+                            span.snapSpan {{snap.Refunds.Count}}
+                            span {{snap.Refunds.Total | currency }}
+                        td
+                            span.snapSpan {{snap.Voids.Count}}
+                            span {{snap.Voids.Total | currency }}
+                        td
+                            span.snapSpan {{snap.DeclineTotal}}
+                            span {{snap.DeclinePercentage}} %
+                        td
+                            span.snapSpan {{snap.Totals.Count}}
+                            span {{snap.Totals.Total | currency }}

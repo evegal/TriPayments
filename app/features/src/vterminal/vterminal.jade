@@ -238,9 +238,8 @@
                                 label Credit Card Number:
                                     span.required-icon *
                                 input.form-control(type="text" name="ccNumber" placeholder="ex. 4264-6542-4984-4116" ng-model="chargeCcNumber" required="")
-                            .form-group
+                            .row
                                 label CVV:
-                                    span.required-icon *
                                 input.form-control(type="password" name="Cvv" maxlength="4" ng-model="chargeCvv")
                             .form-group
                                 label Expiration Date
@@ -354,7 +353,7 @@
                             .form-group
                                 label Credit Card Number:
                                 input.form-control(type="text" placeholder="ex. 4264-6542-4984-4116" name="ccNumber" ng-model="authCcNumber" required="")
-                            .form-group
+                            .row
                                 label CVV:
                                 input.form-control(type="password" maxlength="4" name="authCvv" ng-model="authCvv")
                             .form-group

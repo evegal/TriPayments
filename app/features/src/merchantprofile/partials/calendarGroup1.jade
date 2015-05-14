@@ -1,0 +1,5 @@
+div.daterangePick(ng-controller='transfromDateCtrl')
+  input.form-control(type='text', ng-model='transForm.fromDate', datepicker-popup='{{format}}', is-open='opened', min-date='"minDate"', max-date='"maxDate"', datepicker-options='dateOptions', date-disabled='disabled(date, mode)', ng-required='false', close-text='Close', placeholder='{{fromDate | date:"MM/dd/yyyy"}}')
+  span.input-group-btn
+    button.btn.btn-default(type='button', ng-click='open($event)')
+      i.glyphicon.glyphicon-calendar

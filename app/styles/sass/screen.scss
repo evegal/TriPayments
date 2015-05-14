@@ -26,7 +26,11 @@ body {
 .nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
 .bg-info{padding:20px;}
 .subtleTxt{color: $silver;}
-
+button{
+  i {
+    padding-right:5px;
+  }
+}
 ///////////////
 // OFF-CANVAS
 ///////////////
@@ -494,15 +498,17 @@ a[class$='groupsgroups'], a[class$='subscriberssubscribers'], a[class$='subscrip
 
 .floater {
   background:#333;
-  color:#fff !important;
+  color:#fff!important;
   display:none;
   position:absolute;
-  padding:10px 0px 10px 40px;
-  width:250px;
+  padding:10px 5px 10px 40px;
+  max-width:350px;
   top:20px;
   left:-50%;
-  min-width:100px;
+  min-width:220px;
   z-index:100;
+  word-wrap: break-word;
+  white-space:normal !important;
   ol,ul {
     list-style:square;
   }
@@ -945,4 +951,10 @@ ul.nav_subNav {
     */
   }
 
+}
+/* Profile MANAGEMENT */
+.stand {
+    background:#f3f5f5;
+    padding:15px;
+    margin:10px 0;
 }
